@@ -15,8 +15,11 @@
 
 ## Команды
 
-- `npm run dev`, `npm run build`, `npm run preview` — появятся после создания проекта Astro
-- `npm run release` — релиз (см. «Версионирование»)
+- `npm run dev` — сервер разработки
+- `npm run build` — сборка в `dist/`
+- `npm run preview` — просмотр собранного сайта
+- `npm run check` — проверка типов (`astro check`)
+- `npm run release` — релиз (см. «Git и версионирование»)
 
 ## Структура (целевая)
 
