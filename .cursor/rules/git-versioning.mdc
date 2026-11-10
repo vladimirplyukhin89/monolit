@@ -1,0 +1,29 @@
+---
+description: Conventional Commits, ветки и релизы через commit-and-tag-version
+alwaysApply: true
+---
+
+# Git и версионирование
+
+## Коммиты
+
+- Conventional Commits: `feat`, `fix`, `perf`, `refactor`, `docs`, `style`, `chore`, `test`, `build`, `ci`
+- Формат: `тип(область): краткое описание`
+- Тип без скобок: `chore: ...`, не `(chore): ...` — иначе `commit-and-tag-version` не распознает
+- Ломающее изменение: `!` после типа или `BREAKING CHANGE:` в теле
+
+## Ветки
+
+- `main` — стабильная
+- Работа в `feature/...` и `fix/...`
+
+## Релизы
+
+- Версии и тэги ведёт `commit-and-tag-version`: `feat` → minor, `fix` → patch, breaking → major
+- Не правь `CHANGELOG.md` и `version` в `package.json` вручную
+- Из `main` с чистым деревом:
+  - первый: `npm run release:first`
+  - обычный: `npm run release`
+  - пробный: `npm run release:dry`
+  - запуск сайта: `npm run release -- --release-as 1.0.0`
+  - после: `git push --follow-tags origin main`

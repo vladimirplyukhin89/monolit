@@ -7,6 +7,8 @@ description: Use when the user shares design references (Figma links, screenshot
 
 Цель: из референса получить структурированный разбор и список компонентов для проекта, а не копию чужого дизайна.
 
+Каноническая копия для Cursor: `.cursor/skills/analyze-design-reference/SKILL.md`. Держи обе версии синхронными при правках.
+
 ## Перед началом
 
 1. Прочитай `docs/design/README.md`, `docs/design/_templates/reference-analysis.md` и `docs/design/component-inventory.md`.

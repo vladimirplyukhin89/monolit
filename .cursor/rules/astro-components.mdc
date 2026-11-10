@@ -1,0 +1,15 @@
+---
+description: Конвенции статических Astro-компонентов
+globs: src/components/**/*.astro
+alwaysApply: false
+---
+
+# Astro-компоненты
+
+- Имена файлов: `PascalCase.astro`
+- По умолчанию статика без клиентского JS
+- Одна ответственность, небольшие компоненты
+- Стили: только токены из `src/styles/tokens.css`, mobile-first
+- Данные компании не выдумывать — плейсхолдеры
+- Новый блок: сверься с `docs/design/component-inventory.md`; при сомнении — skill `add-component`
+- Figma — источник правды по макету; референсы не копировать дословно

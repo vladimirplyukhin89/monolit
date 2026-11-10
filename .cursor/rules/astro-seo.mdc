@@ -1,0 +1,19 @@
+---
+description: SEO и семантика для страниц и layout Astro
+globs: src/pages/**/*.{astro,ts},src/layouts/**/*.astro
+alwaysApply: false
+---
+
+# SEO страниц
+
+Каждая страница:
+
+- Через `BaseLayout`: уникальные `title` и `description`
+- `<html lang="ru">` уже в layout — не дублируй иначе
+- Один `h1`, корректная иерархия заголовков, семантическая разметка
+- `canonical` и Open Graph задаёт layout; при необходимости передай `image`
+- `alt` у всех содержательных изображений
+- JSON-LD (LocalBusiness / Service) — через `slot="head"`, где уместно
+- Понятные URL; `sitemap` и `robots.txt` уже в проекте
+
+Перед релизом или крупной правкой страницы — skill `seo-page-check`.
