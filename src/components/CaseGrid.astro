@@ -1,0 +1,93 @@
+---
+import type { CaseItem } from '../data/blagoustrojstvo';
+
+interface Props {
+  title?: string;
+  items: CaseItem[];
+}
+
+const { title = 'Наши работы', items } = Astro.props;
+---
+
+<section class="cases section" aria-labelledby="cases-title">
+  <div class="container">
+    <h2 id="cases-title" class="cases__title">{title}</h2>
+    <ul class="cases__list">
+      {
+        items.map((item) => (
+          <li class="cases__card">
+            <div
+              class="cases__media"
+              role="img"
+              aria-label={`Фото: ${item.title} — будет добавлено`}
+            >
+              <span>{item.category}</span>
+            </div>
+            <h3 class="cases__name">{item.title}</h3>
+            <p class="cases__category">{item.category}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .cases__title {
+    margin: 0 0 var(--space-8);
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    line-height: var(--line-height-tight);
+  }
+
+  .cases__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .cases__card {
+    background: var(--color-bg);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    padding-bottom: var(--space-4);
+  }
+
+  .cases__media {
+    min-height: 11rem;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    display: grid;
+    place-items: center;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  .cases__name {
+    margin: var(--space-4) var(--space-4) var(--space-1);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    line-height: var(--line-height-tight);
+  }
+
+  .cases__category {
+    margin: 0 var(--space-4);
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  @media (min-width: 768px) {
+    .cases__list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-6);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .cases__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

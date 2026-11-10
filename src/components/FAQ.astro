@@ -1,0 +1,62 @@
+---
+import type { FaqItem } from '../data/blagoustrojstvo';
+
+interface Props {
+  title?: string;
+  items: FaqItem[];
+}
+
+const { title = 'Частые вопросы', items } = Astro.props;
+---
+
+<section class="faq section" aria-labelledby="faq-title">
+  <div class="container">
+    <h2 id="faq-title" class="faq__title">{title}</h2>
+    <div class="faq__list">
+      {
+        items.map((item) => (
+          <details class="faq__item">
+            <summary>{item.question}</summary>
+            <p>{item.answer}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq__title {
+    margin: 0 0 var(--space-8);
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    line-height: var(--line-height-tight);
+  }
+
+  .faq__list {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .faq__item {
+    background: var(--color-bg);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4) var(--space-6);
+  }
+
+  .faq__item summary {
+    cursor: pointer;
+    font-weight: 600;
+    list-style-position: outside;
+  }
+
+  .faq__item summary:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+  }
+
+  .faq__item p {
+    margin: var(--space-3) 0 0;
+    color: var(--color-text-muted);
+  }
+</style>

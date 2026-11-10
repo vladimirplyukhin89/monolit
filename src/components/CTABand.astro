@@ -1,0 +1,58 @@
+---
+interface Props {
+  title?: string;
+  text?: string;
+  href?: string;
+  ctaLabel?: string;
+}
+
+const {
+  title = 'Закажите бесплатный выезд специалиста и получите скидку 5%',
+  text = 'Специалист приедет в удобное время, сделает замеры и подготовит предварительную смету.',
+  href = '#lead',
+  ctaLabel = 'Оставить заявку',
+} = Astro.props;
+---
+
+<section class="cta section">
+  <div class="container">
+    <div class="cta__panel">
+      <h2 class="cta__title">{title}</h2>
+      <p class="cta__text">{text}</p>
+      <a class="cta__button" href={href}>{ctaLabel}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta__panel {
+    background: var(--color-bg);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+  }
+
+  .cta__title {
+    margin: 0 0 var(--space-4);
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    line-height: var(--line-height-tight);
+  }
+
+  .cta__text {
+    margin: 0 0 var(--space-6);
+    color: var(--color-text-muted);
+    max-width: 36rem;
+  }
+
+  .cta__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-lg);
+    background: var(--color-primary);
+    color: var(--color-primary-contrast);
+    text-decoration: none;
+    font-weight: 600;
+  }
+</style>

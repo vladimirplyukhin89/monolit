@@ -1,0 +1,76 @@
+---
+import type { TestimonialItem } from '../data/blagoustrojstvo';
+
+interface Props {
+  title?: string;
+  items: TestimonialItem[];
+}
+
+const { title = 'Что говорят клиенты', items } = Astro.props;
+---
+
+<section class="reviews section" aria-labelledby="reviews-title">
+  <div class="container">
+    <h2 id="reviews-title" class="reviews__title">{title}</h2>
+    <ul class="reviews__list">
+      {
+        items.map((item) => (
+          <li class="reviews__item">
+            <blockquote class="reviews__quote">
+              <p>{item.quote}</p>
+              <footer>
+                <cite>{item.author}</cite>
+              </footer>
+            </blockquote>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .reviews__title {
+    margin: 0 0 var(--space-8);
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    line-height: var(--line-height-tight);
+  }
+
+  .reviews__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .reviews__item {
+    background: var(--color-bg);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+  }
+
+  .reviews__quote {
+    margin: 0;
+  }
+
+  .reviews__quote p {
+    margin: 0 0 var(--space-4);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-base);
+  }
+
+  .reviews__quote cite {
+    font-style: normal;
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  @media (min-width: 768px) {
+    .reviews__list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-6);
+    }
+  }
+</style>

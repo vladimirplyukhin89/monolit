@@ -14,8 +14,8 @@
 | `--color-primary` | `#2f5d3a` | `#ED581F` | фирменный оранжевый (кнопки, ссылки-акценты) |
 | `--color-primary-contrast` | `#ffffff` | `#ffffff` | текст на оранжевом |
 | `--color-border` | `#d9d9d4` | `#D4D4D4` | границы на сером ambient |
-| `--color-ambient-landscape` | — | `#E4EDE6` (лёгкий зеленоватый; уточнить в Figma) | фон при выборе благоустройства |
-| `--color-ambient-renovation` | — | `#F5EFE3` (тёплый желтоватый; уточнить в Figma) | фон при выборе ремонта |
+| `--color-ambient-landscape` | — | `#D5E8DA` (зеленоватый ambient) | фон при выборе благоустройства |
+| `--color-ambient-renovation` | — | `#F3E2C4` (тёплый желтоватый ambient) | фон при выборе ремонта |
 | `--font-sans` | system-ui stack | `'Golos Text', system-ui, sans-serif` | кириллица, близко к TT Norms Pro без лицензии |
 | `--font-size-xl` / `--font-size-2xl` | `1.75rem` / `2.5rem` | оставить порядок; в макете сверить с ~26–32px H2/H1 mobile | масштаб референса |
 | `--radius-sm` / `--radius-md` | `4px` / `8px` | добавить `--radius-lg: 16px`, `--radius-xl: 24px` | крупные скругления секций/плит |
@@ -27,6 +27,6 @@
 - Ambient-tint — только фон обёртки/`body` в состояниях направления; текст на нём — `--color-text` (`#2E2E2E`).
 - Перед фиксацией tint проверить контраст WCAG 2.1 AA для текста и оранжевых кнопок на обоих ambient.
 
-## Не вносить в код, пока не согласовано
+## Статус
 
-Файл `src/styles/tokens.css` на этом шаге не меняем. После ОК — одна правка токенов, затем Figma/вёрстка.
+Токены внесены в `src/styles/tokens.css` (согласовано). Golos Text подключён в `BaseLayout.astro`.

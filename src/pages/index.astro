@@ -1,13 +1,27 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import HeroIntro from '../components/HeroIntro.astro';
+import DirectionChooser from '../components/DirectionChooser';
+import TrustStrip from '../components/TrustStrip.astro';
+import CTABand from '../components/CTABand.astro';
+import LeadForm from '../components/LeadForm';
+import Footer from '../components/Footer.astro';
 ---
 
 <BaseLayout
-  title="Название компании — ландшафтный дизайн и ремонт квартир под ключ"
-  description="Описание компании. Заполнить после согласования текстов."
+  title="Монолит — благоустройство и ремонт квартир в Тюмени"
+  description="Ландшафтное благоустройство участка и ремонт квартир под ключ в Тюмени. Бесплатный выезд и расчёт стоимости."
 >
-  <main>
-    <h1>Ландшафтный дизайн и ремонт квартир под ключ</h1>
-    <p>Заглушка главной страницы. Контент и вёрстка появятся по макетам из Figma.</p>
-  </main>
+  <div class="page-shell">
+    <Header />
+    <main>
+      <HeroIntro />
+      <DirectionChooser client:load />
+      <TrustStrip />
+      <CTABand />
+      <LeadForm client:load />
+    </main>
+    <Footer />
+  </div>
 </BaseLayout>

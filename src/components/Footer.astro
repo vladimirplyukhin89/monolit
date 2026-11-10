@@ -1,0 +1,112 @@
+---
+interface Props {
+  phone?: string;
+  phoneHref?: string;
+  email?: string;
+  address?: string;
+  legal?: string;
+}
+
+const {
+  phone = '8 (919) 950-77-22',
+  phoneHref = 'tel:+79199507722',
+  email = 'monolittmn@mail.ru',
+  address = 'г. Тюмень, ул. Депутатская, 129',
+  legal = 'ИП Ерамасов В.Н. · ИНН 723011554086 · ОГРНИП 323723200019722',
+} = Astro.props;
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <a class="footer__logo" href="/">Монолит</a>
+      <p class="footer__legal">{legal}</p>
+    </div>
+    <div class="footer__contacts">
+      <a href={phoneHref}>{phone}</a>
+      <a href={`mailto:${email}`}>{email}</a>
+      <p>{address}</p>
+    </div>
+    <div class="footer__links">
+      <a href="/blagoustrojstvo">Благоустройство</a>
+      <a href="/remont-kvartir">Ремонт квартир</a>
+      <a href="/politika-konfidencialnosti">Политика конфиденциальности</a>
+    </div>
+    <p class="footer__copy">© {year}. Все права защищены</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--color-border);
+    padding-block: var(--space-12);
+    background: color-mix(in srgb, var(--color-bg) 70%, transparent);
+  }
+
+  .footer__inner {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  .footer__logo {
+    display: inline-block;
+    margin-bottom: var(--space-3);
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .footer__legal,
+  .footer__copy {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  .footer__contacts,
+  .footer__links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .footer__contacts a,
+  .footer__links a {
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .footer__contacts p {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 768px) {
+    .footer__inner {
+      grid-template-columns: 1.4fr 1fr 1fr;
+      grid-template-areas:
+        'brand contacts links'
+        'copy copy copy';
+    }
+
+    .footer__brand {
+      grid-area: brand;
+    }
+
+    .footer__contacts {
+      grid-area: contacts;
+    }
+
+    .footer__links {
+      grid-area: links;
+    }
+
+    .footer__copy {
+      grid-area: copy;
+    }
+  }
+</style>

@@ -1,0 +1,83 @@
+---
+interface Metric {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  title?: string;
+  text: string;
+  metrics?: readonly Metric[];
+}
+
+const { title = 'О нас', text, metrics = [] } = Astro.props;
+---
+
+<section class="about section" aria-labelledby="about-title">
+  <div class="container">
+    <div class="about__panel">
+      <h2 id="about-title" class="about__title">{title}</h2>
+      <p class="about__text">{text}</p>
+      {
+        metrics.length > 0 && (
+          <ul class="about__metrics">
+            {metrics.map((metric) => (
+              <li>
+                <p class="about__metric-value">{metric.value}</p>
+                <p class="about__metric-label">{metric.label}</p>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .about__panel {
+    background: var(--color-bg);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+  }
+
+  .about__title {
+    margin: 0 0 var(--space-4);
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    line-height: var(--line-height-tight);
+  }
+
+  .about__text {
+    margin: 0;
+    color: var(--color-text-muted);
+    max-width: 40rem;
+  }
+
+  .about__metrics {
+    list-style: none;
+    margin: var(--space-8) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .about__metric-value {
+    margin: 0;
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    line-height: var(--line-height-tight);
+  }
+
+  .about__metric-label {
+    margin: var(--space-1) 0 0;
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 768px) {
+    .about__metrics {
+      grid-template-columns: repeat(2, minmax(0, 12rem));
+      gap: var(--space-8);
+    }
+  }
+</style>

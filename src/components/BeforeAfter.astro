@@ -1,0 +1,84 @@
+---
+interface Props {
+  title?: string;
+  text?: string;
+}
+
+const {
+  title = 'Как меняется участок после благоустройства',
+  text = 'Добавим пары фото «до / после», когда будут материалы в docs/content/media/blagoustrojstvo/before-after/.',
+} = Astro.props;
+---
+
+<section class="ba section" aria-labelledby="ba-title">
+  <div class="container">
+    <h2 id="ba-title" class="ba__title">{title}</h2>
+    <p class="ba__text">{text}</p>
+    <div class="ba__pair">
+      <figure class="ba__frame">
+        <div class="ba__placeholder" role="img" aria-label="Фото участка до работ — будет добавлено">
+          <span>До</span>
+        </div>
+        <figcaption>До</figcaption>
+      </figure>
+      <figure class="ba__frame">
+        <div class="ba__placeholder" role="img" aria-label="Фото участка после работ — будет добавлено">
+          <span>После</span>
+        </div>
+        <figcaption>После</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ba__title {
+    margin: 0 0 var(--space-4);
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    line-height: var(--line-height-tight);
+  }
+
+  .ba__text {
+    margin: 0 0 var(--space-8);
+    color: var(--color-text-muted);
+    max-width: 40rem;
+  }
+
+  .ba__pair {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .ba__frame {
+    margin: 0;
+  }
+
+  .ba__placeholder {
+    min-height: 12rem;
+    border-radius: var(--radius-xl);
+    background: var(--color-bg);
+    border: 1px dashed var(--color-border);
+    display: grid;
+    place-items: center;
+    color: var(--color-text-muted);
+    font-weight: 600;
+  }
+
+  .ba__frame figcaption {
+    margin-top: var(--space-2);
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 768px) {
+    .ba__pair {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+    }
+
+    .ba__placeholder {
+      min-height: 16rem;
+    }
+  }
+</style>

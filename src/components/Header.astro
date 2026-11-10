@@ -1,0 +1,120 @@
+---
+import MobileNav from './MobileNav';
+
+interface Props {
+  phone?: string;
+  phoneHref?: string;
+  secondaryHref?: string;
+  secondaryLabel?: string;
+}
+
+const {
+  phone = '8 (919) 950-77-22',
+  phoneHref = 'tel:+79199507722',
+  secondaryHref,
+  secondaryLabel,
+} = Astro.props;
+---
+
+<header class="header">
+  <div class="container header__inner">
+    <a class="header__logo" href="/">Монолит</a>
+
+    <nav class="header__nav" aria-label="Основная">
+      {
+        secondaryHref && secondaryLabel && (
+          <a class="header__link header__link--secondary" href={secondaryHref}>
+            {secondaryLabel}
+          </a>
+        )
+      }
+      <a class="header__link" href={phoneHref}>{phone}</a>
+      <a class="header__cta" href="#lead">Оставить заявку</a>
+    </nav>
+
+    <div class="header__mobile">
+      <a class="header__phone-icon" href={phoneHref} aria-label={`Позвонить ${phone}`}>
+        тел.
+      </a>
+      <MobileNav client:load phone={phone} phoneHref={phoneHref} />
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 3.5rem;
+    gap: var(--space-4);
+  }
+
+  .header__logo {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-text);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  .header__nav {
+    display: none;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .header__link {
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .header__link--secondary {
+    color: var(--color-text-muted);
+  }
+
+  .header__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-lg);
+    background: var(--color-primary);
+    color: var(--color-primary-contrast);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .header__mobile {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .header__phone-icon {
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  @media (min-width: 768px) {
+    .header__nav {
+      display: flex;
+    }
+
+    .header__mobile {
+      display: none;
+    }
+  }
+</style>

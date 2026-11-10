@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import DirectionHero from '../components/DirectionHero.astro';
+import TrustStrip from '../components/TrustStrip.astro';
+import ServiceGrid from '../components/ServiceGrid.astro';
+import BeforeAfter from '../components/BeforeAfter.astro';
+import CTABand from '../components/CTABand.astro';
+import CaseGrid from '../components/CaseGrid.astro';
+import AboutSection from '../components/AboutSection.astro';
+import Testimonials from '../components/Testimonials.astro';
+import FAQ from '../components/FAQ.astro';
+import LeadForm from '../components/LeadForm';
+import Footer from '../components/Footer.astro';
+import {
+  about,
+  cases,
+  cta,
+  faq,
+  hero,
+  jsonLdService,
+  pageMeta,
+  services,
+  testimonials,
+} from '../data/blagoustrojstvo';
+---
+
+<BaseLayout title={pageMeta.title} description={pageMeta.description}>
+  <script
+    slot="head"
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLdService)}
+  />
+  <div class="page-shell" data-direction="landscaping">
+    <Header
+      secondaryHref="/remont-kvartir"
+      secondaryLabel="Ремонт квартир"
+    />
+    <main>
+      <DirectionHero
+        title={hero.title}
+        support={hero.support}
+        ctaLabel={hero.ctaLabel}
+        ctaHref={hero.ctaHref}
+        chips={hero.chips}
+        photoAlt={hero.photoAlt}
+      />
+      <TrustStrip />
+      <ServiceGrid items={services} />
+      <BeforeAfter />
+      <CTABand
+        title={cta.title}
+        text={cta.text}
+        href={cta.href}
+        ctaLabel={cta.ctaLabel}
+      />
+      <CaseGrid items={cases} />
+      <AboutSection text={about.text} metrics={about.metrics} />
+      <Testimonials items={testimonials} />
+      <FAQ items={faq} />
+      <LeadForm client:load />
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>

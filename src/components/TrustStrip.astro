@@ -1,0 +1,84 @@
+---
+interface Item {
+  title: string;
+  text: string;
+}
+
+interface Props {
+  items?: Item[];
+}
+
+const {
+  items = [
+    {
+      title: 'Понятная смета',
+      text: 'Без скрытых платежей. Цена фиксируется до начала работ.',
+    },
+    {
+      title: 'Сроки в договоре',
+      text: 'Согласуем график и придерживаемся его.',
+    },
+    {
+      title: 'Гарантия до 5 лет',
+      text: 'Отвечаем за качество работ и материалов.',
+    },
+  ],
+} = Astro.props;
+---
+
+<section class="trust section" aria-labelledby="trust-title">
+  <div class="container">
+    <h2 id="trust-title" class="trust__title">Почему нам доверяют</h2>
+    <ul class="trust__list">
+      {
+        items.map((item) => (
+          <li class="trust__item">
+            <h3 class="trust__item-title">{item.title}</h3>
+            <p class="trust__item-text">{item.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .trust__title {
+    margin: 0 0 var(--space-8);
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    line-height: var(--line-height-tight);
+  }
+
+  .trust__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .trust__item {
+    background: var(--color-bg);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+  }
+
+  .trust__item-title {
+    margin: 0 0 var(--space-2);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+  }
+
+  .trust__item-text {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 768px) {
+    .trust__list {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+    }
+  }
+</style>

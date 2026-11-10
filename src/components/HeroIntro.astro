@@ -1,0 +1,60 @@
+---
+interface Props {
+  brand?: string;
+  offer?: string;
+  support?: string;
+}
+
+const {
+  brand = 'Монолит',
+  offer = 'Ландшафтное благоустройство и ремонт квартир под ключ в Тюмени',
+  support = 'Бесплатный выезд специалиста и расчёт стоимости',
+} = Astro.props;
+---
+
+<section class="hero section">
+  <div class="container hero__inner">
+    <p class="hero__brand">{brand}</p>
+    <h1 class="hero__title">{offer}</h1>
+    <p class="hero__support">{support}</p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-8);
+  }
+
+  .hero__inner {
+    max-width: 40rem;
+  }
+
+  .hero__brand {
+    margin: 0 0 var(--space-4);
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 700;
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+  }
+
+  .hero__title {
+    margin: 0 0 var(--space-4);
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    line-height: var(--line-height-tight);
+  }
+
+  .hero__support {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
+  }
+
+  @media (min-width: 768px) {
+    .hero__title {
+      font-size: var(--font-size-2xl);
+    }
+  }
+</style>

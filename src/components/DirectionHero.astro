@@ -1,0 +1,126 @@
+---
+interface Props {
+  title: string;
+  support: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  chips?: readonly string[];
+  photoAlt?: string;
+}
+
+const {
+  title,
+  support,
+  ctaLabel = 'Оставить заявку',
+  ctaHref = '#lead',
+  chips = [],
+  photoAlt = 'Фото работ по направлению',
+} = Astro.props;
+---
+
+<section class="dir-hero section">
+  <div class="container dir-hero__grid">
+    <div class="dir-hero__copy">
+      <h1 class="dir-hero__title">{title}</h1>
+      <p class="dir-hero__support">{support}</p>
+      {
+        chips.length > 0 && (
+          <ul class="dir-hero__chips" aria-label="Основные услуги">
+            {chips.map((chip) => (
+              <li>{chip}</li>
+            ))}
+          </ul>
+        )
+      }
+      <a class="dir-hero__cta" href={ctaHref}>{ctaLabel}</a>
+    </div>
+    <div class="dir-hero__media" role="img" aria-label={photoAlt}>
+      <span class="dir-hero__media-label">Фото работ</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .dir-hero {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-8);
+  }
+
+  .dir-hero__grid {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  .dir-hero__title {
+    margin: 0 0 var(--space-4);
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    line-height: var(--line-height-tight);
+  }
+
+  .dir-hero__support {
+    margin: 0 0 var(--space-6);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
+  }
+
+  .dir-hero__chips {
+    list-style: none;
+    margin: 0 0 var(--space-6);
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .dir-hero__chips li {
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--color-bg) 80%, transparent);
+    border: 1px solid var(--color-border);
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  .dir-hero__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-lg);
+    background: var(--color-primary);
+    color: var(--color-primary-contrast);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .dir-hero__media {
+    min-height: 14rem;
+    border-radius: var(--radius-xl);
+    background: var(--color-bg);
+    border: 1px dashed var(--color-border);
+    display: grid;
+    place-items: center;
+  }
+
+  .dir-hero__media-label {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  @media (min-width: 768px) {
+    .dir-hero__grid {
+      grid-template-columns: 1fr 1.1fr;
+      align-items: center;
+      gap: var(--space-12);
+    }
+
+    .dir-hero__title {
+      font-size: var(--font-size-2xl);
+    }
+
+    .dir-hero__media {
+      min-height: 22rem;
+    }
+  }
+</style>

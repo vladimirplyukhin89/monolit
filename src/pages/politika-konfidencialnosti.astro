@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Политика конфиденциальности — Монолит"
+  description="Политика обработки персональных данных компании Монолит."
+>
+  <div class="page-shell">
+    <Header />
+    <main class="section">
+      <div class="container stub">
+        <h1>Политика конфиденциальности</h1>
+        <p>
+          Текст политики появится после заполнения
+          <code>docs/content/politika-konfidencialnosti.md</code>.
+        </p>
+        <p>
+          Оператор: ИП Ерамасов В.Н., ИНН 723011554086, email monolittmn@mail.ru.
+        </p>
+        <p><a href="/">На главную</a></p>
+      </div>
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>
+
+<style>
+  .stub {
+    background: var(--color-bg);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+  }
+
+  .stub h1 {
+    margin-top: 0;
+    font-size: var(--font-size-2xl);
+    font-weight: 500;
+    line-height: var(--line-height-tight);
+  }
+
+  .stub code {
+    font-size: 0.9em;
+  }
+</style>

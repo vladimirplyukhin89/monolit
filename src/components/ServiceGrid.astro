@@ -1,0 +1,83 @@
+---
+import type { ServiceItem } from '../data/blagoustrojstvo';
+
+interface Props {
+  title?: string;
+  items: ServiceItem[];
+}
+
+const { title = 'Наши услуги', items } = Astro.props;
+---
+
+<section class="services section" aria-labelledby="services-title">
+  <div class="container">
+    <h2 id="services-title" class="services__title">{title}</h2>
+    <ul class="services__list">
+      {
+        items.map((item) => (
+          <li class="services__card">
+            <h3 class="services__card-title">{item.title}</h3>
+            <p class="services__card-summary">{item.summary}</p>
+            <p class="services__card-price">{item.priceFrom}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .services__title {
+    margin: 0 0 var(--space-8);
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    line-height: var(--line-height-tight);
+  }
+
+  .services__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .services__card {
+    background: var(--color-bg);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .services__card-title {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    line-height: var(--line-height-tight);
+  }
+
+  .services__card-summary {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .services__card-price {
+    margin: var(--space-2) 0 0;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  @media (min-width: 768px) {
+    .services__list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-6);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .services__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
