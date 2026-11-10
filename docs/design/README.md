@@ -27,5 +27,7 @@
 ## Файлы
 
 - `component-inventory.md` — список компонентов и их статус
+- `tokens-proposal.md` — предложения по токенам до правок в `src/styles/tokens.css`
 - `_templates/reference-analysis.md` — шаблон разбора референса
 - `references/` — разборы и скриншоты референсов
+- `wireframes/` — структура блоков страниц (главная и схема услуг)
