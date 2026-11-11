@@ -230,42 +230,27 @@ const styles = `
     gap: var(--space-3);
     text-align: left;
     padding: var(--space-6);
-    border: 1px solid var(--glass-border);
+    border: 1px solid color-mix(in srgb, var(--color-text) 14%, transparent);
     border-radius: var(--radius-xl);
     color: var(--color-chooser-text);
     font: inherit;
     cursor: pointer;
     overflow: hidden;
-    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
-    box-shadow:
-      inset 0 1px 0 var(--glass-highlight),
-      0 var(--space-2) var(--space-6) var(--shadow-color);
-  }
-  .chooser__card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background: linear-gradient(
-      135deg,
-      color-mix(in srgb, white 35%, transparent) 0%,
-      transparent 42%,
-      transparent 100%
-    );
-    opacity: 0.55;
+    box-shadow: 0 var(--space-2) var(--space-6) var(--shadow-color);
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out);
   }
   .chooser__card > * {
     position: relative;
     z-index: 1;
   }
   .chooser__card--landscaping {
-    background: color-mix(in srgb, var(--color-ambient-landscape) 72%, transparent);
+    background: var(--color-ambient-landscape);
     view-transition-name: dir-landscaping;
   }
   .chooser__card--renovation {
-    background: color-mix(in srgb, var(--color-ambient-renovation) 72%, transparent);
+    background: var(--color-ambient-renovation);
     view-transition-name: dir-renovation;
   }
   .chooser__selected {

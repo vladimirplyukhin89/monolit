@@ -13,7 +13,7 @@
 | Светлые секции | `--color-bg` | `--color-text` (`#222222`) |
 | Тёмные секции | `--color-bg-inverse` (`#222222`) | `--color-on-inverse` (`#ffffff`) |
 | CTA / акценты | `--color-primary` (`#F28C28`) | см. контраст в tokens-proposal |
-| Ambient главной | розовый tint только на карточке ремонта в DirectionChooser | не на этой странице |
+| Ambient главной | лавандовый tint только на карточке ремонта в DirectionChooser | не на этой странице |
 
 Шапка: ссылка на другое направление (`/blagoustrojstvo`). Переключателя ambient на всю страницу нет.
 

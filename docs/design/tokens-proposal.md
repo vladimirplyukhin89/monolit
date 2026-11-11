@@ -8,11 +8,11 @@
 
 | Токен | Значение | Роль |
 |---|---|---|
-| `--color-bg` | `#FFFFFF` | светлые секции / поверхности |
-| `--color-bg-muted` | `#EBE8E2` | фон page-shell (тёплый, сверить с Figma) |
+| `--color-bg` | `#FFFFFF` | фон компонентов / светлых секций |
+| `--color-bg-muted` | `#E8E8E8` | фон page-shell (как география.рф) |
 | `--color-bg-inverse` | `#222222` | контрастные секции (кейсы ремонта и т. п.) |
 | `--color-on-inverse` | `#FFFFFF` | текст на inverse |
-| `--color-surface` | `#F5F3EF` | вторичные поверхности |
+| `--color-surface` | `#FFFFFF` | вторичные поверхности (= `--color-bg` в light) |
 | `--color-text` | `#222222` | основной текст |
 | `--color-text-muted` | `#5C5C5C` | приглушённый текст |
 | `--color-primary` | `#F28C28` | фирменный оранжевый (CTA) |
@@ -22,8 +22,8 @@
 | `--color-inverse-hover` | `color-mix` от inverse | hover тёмных кнопок |
 | `--color-ghost-hover` | `color-mix` от text | hover кнопок-контуров |
 | `--color-scrim` | тёплый тёмный 55 % | фон модалок, подложки на фото |
-| `--color-ambient-landscape` | `#D5E8DA` | салатовый tint карточки «Благоустройство» |
-| `--color-ambient-renovation` | `#F3DDE6` | розовый tint карточки «Ремонт» |
+| `--color-ambient-landscape` | `#D5E8DA` | мятный tint карточки «Благоустройство» (сплит к `#F28C28`) |
+| `--color-ambient-renovation` | `#E2D8F0` | лавандовый tint карточки «Ремонт» (сплит к `#F28C28`) |
 | `--color-chooser-text` | `#222222` | текст на пастельных карточках chooser |
 | `--color-chooser-text-muted` | `#5C5C5C` | приглушённый на карточках chooser |
 
@@ -55,14 +55,14 @@ Primary и primary-contrast без смены. Ambient и chooser-text **не** 
 | `#222222` на `#FFFFFF` | 15.91:1 | ок |
 | `#FFFFFF` на `#F28C28` | **2.45:1** | **не ок** |
 | `#222222` на `#F28C28` | 6.48:1 | ок |
-| `#222222` на `#D5E8DA` / `#F3DDE6` | высокий | ок для текста на карточках |
+| `#222222` на `#D5E8DA` / `#E2D8F0` | высокий | ок для текста на карточках |
 
 **Решено (2026-11-11):** на оранжевой кнопке текст `#222222`.
 
 ## Правила применения
 
 - Оранжевый — CTA и редкие плашки (`PackageBand`), не фон страницы.
-- Салатовый / розовый — **только** карточки DirectionChooser на главной.
+- Мята / лаванда — **только** карточки DirectionChooser на главной (сплит-комплемент к оранжевому).
 - Глобально — light/dark через `data-theme` на `<html>`, переключатель в Header.
 - `/remont-kvartir`: локальные inverse-секции (PhotoHero, CaseGrid dark) — контентный контраст, не тема сайта.
 
@@ -74,3 +74,5 @@ Primary и primary-contrast без смены. Ambient и chooser-text **не** 
 
 - Motion + liquid glass + glow + слайдер кейсов — внесено (2026-11-11).
 - Токены `--ease-spring`, `--glass-*`, `--glow-color`, `--shadow-glow` — в `tokens.css`.
+- Light: только два фона — `#e8e8e8` (`--color-bg-muted`) и `#ffffff` (`--color-bg` / `--color-surface`); тёплые `#ebe8e2` / `#f5f3ef` убраны — внесено (2026-11-11).
+- DirectionChooser: `--color-ambient-renovation` `#F3DDE6` → `#E2D8F0` (лаванда, сплит к оранжевому) — внесено (2026-11-11).

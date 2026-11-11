@@ -153,7 +153,11 @@ export default function CaseSlider({
                     <a className="cases__action cases__action--ghost" href="#cases-title">
                       {viewLabel}
                     </a>
-                    <a className="cases__action cases__action--primary" href={leadHref}>
+                    <a
+                      className="cases__action cases__action--primary"
+                      href={leadHref}
+                      data-lead-dialog
+                    >
                       {leadLabel}
                     </a>
                   </div>

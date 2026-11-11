@@ -2,12 +2,12 @@
 :root {
   color-scheme: light;
 
-  /* Цвета — light */
-  --color-bg: #e8e8e8;
-  --color-bg-muted: #ebe8e2;
+  /* Цвета — light: только #e8e8e8 (страница) и #ffffff (компоненты) */
+  --color-bg: #ffffff;
+  --color-bg-muted: #e8e8e8;
   --color-bg-inverse: #222222;
   --color-on-inverse: #ffffff;
-  --color-surface: #f5f3ef;
+  --color-surface: #ffffff;
   --color-text: #222222;
   --color-text-muted: #5c5c5c;
   --color-primary: #f28c28;
@@ -24,9 +24,9 @@
   --color-scrim: color-mix(in srgb, #1c1a17 55%, transparent);
   --shadow-color: color-mix(in srgb, #1c1a17 14%, transparent);
 
-  /* Tint только для карточек DirectionChooser на главной */
+  /* Tint DirectionChooser: сплит-комплемент к оранжевому (Иттен) */
   --color-ambient-landscape: #d5e8da;
-  --color-ambient-renovation: #f3dde6;
+  --color-ambient-renovation: #e2d8f0;
   /* Текст на пастельных карточках (не следует за dark theme) */
   --color-chooser-text: #222222;
   --color-chooser-text-muted: #5c5c5c;

@@ -16,7 +16,7 @@
 |---|---|---|---|
 | Нейтральное | обе с tint своего направления | muted темы | подсказка |
 | Благоустройство | салатовый `#D5E8DA`, selected-обводка | muted темы | тизер landscaping |
-| Ремонт | розовый `#F3DDE6`, selected-обводка | muted темы | тизер renovation |
+| Ремонт | лаванда `#E2D8F0`, selected-обводка | muted темы | тизер renovation |
 
 Акцент кнопок — `#F28C28`. Ритм светлая/тёмная **секция** на `/remont-kvartir` — см. `wireframes/remont-kvartir.md`.
 

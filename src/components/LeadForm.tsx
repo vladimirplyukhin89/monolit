@@ -46,7 +46,7 @@ export default function LeadForm({ variant = 'section' }: Props) {
 
     setSubmitting(true);
     // Заглушка до API lead (Telegram / Max / почта)
-    console.info('lead stub', { name, phone, message: String(data.get('message') ?? '') });
+    console.info('lead stub', { name, phone });
     window.setTimeout(() => {
       setSubmitting(false);
       setStatus('ok');
@@ -84,10 +84,6 @@ export default function LeadForm({ variant = 'section' }: Props) {
           aria-invalid={invalid.includes('phone') || undefined}
           onInput={() => clearInvalid('phone')}
         />
-      </div>
-      <div className="lead__field">
-        <label htmlFor={`${uid}-message`}>Комментарий</label>
-        <textarea id={`${uid}-message`} name="message" rows={3} />
       </div>
       <label className="lead__consent">
         <input

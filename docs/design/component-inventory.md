@@ -12,7 +12,7 @@
 | ThemeToggle | Переключение light/dark (`data-theme`, localStorage) | все | остров | в коде |
 | Footer | Контакты, реквизиты, ссылка на политику | все | статика | в коде |
 | HeroIntro | Бренд + общий оффер на главной | главная | статика | в коде |
-| DirectionChooser | Два раздела; салатовый/розовый tint на карточках; preview; без заливки страницы | главная | остров | в коде (с preview) |
+| DirectionChooser | Два раздела; мятный/лавандовый tint на карточках; preview; без заливки страницы | главная | остров | в коде (с preview) |
 | DirectionPreview | Тизер услуг/фото/CTA выбранного направления | главная | часть DirectionChooser | в коде |
 | DirectionHero | H1, оффер, CTA, чипы, фото-якорь страницы направления | благоустройство | статика | в коде |
 | PhotoHero | Full-bleed hero ремонта: H1, оффер, CTA, фото-плейсхолдер | ремонт | статика | в коде |
@@ -50,7 +50,7 @@
 ## Решения по открытым вопросам
 
 - **Цены:** отдельной страницы «Цены» нет; диапазоны «от» в карточках услуг + форма расчёта.
-- **Два направления:** общая фирма (`#222222`, `#F28C28`); на главной tint только на карточках chooser (салатовый / розовый); сайт — light/dark через ThemeToggle.
+- **Два направления:** общая фирма (`#222222`, `#F28C28`); на главной tint только на карточках chooser (мята `#D5E8DA` / лаванда `#E2D8F0`); сайт — light/dark через ThemeToggle.
 - **Главная обязательно:** Header (+ ThemeToggle), HeroIntro, DirectionChooser, DirectionPreview, TrustStrip, CTABand/LeadForm, Footer.
 - **`/blagoustrojstvo`:** DirectionHero → TrustStrip → ServiceGrid → BeforeAfter → CTABand → CaseGrid → About → Testimonials → FAQ → LeadForm.
 - **`/remont-kvartir`:** см. `wireframes/remont-kvartir.md` — PhotoHero → TrustStrip → PackageBand (опц.) → ServiceGrid → CaseGrid (inverse) → About → FAQ → LeadForm.
