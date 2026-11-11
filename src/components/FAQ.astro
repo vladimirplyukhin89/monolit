@@ -48,14 +48,64 @@ const { title = 'Частые вопросы', items } = Astro.props;
   }
 
   .faq__item summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-4);
     cursor: pointer;
     font-weight: 600;
-    list-style-position: outside;
+    list-style: none;
+  }
+
+  .faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__item summary::after {
+    content: '+' / '';
+    flex-shrink: 0;
+    color: var(--color-primary);
+    font-size: var(--font-size-xl);
+    font-weight: 400;
+    line-height: 1;
+    transition: rotate var(--duration-base) var(--ease-out);
+  }
+
+  .faq__item[open] summary::after {
+    rotate: 45deg;
   }
 
   .faq__item summary:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 4px;
+  }
+
+  .faq__item::details-content {
+    opacity: 0;
+    transition:
+      opacity var(--duration-base) var(--ease-out),
+      block-size var(--duration-slow) var(--ease-out),
+      content-visibility var(--duration-slow);
+    transition-behavior: allow-discrete;
+  }
+
+  .faq__item[open]::details-content {
+    opacity: 1;
+  }
+
+  @supports (interpolate-size: allow-keywords) {
+    .faq__item {
+      interpolate-size: allow-keywords;
+    }
+
+    .faq__item::details-content {
+      block-size: 0;
+      overflow: hidden;
+    }
+
+    .faq__item[open]::details-content {
+      block-size: auto;
+    }
   }
 
   .faq__item p {

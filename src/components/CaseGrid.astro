@@ -89,6 +89,24 @@ const isDark = variant === 'dark';
     border-radius: var(--radius-xl);
     overflow: hidden;
     padding-bottom: var(--space-4);
+    transition:
+      translate var(--duration-base) var(--ease-out),
+      box-shadow var(--duration-base) var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .cases__card:hover {
+      translate: 0 -2px;
+      box-shadow: 0 var(--space-2) var(--space-6) var(--shadow-color);
+    }
+
+    .cases__card:hover .cases__media img {
+      scale: 1.03;
+    }
+  }
+
+  .cases__media img {
+    transition: scale var(--duration-slow) var(--ease-out);
   }
 
   .cases--dark .cases__card {

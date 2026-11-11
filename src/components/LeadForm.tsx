@@ -1,10 +1,16 @@
 import { useState } from 'react';
 
 type Status = 'idle' | 'ok' | 'error';
+type Field = 'name' | 'phone' | 'consent';
 
 export default function LeadForm() {
   const [status, setStatus] = useState<Status>('idle');
   const [submitting, setSubmitting] = useState(false);
+  const [invalid, setInvalid] = useState<Field[]>([]);
+
+  const clearInvalid = (field: Field) => {
+    setInvalid((fields) => fields.filter((item) => item !== field));
+  };
 
   const onSubmit = (event: { preventDefault: () => void; currentTarget: HTMLFormElement }) => {
     event.preventDefault();
@@ -21,7 +27,13 @@ export default function LeadForm() {
     const phone = String(data.get('phone') ?? '').trim();
     const consent = data.get('consent') === 'on';
 
-    if (!name || !phone || !consent) {
+    const nextInvalid: Field[] = [];
+    if (!name) nextInvalid.push('name');
+    if (!phone) nextInvalid.push('phone');
+    if (!consent) nextInvalid.push('consent');
+    setInvalid(nextInvalid);
+
+    if (nextInvalid.length > 0) {
       setStatus('error');
       return;
     }
@@ -51,7 +63,15 @@ export default function LeadForm() {
             </div>
             <div className="lead__field">
               <label htmlFor="lead-name">Имя</label>
-              <input id="lead-name" name="name" type="text" autoComplete="name" required />
+              <input
+                id="lead-name"
+                name="name"
+                type="text"
+                autoComplete="name"
+                required
+                aria-invalid={invalid.includes('name') || undefined}
+                onInput={() => clearInvalid('name')}
+              />
             </div>
             <div className="lead__field">
               <label htmlFor="lead-phone">Телефон</label>
@@ -62,6 +82,8 @@ export default function LeadForm() {
                 autoComplete="tel"
                 inputMode="tel"
                 required
+                aria-invalid={invalid.includes('phone') || undefined}
+                onInput={() => clearInvalid('phone')}
               />
             </div>
             <div className="lead__field">
@@ -69,7 +91,13 @@ export default function LeadForm() {
               <textarea id="lead-message" name="message" rows={3} />
             </div>
             <label className="lead__consent">
-              <input name="consent" type="checkbox" required />
+              <input
+                name="consent"
+                type="checkbox"
+                required
+                aria-invalid={invalid.includes('consent') || undefined}
+                onChange={() => clearInvalid('consent')}
+              />
               <span>
                 Согласен(на) на обработку персональных данных и ознакомлен(а) с{' '}
                 <a href="/politika-konfidencialnosti">политикой конфиденциальности</a>
@@ -134,6 +162,32 @@ const styles = `
     font: inherit;
     color: var(--color-text);
     background: var(--color-bg);
+    transition:
+      border-color var(--duration-base) var(--ease-out),
+      box-shadow var(--duration-base) var(--ease-out);
+  }
+  .lead__field input:focus-visible,
+  .lead__field textarea:focus-visible {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 30%, transparent);
+  }
+  .lead__form [aria-invalid='true'] {
+    border-color: var(--color-primary);
+    animation: lead-shake var(--duration-slow) var(--ease-out);
+  }
+  .lead__consent input[aria-invalid='true'] {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  @keyframes lead-shake {
+    25% { translate: calc(var(--space-1) * -1) 0; }
+    75% { translate: var(--space-1) 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lead__form [aria-invalid='true'] {
+      animation: none;
+    }
   }
   .lead__consent {
     display: flex;
@@ -173,6 +227,13 @@ const styles = `
   .lead__status {
     margin: 0;
     color: var(--color-text);
+    animation: lead-status-in var(--duration-base) var(--ease-out);
+  }
+  @keyframes lead-status-in {
+    from {
+      opacity: 0;
+      translate: 0 var(--space-1);
+    }
   }
   .lead__status--error {
     color: var(--color-primary);
