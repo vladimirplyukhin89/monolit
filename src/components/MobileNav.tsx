@@ -74,7 +74,7 @@ export default function MobileNav({ phone, phoneHref }: Props) {
           background: var(--color-bg);
           border: 1px solid var(--color-border);
           border-radius: var(--radius-lg);
-          box-shadow: 0 8px 24px color-mix(in srgb, var(--color-text) 12%, transparent);
+          box-shadow: 0 var(--space-2) var(--space-6) var(--shadow-color);
         }
         .mobile-nav__panel a {
           color: var(--color-text);

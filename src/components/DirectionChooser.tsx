@@ -201,7 +201,7 @@ const styles = `
   .chooser__card.is-selected {
     border-color: var(--color-bg-inverse);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px color-mix(in srgb, var(--color-bg-inverse) 18%, transparent);
+    box-shadow: 0 var(--space-2) var(--space-6) var(--shadow-color);
   }
   .chooser__shell:not(.is-active) .chooser__card.is-selected {
     border-color: var(--color-primary);
@@ -285,6 +285,7 @@ const styles = `
     justify-content: center;
     padding: var(--space-3) var(--space-6);
     border-radius: var(--radius-full);
+    border: 1px solid color-mix(in srgb, var(--color-on-inverse) 16%, transparent);
     background: var(--color-bg-inverse);
     color: var(--color-on-inverse);
     text-decoration: none;

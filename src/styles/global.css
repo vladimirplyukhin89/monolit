@@ -75,6 +75,18 @@ a {
   animation-timing-function: var(--ease-out);
 }
 
+.is-theme-switching *,
+.is-theme-switching *::before,
+.is-theme-switching *::after {
+  transition: none !important;
+}
+
+.is-theme-switching::view-transition-group(*),
+.is-theme-switching::view-transition-old(*),
+.is-theme-switching::view-transition-new(*) {
+  animation-duration: var(--theme-duration);
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --press-scale: 1;

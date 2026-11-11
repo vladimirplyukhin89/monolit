@@ -20,8 +20,16 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" />
     <script is:inline>
       (function () {
+        document.addEventListener('DOMContentLoaded', function () {
+          var color = getComputedStyle(document.documentElement)
+            .getPropertyValue('--color-bg-muted')
+            .trim();
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta && color) meta.setAttribute('content', color);
+        });
         try {
           var stored = localStorage.getItem('monolit-theme');
           var theme =

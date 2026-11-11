@@ -23,6 +23,7 @@
 
   /* Затемнения: фон модалок, подложки под текст на фото */
   --color-scrim: color-mix(in srgb, #1c1a17 55%, transparent);
+  --shadow-color: color-mix(in srgb, #1c1a17 14%, transparent);
 
   /* Tint только для карточек DirectionChooser на главной */
   --color-ambient-landscape: #d5e8da;
@@ -76,16 +77,18 @@
 [data-theme='dark'] {
   color-scheme: dark;
 
-  --color-bg: #2a2a2a;
-  --color-bg-muted: #222222;
-  --color-bg-inverse: #f3f3f1;
-  --color-on-inverse: #222222;
-  --color-surface: #333333;
-  --color-text: #f3f3f1;
-  --color-text-muted: #b0b0b0;
+  --color-bg: #2a2825;
+  --color-bg-muted: #211f1d;
+  /* Контрастные секции в dark остаются тёмными — глубже фона страницы */
+  --color-bg-inverse: #1b1a18;
+  --color-on-inverse: #f3f1ec;
+  --color-surface: #34312e;
+  --color-text: #f3f1ec;
+  --color-text-muted: #b3aea6;
   --color-primary: #f28c28;
   --color-primary-contrast: #222222;
-  --color-border: #4a4a4a;
+  --color-border: #4a4642;
 
   --color-scrim: color-mix(in srgb, #000000 65%, transparent);
+  --shadow-color: color-mix(in srgb, #000000 50%, transparent);
 }
