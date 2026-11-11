@@ -18,7 +18,7 @@ const { title = 'Частые вопросы', items } = Astro.props;
     <div class="faq__list">
       {
         items.map((item) => (
-          <details class="faq__item">
+          <details class="faq__item glow">
             <summary>{item.question}</summary>
             <p>{item.answer}</p>
           </details>

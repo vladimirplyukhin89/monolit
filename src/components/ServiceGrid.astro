@@ -19,7 +19,7 @@ const { title = 'Наши услуги', items } = Astro.props;
     <ul class="services__list">
       {
         items.map((item) => (
-          <li class="services__card reveal">
+          <li class="services__card reveal glow">
             <h3 class="services__card-title">{item.title}</h3>
             <p class="services__card-summary">{item.summary}</p>
             <p class="services__card-price">{item.priceFrom}</p>

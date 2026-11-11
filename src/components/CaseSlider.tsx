@@ -137,7 +137,7 @@ export default function CaseSlider({
             onDragEnd={onDragEnd}
           >
             {items.map((item) => (
-              <article key={item.title} className="cases__card" aria-roledescription="slide">
+              <article key={item.title} className="cases__card glow" aria-roledescription="slide">
                 <div
                   className="cases__media"
                   role="img"

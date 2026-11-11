@@ -130,7 +130,7 @@ export default function LeadForm({ variant = 'section' }: Props) {
   return (
     <section id="lead" className="lead section" aria-labelledby="lead-title">
       <div className="container">
-        <div className="lead__panel">
+        <div className="lead__panel glow">
           <h2 id="lead-title" className="lead__title">
             Оставить заявку
           </h2>

@@ -95,6 +95,21 @@ html.has-motion .reveal {
   opacity: 0;
 }
 
+/* Лаконичная подсветка крупных блоков */
+.glow {
+  transition: box-shadow var(--duration-base) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .glow:hover {
+    box-shadow: var(--shadow-glow);
+  }
+}
+
+.glow:focus-within {
+  box-shadow: var(--shadow-glow);
+}
+
 .is-theme-switching *,
 .is-theme-switching *::before,
 .is-theme-switching *::after {
