@@ -1,4 +1,6 @@
 ---
+import CaseSlider from './CaseSlider';
+
 interface CaseItem {
   title: string;
   category: string;
@@ -33,33 +35,15 @@ const isDark = variant === 'dark';
 >
   <div class="container">
     <h2 id="cases-title" class="cases__title">{title}</h2>
-    <ul class="cases__list">
-      {
-        items.map((item) => (
-          <li class="cases__card reveal">
-            <div
-              class="cases__media"
-              role="img"
-              aria-label={`Фото: ${item.title} — будет добавлено`}
-            >
-              <span>{item.category}</span>
-            </div>
-            <h3 class="cases__name">{item.title}</h3>
-            <p class="cases__category">{item.category}</p>
-            {showActions && (
-              <div class="cases__actions">
-                <a class="cases__action cases__action--ghost" href="#cases-title">
-                  {viewLabel}
-                </a>
-                <a class="cases__action cases__action--primary" href={leadHref}>
-                  {leadLabel}
-                </a>
-              </div>
-            )}
-          </li>
-        ))
-      }
-    </ul>
+    <CaseSlider
+      client:visible
+      items={items}
+      variant={variant}
+      showActions={showActions}
+      viewLabel={viewLabel}
+      leadLabel={leadLabel}
+      leadHref={leadHref}
+    />
   </div>
 </section>
 
@@ -74,145 +58,5 @@ const isDark = variant === 'dark';
     font-size: var(--font-size-xl);
     font-weight: 500;
     line-height: var(--line-height-tight);
-  }
-
-  .cases__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: var(--space-4);
-  }
-
-  .cases__card {
-    background: var(--color-bg);
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-    padding-bottom: var(--space-4);
-    transition:
-      translate var(--duration-base) var(--ease-out),
-      box-shadow var(--duration-base) var(--ease-out);
-  }
-
-  @media (hover: hover) {
-    .cases__card:hover {
-      translate: 0 -2px;
-      box-shadow: 0 var(--space-2) var(--space-6) var(--shadow-color);
-    }
-
-    .cases__card:hover .cases__media img {
-      scale: 1.03;
-    }
-  }
-
-  .cases__media img {
-    transition: scale var(--duration-slow) var(--ease-out);
-  }
-
-  .cases--dark .cases__card {
-    background: color-mix(in srgb, var(--color-on-inverse) 6%, var(--color-bg-inverse));
-    border: 1px solid color-mix(in srgb, var(--color-on-inverse) 16%, transparent);
-  }
-
-  .cases__media {
-    min-height: 11rem;
-    background: var(--color-surface);
-    border-bottom: 1px solid var(--color-border);
-    display: grid;
-    place-items: center;
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
-  }
-
-  .cases--dark .cases__media {
-    background: color-mix(in srgb, var(--color-on-inverse) 10%, var(--color-bg-inverse));
-    border-bottom-color: color-mix(in srgb, var(--color-on-inverse) 16%, transparent);
-    color: color-mix(in srgb, var(--color-on-inverse) 55%, transparent);
-  }
-
-  .cases__name {
-    margin: var(--space-4) var(--space-4) var(--space-1);
-    font-size: var(--font-size-lg);
-    font-weight: 600;
-    line-height: var(--line-height-tight);
-  }
-
-  .cases__category {
-    margin: 0 var(--space-4);
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
-  }
-
-  .cases--dark .cases__category {
-    color: color-mix(in srgb, var(--color-on-inverse) 65%, transparent);
-  }
-
-  .cases__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin: var(--space-4) var(--space-4) 0;
-  }
-
-  .cases__action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-full);
-    text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 600;
-    transition:
-      background-color var(--duration-fast) var(--ease-out),
-      transform var(--duration-fast) var(--ease-out);
-  }
-
-  .cases__action:active {
-    transform: scale(var(--press-scale));
-  }
-
-  .cases__action--ghost {
-    border: 1px solid var(--color-border);
-    color: var(--color-text);
-  }
-
-  .cases__action--ghost:hover {
-    background: var(--color-ghost-hover);
-  }
-
-  .cases--dark .cases__action--ghost {
-    border-color: color-mix(in srgb, var(--color-on-inverse) 35%, transparent);
-    color: var(--color-on-inverse);
-  }
-
-  .cases--dark .cases__action--ghost:hover {
-    background: color-mix(in srgb, var(--color-on-inverse) 10%, transparent);
-  }
-
-  .cases__action--primary {
-    background: var(--color-primary);
-    color: var(--color-primary-contrast);
-  }
-
-  .cases__action--primary:hover {
-    background: var(--color-primary-hover);
-  }
-
-  .cases__action--primary:active {
-    background: var(--color-primary-active);
-  }
-
-  @media (min-width: 768px) {
-    .cases__list {
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-6);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .cases__list {
-      grid-template-columns: repeat(3, 1fr);
-    }
   }
 </style>
