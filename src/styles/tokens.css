@@ -32,7 +32,7 @@
   --color-chooser-text-muted: #5c5c5c;
 
   /* Типографика */
-  --font-sans: 'Golos Text', system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-tt-norms), system-ui, -apple-system, sans-serif;
   --font-size-base: 1rem;
   --font-size-lg: 1.25rem;
   --font-size-xl: 1.75rem;
