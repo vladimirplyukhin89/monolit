@@ -46,7 +46,7 @@ Primary и primary-contrast без смены. Ambient и chooser-text **не** 
 
 Тема: `localStorage['monolit-theme']` или `prefers-color-scheme`; anti-FOUC в `BaseLayout`.
 
-Шрифт: Golos Text. Радиусы: sm/md/lg/xl/2xl + `--radius-full` (кнопки, чипы). Контейнер: `72rem`. Анимации: `--duration-*`, `--ease-*`, `--press-scale` — см. `trends-2026.md`.
+Шрифт: TT Norms Pro (`--font-tt-norms`; сейчас пробные Condensed OTF — заменить до релиза). Радиусы: sm/md/lg/xl/2xl + `--radius-full` (кнопки, чипы). Контейнер: `72rem`. Анимации: `--duration-*`, `--ease-*`, `--press-scale` — см. `trends-2026.md`.
 
 ## Контраст (промер)
 
@@ -71,3 +71,6 @@ Primary и primary-contrast без смены. Ambient и chooser-text **не** 
 - Light/dark + tint только в chooser — внесено в `tokens.css` (2026-11-11).
 - Тёплый фон, состояния кнопок, scrim, капсулы, токены анимаций — внесено (2026-11-11), разбор в `trends-2026.md`.
 - Тёплая dark-тема, inverse тёмный в dark, `--shadow-color` — внесено (2026-11-11).
+
+- Motion + liquid glass + glow + слайдер кейсов — внесено (2026-11-11).
+- Токены `--ease-spring`, `--glass-*`, `--glow-color`, `--shadow-glow` — в `tokens.css`.

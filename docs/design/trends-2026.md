@@ -79,19 +79,44 @@
 
 ### Тренд 6: motion
 
-- FAQ: маркер «+» поворачивается в «×», содержимое плавно раскрывается через `::details-content` (высота — где есть `interpolate-size`).
-- Форма: фокус-кольцо, `aria-invalid` с коротким «вздрагиванием», статус появляется с fade.
-- Кейсы: hover — подъём и тень, заготовка zoom для фото.
-- Scrollytelling — деликатный: утилита `.reveal` на `animation-timeline: view()` (только CSS) у карточек и блоков; hero, шапка и форма не анимируются.
-- `DirectionChooser`: смена направления — кроссфейд превью (`startViewTransition` + `flushSync`).
-- Морфинг: карточка направления на главной перетекает в медиа hero (`view-transition-name: dir-landscaping` / `dir-renovation`, проп `transitionName` у `DirectionHero` и `PhotoHero`). В Firefox — обычный переход.
-- Модалка заявки и мобильное меню — `<dialog class="dialog">` (общие стили в `global.css`).
+- FAQ: маркер «+» поворачивается в «×», содержимое плавно раскрывается через `::details-content` (высота — где есть `interpolate-size`) — CSS.
+- Форма: фокус-кольцо, `aria-invalid` с коротким «вздрагиванием», статус появляется с fade — CSS.
+- Кейсы: слайдер `CaseSlider` на Motion (свайп, стрелки, точки с `layoutId`); hover — подъём и `--shadow-glow`.
+- Scrollytelling: `.reveal` + `src/scripts/reveal.ts` (`inView` + `animate` из Motion); класс `html.has-motion` из anti-FOUC.
+- `DirectionChooser`: liquid glass на карточках; оранжевый только у выбранной (`layoutId="chooser-selected"`); превью — `AnimatePresence`.
+- Морфинг карточка → hero: `view-transition-name` (CSS, cross-document).
+- Модалка и мобильное меню: панель на Motion (`src/lib/dialog-motion.ts`), backdrop — CSS.
+
+## Motion (motion.dev)
+
+Зависимость: `motion` (framer-motion). Пресеты: `src/lib/motion.ts`.
+
+| Что | Где |
+|---|---|
+| Модалки / меню-шторка | `dialog-motion.ts` + `animate` |
+| Появление при скролле | `reveal.ts` + `inView` |
+| Chooser (layoutId, превью) | `DirectionChooser` + `LazyMotion`/`domMax` |
+| Слайдер кейсов | `CaseSlider` + drag |
+| Переходы между страницами | CSS `@view-transition` + `--ease-spring` (Motion не умеет cross-document) |
+| Hover кнопок, FAQ, shake полей, glow, тема | CSS |
+
+## Шрифт
+
+- Семейство в CSS: `TT Norms Pro` (`--font-tt-norms` через Astro Fonts API).
+- Сейчас в репо: **пробные** TT Norms Std Trial Condensed (OTF) в `src/fonts/tt-norms/`.
+- **Перед запуском сайта** заменить на купленные TT Norms Pro (woff2) и обновить пути в `astro.config.mjs`.
+
+## Liquid glass и подсветка
+
+- Токены: `--glass-blur`, `--glass-border`, `--glass-highlight`.
+- Подсветка: `--glow-color`, `--shadow-glow`; класс `.glow` на крупных блоках (услуги, trust, отзывы, FAQ, пакет, about, форма, слайды кейсов).
 
 ## Следующие шаги
 
-- Hover-zoom фото кейсов заработает, когда в `.cases__media` появятся `<img>`.
+- Заменить пробный TT Norms на лицензионный Pro (woff2) до релиза.
+- Hover-zoom фото кейсов — когда появятся `<img>`.
 - Поля формы 8px → 12px — решить вместе с макетом.
-- Проверить тёплую палитру (light и dark) с Figma.
+- Сверить тёплую палитру (light и dark) с Figma.
 
 ## Источники
 
