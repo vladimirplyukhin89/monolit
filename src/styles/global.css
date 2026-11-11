@@ -77,8 +77,12 @@ a {
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
+    /* Только longhand-свойства: минификатор сборки выкидывает шорткат animation рядом с animation-timeline */
     .reveal {
-      animation: reveal linear both;
+      animation-name: reveal;
+      animation-duration: auto;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
       animation-timeline: view();
       animation-range: entry 0% entry 40%;
     }

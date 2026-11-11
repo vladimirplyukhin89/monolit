@@ -3,7 +3,7 @@
   color-scheme: light;
 
   /* Цвета — light */
-  --color-bg: #ffffff;
+  --color-bg: #e8e8e8;
   --color-bg-muted: #ebe8e2;
   --color-bg-inverse: #222222;
   --color-on-inverse: #ffffff;
@@ -11,7 +11,6 @@
   --color-text: #222222;
   --color-text-muted: #5c5c5c;
   --color-primary: #f28c28;
-  /* Белый на #F28C28 — 2.45:1, не проходит AA */
   --color-primary-contrast: #222222;
   --color-border: #d9d5ce;
 
