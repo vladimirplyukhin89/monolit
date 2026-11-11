@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 import react from '@astrojs/react';
 
+/** @param {string} file */
 const ttNorms = (file) => `./src/fonts/tt-norms/TT Norms Std Trial Condensed ${file}.otf`;
 
 export default defineConfig({

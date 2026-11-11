@@ -18,21 +18,25 @@ import LeadForm from './LeadForm';
 </dialog>
 
 <script>
+  import { bindDialogEsc, closeDialog, openDialog } from '../lib/dialog-motion';
+
   const dialog = document.getElementById('lead-dialog');
 
   if (dialog instanceof HTMLDialogElement) {
+    bindDialogEsc(dialog);
+
     document.addEventListener('click', (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
 
       if (target.closest('[data-lead-dialog]')) {
         event.preventDefault();
-        dialog.showModal();
+        void openDialog(dialog);
         return;
       }
 
       if (target === dialog || target.closest('#lead-dialog [data-dialog-close]')) {
-        dialog.close();
+        void closeDialog(dialog);
       }
     });
   }

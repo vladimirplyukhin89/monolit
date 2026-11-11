@@ -1,4 +1,5 @@
-import { useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+import { bindDialogEsc, closeDialog, openDialog } from '../lib/dialog-motion';
 
 interface Props {
   phone: string;
@@ -11,13 +12,38 @@ export default function MobileNav({ phone, phoneHref }: Props) {
   const panelId = useId();
   const titleId = useId();
 
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (dialog) {
+      bindDialogEsc(dialog);
+    }
+  }, []);
+
   const show = () => {
-    dialogRef.current?.showModal();
+    const dialog = dialogRef.current;
+    if (!dialog) return;
     setOpen(true);
+    void openDialog(dialog);
   };
 
   const close = () => {
-    dialogRef.current?.close();
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    void closeDialog(dialog);
+  };
+
+  const openLead = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    const menu = dialogRef.current;
+    const lead = document.getElementById('lead-dialog');
+    void (async () => {
+      if (menu?.open) {
+        await closeDialog(menu);
+      }
+      if (lead instanceof HTMLDialogElement) {
+        await openDialog(lead);
+      }
+    })();
   };
 
   return (
@@ -55,7 +81,7 @@ export default function MobileNav({ phone, phoneHref }: Props) {
             <a href={phoneHref} onClick={close}>
               {phone}
             </a>
-            <a href="#lead" data-lead-dialog onClick={close}>
+            <a href="#lead" onClick={openLead}>
               Оставить заявку
             </a>
             <a href="/blagoustrojstvo" onClick={close}>
