@@ -19,12 +19,13 @@ interface Props {
 }
 
 function usePerView(): number {
-  const [perView, setPerView] = useState(1);
+  const [perView, setPerView] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches ? 2 : 1,
+  );
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 768px)');
     const update = () => setPerView(mq.matches ? 2 : 1);
-    update();
     mq.addEventListener('change', update);
     return () => mq.removeEventListener('change', update);
   }, []);
