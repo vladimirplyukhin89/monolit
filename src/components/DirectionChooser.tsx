@@ -249,7 +249,7 @@ const styles = `
       box-shadow var(--duration-fast) var(--ease-out),
       border-radius var(--duration-fast) var(--ease-out),
       opacity var(--duration-fast) var(--ease-out),
-      margin-top var(--duration-fast) var(--ease-out);
+      margin-bottom var(--duration-fast) var(--ease-out);
   }
   .chooser__card--landscaping {
     view-transition-name: dir-landscaping;
@@ -259,7 +259,7 @@ const styles = `
   }
   .chooser__shell.has-selection .chooser__card:not(.is-selected) {
     opacity: 0.72;
-    margin-top: var(--space-2);
+    margin-bottom: var(--space-2);
   }
   .chooser__card.is-selected {
     z-index: 2;
