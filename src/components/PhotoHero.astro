@@ -5,6 +5,8 @@ interface Props {
   ctaLabel?: string;
   ctaHref?: string;
   photoAlt?: string;
+  /** view-transition-name медиа: морфинг из карточки DirectionChooser */
+  transitionName?: string;
 }
 
 const {
@@ -13,11 +15,17 @@ const {
   ctaLabel = 'Оставить заявку',
   ctaHref = '#lead',
   photoAlt = 'Фото готового ремонта — будет добавлено',
+  transitionName,
 } = Astro.props;
 ---
 
 <section class="photo-hero" aria-labelledby="photo-hero-title">
-  <div class="photo-hero__media" role="img" aria-label={photoAlt}>
+  <div
+    class="photo-hero__media"
+    role="img"
+    aria-label={photoAlt}
+    style={transitionName ? `view-transition-name: ${transitionName}` : undefined}
+  >
     <span class="photo-hero__media-label">Фото интерьера</span>
   </div>
   <div class="photo-hero__scrim" aria-hidden="true"></div>

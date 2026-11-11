@@ -1,4 +1,5 @@
 import { useLayoutEffect, useState } from 'react';
+import { flushSync } from 'react-dom';
 
 type Direction = 'neutral' | 'landscaping' | 'renovation';
 
@@ -20,6 +21,21 @@ const renovationServices: PreviewService[] = [
   { title: '[Услуга 3]', price: '[от — ₽]' },
 ];
 
+const previews = {
+  landscaping: {
+    heading: 'Благоустройство',
+    services: landscapingServices,
+    href: '/blagoustrojstvo',
+    cta: 'Смотреть благоустройство',
+  },
+  renovation: {
+    heading: 'Ремонт квартир',
+    services: renovationServices,
+    href: '/remont-kvartir',
+    cta: 'Смотреть ремонт квартир',
+  },
+};
+
 function readDirectionFromUrl(): Direction {
   if (typeof window === 'undefined') {
     return 'neutral';
@@ -40,7 +56,13 @@ export default function DirectionChooser() {
   }, []);
 
   const select = (next: Direction) => {
-    setDirection(next);
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const swapsPreview = hasSelection && next !== direction;
+    if (swapsPreview && !reduced && typeof document.startViewTransition === 'function') {
+      document.startViewTransition(() => flushSync(() => setDirection(next)));
+    } else {
+      setDirection(next);
+    }
     const url = new URL(window.location.href);
     if (next === 'neutral') {
       url.searchParams.delete('dir');
@@ -90,23 +112,7 @@ export default function DirectionChooser() {
               <p className="chooser__hint">Нажмите на раздел, чтобы увидеть услуги.</p>
             ) : null}
 
-            {direction === 'landscaping' ? (
-              <Preview
-                heading="Благоустройство"
-                services={landscapingServices}
-                href="/blagoustrojstvo"
-                cta="Смотреть благоустройство"
-              />
-            ) : null}
-
-            {direction === 'renovation' ? (
-              <Preview
-                heading="Ремонт квартир"
-                services={renovationServices}
-                href="/remont-kvartir"
-                cta="Смотреть ремонт квартир"
-              />
-            ) : null}
+            {direction !== 'neutral' ? <Preview {...previews[direction]} /> : null}
           </div>
         </div>
       </div>
@@ -191,9 +197,11 @@ const styles = `
   }
   .chooser__card--landscaping {
     background: var(--color-ambient-landscape);
+    view-transition-name: dir-landscaping;
   }
   .chooser__card--renovation {
     background: var(--color-ambient-renovation);
+    view-transition-name: dir-renovation;
   }
   .chooser__card:hover {
     border-color: color-mix(in srgb, var(--color-primary) 50%, var(--color-border));
@@ -241,6 +249,11 @@ const styles = `
     border-radius: var(--radius-xl);
     padding: var(--space-6);
     animation: preview-in var(--ambient-duration) ease;
+    view-transition-name: chooser-preview;
+  }
+  ::view-transition-group(chooser-preview) {
+    animation-duration: var(--duration-base);
+    animation-timing-function: var(--ease-out);
   }
   .preview__heading {
     margin: 0 0 var(--space-4);

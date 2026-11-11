@@ -6,6 +6,8 @@ interface Props {
   ctaHref?: string;
   chips?: readonly string[];
   photoAlt?: string;
+  /** view-transition-name медиа: морфинг из карточки DirectionChooser */
+  transitionName?: string;
 }
 
 const {
@@ -15,6 +17,7 @@ const {
   ctaHref = '#lead',
   chips = [],
   photoAlt = 'Фото работ по направлению',
+  transitionName,
 } = Astro.props;
 ---
 
@@ -34,7 +37,12 @@ const {
       }
       <a class="dir-hero__cta" href={ctaHref}>{ctaLabel}</a>
     </div>
-    <div class="dir-hero__media" role="img" aria-label={photoAlt}>
+    <div
+      class="dir-hero__media"
+      role="img"
+      aria-label={photoAlt}
+      style={transitionName ? `view-transition-name: ${transitionName}` : undefined}
+    >
       <span class="dir-hero__media-label">Фото работ</span>
     </div>
   </div>
