@@ -75,6 +75,24 @@ a {
   animation-timing-function: var(--ease-out);
 }
 
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+  }
+}
+
+/* transform, а не translate: translate занят hover-эффектами карточек */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-4));
+  }
+}
+
 .is-theme-switching *,
 .is-theme-switching *::before,
 .is-theme-switching *::after {

@@ -15,7 +15,7 @@ const { title = 'Что говорят клиенты', items } = Astro.props;
     <ul class="reviews__list">
       {
         items.map((item) => (
-          <li class="reviews__item">
+          <li class="reviews__item reveal">
             <blockquote class="reviews__quote">
               <p>{item.quote}</p>
               <footer>
