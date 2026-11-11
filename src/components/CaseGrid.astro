@@ -1,15 +1,36 @@
 ---
-import type { CaseItem } from '../data/blagoustrojstvo';
+interface CaseItem {
+  title: string;
+  category: string;
+}
 
 interface Props {
   title?: string;
   items: CaseItem[];
+  variant?: 'light' | 'dark';
+  showActions?: boolean;
+  viewLabel?: string;
+  leadLabel?: string;
+  leadHref?: string;
 }
 
-const { title = 'Наши работы', items } = Astro.props;
+const {
+  title = 'Наши работы',
+  items,
+  variant = 'light',
+  showActions = false,
+  viewLabel = 'Смотреть',
+  leadLabel = 'Оставить заявку',
+  leadHref = '#lead',
+} = Astro.props;
+
+const isDark = variant === 'dark';
 ---
 
-<section class="cases section" aria-labelledby="cases-title">
+<section
+  class:list={['cases', 'section', isDark && 'cases--dark']}
+  aria-labelledby="cases-title"
+>
   <div class="container">
     <h2 id="cases-title" class="cases__title">{title}</h2>
     <ul class="cases__list">
@@ -25,6 +46,16 @@ const { title = 'Наши работы', items } = Astro.props;
             </div>
             <h3 class="cases__name">{item.title}</h3>
             <p class="cases__category">{item.category}</p>
+            {showActions && (
+              <div class="cases__actions">
+                <a class="cases__action cases__action--ghost" href="#cases-title">
+                  {viewLabel}
+                </a>
+                <a class="cases__action cases__action--primary" href={leadHref}>
+                  {leadLabel}
+                </a>
+              </div>
+            )}
           </li>
         ))
       }
@@ -33,6 +64,11 @@ const { title = 'Наши работы', items } = Astro.props;
 </section>
 
 <style>
+  .cases--dark {
+    background: var(--color-bg-inverse);
+    color: var(--color-on-inverse);
+  }
+
   .cases__title {
     margin: 0 0 var(--space-8);
     font-size: var(--font-size-xl);
@@ -55,6 +91,11 @@ const { title = 'Наши работы', items } = Astro.props;
     padding-bottom: var(--space-4);
   }
 
+  .cases--dark .cases__card {
+    background: color-mix(in srgb, var(--color-on-inverse) 6%, var(--color-bg-inverse));
+    border: 1px solid color-mix(in srgb, var(--color-on-inverse) 16%, transparent);
+  }
+
   .cases__media {
     min-height: 11rem;
     background: var(--color-surface);
@@ -63,6 +104,12 @@ const { title = 'Наши работы', items } = Astro.props;
     place-items: center;
     color: var(--color-text-muted);
     font-size: 0.875rem;
+  }
+
+  .cases--dark .cases__media {
+    background: color-mix(in srgb, var(--color-on-inverse) 10%, var(--color-bg-inverse));
+    border-bottom-color: color-mix(in srgb, var(--color-on-inverse) 16%, transparent);
+    color: color-mix(in srgb, var(--color-on-inverse) 55%, transparent);
   }
 
   .cases__name {
@@ -76,6 +123,66 @@ const { title = 'Наши работы', items } = Astro.props;
     margin: 0 var(--space-4);
     color: var(--color-text-muted);
     font-size: 0.875rem;
+  }
+
+  .cases--dark .cases__category {
+    color: color-mix(in srgb, var(--color-on-inverse) 65%, transparent);
+  }
+
+  .cases__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-4) var(--space-4) 0;
+  }
+
+  .cases__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .cases__action:active {
+    transform: scale(var(--press-scale));
+  }
+
+  .cases__action--ghost {
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+  }
+
+  .cases__action--ghost:hover {
+    background: var(--color-ghost-hover);
+  }
+
+  .cases--dark .cases__action--ghost {
+    border-color: color-mix(in srgb, var(--color-on-inverse) 35%, transparent);
+    color: var(--color-on-inverse);
+  }
+
+  .cases--dark .cases__action--ghost:hover {
+    background: color-mix(in srgb, var(--color-on-inverse) 10%, transparent);
+  }
+
+  .cases__action--primary {
+    background: var(--color-primary);
+    color: var(--color-primary-contrast);
+  }
+
+  .cases__action--primary:hover {
+    background: var(--color-primary-hover);
+  }
+
+  .cases__action--primary:active {
+    background: var(--color-primary-active);
   }
 
   @media (min-width: 768px) {

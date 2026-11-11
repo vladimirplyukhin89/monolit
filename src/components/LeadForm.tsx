@@ -148,13 +148,23 @@ const styles = `
   .lead__submit {
     justify-self: start;
     border: 0;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-full);
     padding: var(--space-3) var(--space-6);
     background: var(--color-primary);
     color: var(--color-primary-contrast);
     font: inherit;
     font-weight: 600;
     cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+  .lead__submit:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+  }
+  .lead__submit:active:not(:disabled) {
+    background: var(--color-primary-active);
+    transform: scale(var(--press-scale));
   }
   .lead__submit:disabled {
     opacity: 0.7;

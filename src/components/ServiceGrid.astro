@@ -1,5 +1,9 @@
 ---
-import type { ServiceItem } from '../data/blagoustrojstvo';
+interface ServiceItem {
+  title: string;
+  summary: string;
+  priceFrom: string;
+}
 
 interface Props {
   title?: string;

@@ -28,8 +28,9 @@
 
 - `component-inventory.md` — список компонентов и их статус
 - `tokens-proposal.md` — предложения по токенам до правок в `src/styles/tokens.css`
+- `trends-2026.md` — тренды 2026 (анимации, радиусы, цвета) и принятые решения
 - `_templates/reference-analysis.md` — шаблон разбора референса
-- `references/` — разборы и скриншоты референсов (`geografiya`, `karagay`, `urban-green`, `lwla`, контент Tilda)
-- `wireframes/` — структура блоков страниц (главная и схема услуг)
+- `references/` — разборы и скриншоты референсов (`geografiya`, `karagay`, `urban-green`, `lwla`, `nikakih-nervov`, контент Tilda)
+- `wireframes/` — структура блоков страниц (`home`, `remont-kvartir`)
 - `figma-blagoustrojstvo.md` — moodboard и чек-лист макета `/blagoustrojstvo` в Figma
 - `../content/` — черновик текстов и фото для копирования (`docs/content/`)

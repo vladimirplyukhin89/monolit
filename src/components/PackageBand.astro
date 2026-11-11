@@ -1,0 +1,103 @@
+---
+interface Props {
+  title?: string;
+  eyebrow?: string;
+  items: readonly string[];
+  priceFrom: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const {
+  title = 'Пакет «под ключ»',
+  eyebrow = 'Пакетное предложение',
+  items,
+  priceFrom,
+  ctaLabel = 'Оставить заявку',
+  ctaHref = '#lead',
+} = Astro.props;
+---
+
+<section class="package section" aria-labelledby="package-title">
+  <div class="container">
+    <div class="package__band">
+      <p class="package__eyebrow">{eyebrow}</p>
+      <h2 id="package-title" class="package__title">{title}</h2>
+      <ol class="package__list">
+        {
+          items.map((item) => (
+            <li>{item}</li>
+          ))
+        }
+      </ol>
+      <p class="package__price">{priceFrom}</p>
+      <a class="package__cta" href={ctaHref}>{ctaLabel}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .package__band {
+    background: var(--color-primary);
+    color: var(--color-primary-contrast);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+  }
+
+  .package__eyebrow {
+    margin: 0 0 var(--space-2);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.9;
+  }
+
+  .package__title {
+    margin: 0 0 var(--space-6);
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    line-height: var(--line-height-tight);
+  }
+
+  .package__list {
+    margin: 0 0 var(--space-6);
+    padding-left: 1.25rem;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .package__price {
+    margin: 0 0 var(--space-6);
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+  }
+
+  .package__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-full);
+    background: var(--color-bg-inverse);
+    color: var(--color-on-inverse);
+    text-decoration: none;
+    font-weight: 600;
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .package__cta:hover {
+    background: var(--color-inverse-hover);
+  }
+
+  .package__cta:active {
+    transform: scale(var(--press-scale));
+  }
+
+  @media (min-width: 768px) {
+    .package__band {
+      padding: var(--space-12);
+    }
+  }
+</style>

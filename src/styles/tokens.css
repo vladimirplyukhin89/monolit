@@ -1,16 +1,35 @@
 /* Дизайн-токены. Согласованы: docs/design/tokens-proposal.md */
 :root {
-  /* Цвета */
+  color-scheme: light;
+
+  /* Цвета — light */
   --color-bg: #ffffff;
-  --color-bg-muted: #e8e8e8;
-  --color-surface: #f3f3f1;
-  --color-text: #2e2e2e;
+  --color-bg-muted: #ebe8e2;
+  --color-bg-inverse: #222222;
+  --color-on-inverse: #ffffff;
+  --color-surface: #f5f3ef;
+  --color-text: #222222;
   --color-text-muted: #5c5c5c;
-  --color-primary: #ed581f;
-  --color-primary-contrast: #ffffff;
-  --color-border: #d4d4d4;
+  --color-primary: #f28c28;
+  /* Белый на #F28C28 — 2.45:1, не проходит AA */
+  --color-primary-contrast: #222222;
+  --color-border: #d9d5ce;
+
+  /* Состояния — производные от базовых токенов */
+  --color-primary-hover: color-mix(in oklch, var(--color-primary), white 12%);
+  --color-primary-active: color-mix(in oklch, var(--color-primary), black 10%);
+  --color-inverse-hover: color-mix(in oklch, var(--color-bg-inverse), var(--color-on-inverse) 14%);
+  --color-ghost-hover: color-mix(in srgb, var(--color-text) 6%, transparent);
+
+  /* Затемнения: фон модалок, подложки под текст на фото */
+  --color-scrim: color-mix(in srgb, #1c1a17 55%, transparent);
+
+  /* Tint только для карточек DirectionChooser на главной */
   --color-ambient-landscape: #d5e8da;
-  --color-ambient-renovation: #f3e2c4;
+  --color-ambient-renovation: #f3dde6;
+  /* Текст на пастельных карточках (не следует за dark theme) */
+  --color-chooser-text: #222222;
+  --color-chooser-text-muted: #5c5c5c;
 
   /* Типографика */
   --font-sans: 'Golos Text', system-ui, -apple-system, sans-serif;
@@ -36,11 +55,37 @@
   --radius-md: 8px;
   --radius-lg: 16px;
   --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-full: 999px;
 
   /* Контейнер */
   --container-max: 72rem;
   --container-gutter: var(--space-4);
 
-  /* Ambient transition */
+  /* Переходы */
   --ambient-duration: 400ms;
+  --theme-duration: 280ms;
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --press-scale: 0.97;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-bg: #2a2a2a;
+  --color-bg-muted: #222222;
+  --color-bg-inverse: #f3f3f1;
+  --color-on-inverse: #222222;
+  --color-surface: #333333;
+  --color-text: #f3f3f1;
+  --color-text-muted: #b0b0b0;
+  --color-primary: #f28c28;
+  --color-primary-contrast: #222222;
+  --color-border: #4a4a4a;
+
+  --color-scrim: color-mix(in srgb, #000000 65%, transparent);
 }

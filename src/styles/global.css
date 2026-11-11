@@ -17,20 +17,15 @@ body {
   line-height: var(--line-height-base);
   color: var(--color-text);
   background-color: var(--color-bg-muted);
+  transition:
+    color var(--theme-duration) ease,
+    background-color var(--theme-duration) ease;
 }
 
 .page-shell {
   min-height: 100vh;
   background-color: var(--color-bg-muted);
-  transition: background-color var(--ambient-duration) ease;
-}
-
-.page-shell[data-direction='landscaping'] {
-  background-color: var(--color-ambient-landscape);
-}
-
-.page-shell[data-direction='renovation'] {
-  background-color: var(--color-ambient-renovation);
+  transition: background-color var(--theme-duration) ease;
 }
 
 img,
@@ -65,6 +60,33 @@ a {
 @media (min-width: 768px) {
   .section {
     padding-block: var(--space-16);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-slow);
+  animation-timing-function: var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --press-scale: 1;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

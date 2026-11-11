@@ -20,11 +20,6 @@ const renovationServices: PreviewService[] = [
   { title: '[Услуга 3]', price: '[от — ₽]' },
 ];
 
-const ambientByDirection: Record<Exclude<Direction, 'neutral'>, string> = {
-  landscaping: 'var(--color-ambient-landscape)',
-  renovation: 'var(--color-ambient-renovation)',
-};
-
 function readDirectionFromUrl(): Direction {
   if (typeof window === 'undefined') {
     return 'neutral';
@@ -36,32 +31,16 @@ function readDirectionFromUrl(): Direction {
   return 'neutral';
 }
 
-function applyAmbient(direction: Direction) {
-  const shell = document.querySelector('.page-shell');
-  if (!(shell instanceof HTMLElement)) {
-    return;
-  }
-  if (direction === 'neutral') {
-    shell.removeAttribute('data-direction');
-    shell.style.removeProperty('background-color');
-    return;
-  }
-  shell.setAttribute('data-direction', direction);
-  shell.style.backgroundColor = ambientByDirection[direction];
-}
-
 export default function DirectionChooser() {
   const [direction, setDirection] = useState<Direction>('neutral');
+  const hasSelection = direction !== 'neutral';
 
   useLayoutEffect(() => {
-    const initial = readDirectionFromUrl();
-    setDirection(initial);
-    applyAmbient(initial);
+    setDirection(readDirectionFromUrl());
   }, []);
 
   const select = (next: Direction) => {
     setDirection(next);
-    applyAmbient(next);
     const url = new URL(window.location.href);
     if (next === 'neutral') {
       url.searchParams.delete('dir');
@@ -77,53 +56,58 @@ export default function DirectionChooser() {
         <h2 id="chooser-title" className="chooser__title">
           Выберите направление
         </h2>
-        <div className="chooser__grid" role="group" aria-label="Направления работ">
-          <button
-            type="button"
-            className={`chooser__card${direction === 'landscaping' ? ' is-selected' : ''}`}
-            aria-pressed={direction === 'landscaping'}
-            onClick={() => select('landscaping')}
-          >
-            <span className="chooser__card-title">Благоустройство</span>
-            <span className="chooser__card-text">
-              Участок под ключ: асфальт, брусчатка, дренаж, отмостки
-            </span>
-            <span className="chooser__card-action">Выбрать</span>
-          </button>
-          <button
-            type="button"
-            className={`chooser__card${direction === 'renovation' ? ' is-selected' : ''}`}
-            aria-pressed={direction === 'renovation'}
-            onClick={() => select('renovation')}
-          >
-            <span className="chooser__card-title">Ремонт квартир</span>
-            <span className="chooser__card-text">[Краткое описание направления]</span>
-            <span className="chooser__card-action">Выбрать</span>
-          </button>
-        </div>
 
-        <div className="chooser__preview" aria-live="polite">
-          {direction === 'neutral' ? (
-            <p className="chooser__hint">Нажмите на раздел — фон страницы подстроится под направление.</p>
-          ) : null}
+        <div
+          className={`chooser__shell${hasSelection ? ' is-active' : ''}`}
+        >
+          <div className="chooser__grid" role="group" aria-label="Направления работ">
+            <button
+              type="button"
+              className={`chooser__card chooser__card--landscaping${direction === 'landscaping' ? ' is-selected' : ''}`}
+              aria-pressed={direction === 'landscaping'}
+              onClick={() => select('landscaping')}
+            >
+              <span className="chooser__card-title">Благоустройство</span>
+              <span className="chooser__card-text">
+                Участок под ключ: асфальт, брусчатка, дренаж, отмостки
+              </span>
+              <span className="chooser__card-action">Выбрать</span>
+            </button>
+            <button
+              type="button"
+              className={`chooser__card chooser__card--renovation${direction === 'renovation' ? ' is-selected' : ''}`}
+              aria-pressed={direction === 'renovation'}
+              onClick={() => select('renovation')}
+            >
+              <span className="chooser__card-title">Ремонт квартир</span>
+              <span className="chooser__card-text">[Краткое описание направления]</span>
+              <span className="chooser__card-action">Выбрать</span>
+            </button>
+          </div>
 
-          {direction === 'landscaping' ? (
-            <Preview
-              heading="Благоустройство"
-              services={landscapingServices}
-              href="/blagoustrojstvo"
-              cta="Смотреть благоустройство"
-            />
-          ) : null}
+          <div className="chooser__preview" aria-live="polite">
+            {!hasSelection ? (
+              <p className="chooser__hint">Нажмите на раздел, чтобы увидеть услуги.</p>
+            ) : null}
 
-          {direction === 'renovation' ? (
-            <Preview
-              heading="Ремонт квартир"
-              services={renovationServices}
-              href="/remont-kvartir"
-              cta="Смотреть ремонт квартир"
-            />
-          ) : null}
+            {direction === 'landscaping' ? (
+              <Preview
+                heading="Благоустройство"
+                services={landscapingServices}
+                href="/blagoustrojstvo"
+                cta="Смотреть благоустройство"
+              />
+            ) : null}
+
+            {direction === 'renovation' ? (
+              <Preview
+                heading="Ремонт квартир"
+                services={renovationServices}
+                href="/remont-kvartir"
+                cta="Смотреть ремонт квартир"
+              />
+            ) : null}
+          </div>
         </div>
       </div>
       <style>{styles}</style>
@@ -171,6 +155,17 @@ const styles = `
     font-weight: 500;
     line-height: var(--line-height-tight);
   }
+  .chooser__shell {
+    border-radius: var(--radius-xl);
+    padding: 0;
+    transition:
+      background-color var(--ambient-duration) ease,
+      padding var(--ambient-duration) ease;
+  }
+  .chooser__shell.is-active {
+    background: var(--color-primary);
+    padding: var(--space-4);
+  }
   .chooser__grid {
     display: grid;
     gap: var(--space-4);
@@ -184,28 +179,40 @@ const styles = `
     padding: var(--space-6);
     border: 2px solid var(--color-border);
     border-radius: var(--radius-xl);
-    background: var(--color-bg);
-    color: var(--color-text);
+    color: var(--color-chooser-text);
     font: inherit;
     cursor: pointer;
     transition:
       border-color var(--ambient-duration) ease,
       transform var(--ambient-duration) ease,
-      background-color var(--ambient-duration) ease;
+      background-color var(--ambient-duration) ease,
+      box-shadow var(--ambient-duration) ease,
+      border-radius var(--ambient-duration) ease;
+  }
+  .chooser__card--landscaping {
+    background: var(--color-ambient-landscape);
+  }
+  .chooser__card--renovation {
+    background: var(--color-ambient-renovation);
   }
   .chooser__card:hover {
     border-color: color-mix(in srgb, var(--color-primary) 50%, var(--color-border));
   }
   .chooser__card.is-selected {
-    border-color: var(--color-primary);
+    border-color: var(--color-bg-inverse);
     transform: translateY(-2px);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--color-bg-inverse) 18%, transparent);
+  }
+  .chooser__shell:not(.is-active) .chooser__card.is-selected {
+    border-color: var(--color-primary);
+    box-shadow: none;
   }
   .chooser__card-title {
     font-size: var(--font-size-lg);
     font-weight: 700;
   }
   .chooser__card-text {
-    color: var(--color-text-muted);
+    color: var(--color-chooser-text-muted);
   }
   .chooser__card-action {
     margin-top: auto;
@@ -213,6 +220,16 @@ const styles = `
     color: var(--color-primary);
   }
   .chooser__preview {
+    margin-top: var(--space-4);
+  }
+  .chooser__shell.is-active .chooser__preview {
+    margin-top: var(--space-4);
+  }
+  .chooser__shell.is-active .preview,
+  .chooser__shell.is-active .chooser__card {
+    border-radius: max(var(--radius-md), calc(var(--radius-xl) - var(--space-4)));
+  }
+  .chooser__shell:not(.is-active) .chooser__preview {
     margin-top: var(--space-8);
   }
   .chooser__hint {
@@ -267,11 +284,20 @@ const styles = `
     align-items: center;
     justify-content: center;
     padding: var(--space-3) var(--space-6);
-    border-radius: var(--radius-lg);
-    background: var(--color-primary);
-    color: var(--color-primary-contrast);
+    border-radius: var(--radius-full);
+    background: var(--color-bg-inverse);
+    color: var(--color-on-inverse);
     text-decoration: none;
     font-weight: 600;
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+  .preview__cta:hover {
+    background: var(--color-inverse-hover);
+  }
+  .preview__cta:active {
+    transform: scale(var(--press-scale));
   }
   @keyframes preview-in {
     from {
@@ -284,6 +310,14 @@ const styles = `
     }
   }
   @media (min-width: 768px) {
+    .chooser__shell.is-active {
+      padding: var(--space-6);
+      border-radius: var(--radius-2xl);
+    }
+    .chooser__shell.is-active .preview,
+    .chooser__shell.is-active .chooser__card {
+      border-radius: max(var(--radius-md), calc(var(--radius-2xl) - var(--space-6)));
+    }
     .chooser__grid {
       grid-template-columns: 1fr 1fr;
       gap: var(--space-6);

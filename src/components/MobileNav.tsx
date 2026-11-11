@@ -47,11 +47,20 @@ export default function MobileNav({ phone, phoneHref }: Props) {
           border: 1px solid var(--color-border);
           background: var(--color-bg);
           color: var(--color-text);
-          border-radius: var(--radius-md);
-          padding: var(--space-2) var(--space-3);
+          border-radius: var(--radius-full);
+          padding: var(--space-2) var(--space-4);
           font: inherit;
           font-weight: 600;
           cursor: pointer;
+          transition:
+            background-color var(--duration-fast) var(--ease-out),
+            transform var(--duration-fast) var(--ease-out);
+        }
+        .mobile-nav__toggle:hover {
+          background: var(--color-surface);
+        }
+        .mobile-nav__toggle:active {
+          transform: scale(var(--press-scale));
         }
         .mobile-nav__panel {
           position: absolute;
