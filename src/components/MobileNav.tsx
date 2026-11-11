@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 
 interface Props {
   phone: string;
@@ -7,7 +7,18 @@ interface Props {
 
 export default function MobileNav({ phone, phoneHref }: Props) {
   const [open, setOpen] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const panelId = useId();
+  const titleId = useId();
+
+  const show = () => {
+    dialogRef.current?.showModal();
+    setOpen(true);
+  };
+
+  const close = () => {
+    dialogRef.current?.close();
+  };
 
   return (
     <div className="mobile-nav">
@@ -16,33 +27,50 @@ export default function MobileNav({ phone, phoneHref }: Props) {
         className="mobile-nav__toggle"
         aria-expanded={open}
         aria-controls={panelId}
-        onClick={() => setOpen((value) => !value)}
+        aria-haspopup="dialog"
+        onClick={show}
       >
-        {open ? 'Закрыть' : 'Меню'}
+        Меню
       </button>
-      {open ? (
-        <nav id={panelId} className="mobile-nav__panel" aria-label="Мобильная">
-          <a href={phoneHref} onClick={() => setOpen(false)}>
-            {phone}
-          </a>
-          <a href="#lead" onClick={() => setOpen(false)}>
-            Оставить заявку
-          </a>
-          <a href="/blagoustrojstvo" onClick={() => setOpen(false)}>
-            Благоустройство
-          </a>
-          <a href="/remont-kvartir" onClick={() => setOpen(false)}>
-            Ремонт квартир
-          </a>
-          <a href="/politika-konfidencialnosti" onClick={() => setOpen(false)}>
-            Политика конфиденциальности
-          </a>
-        </nav>
-      ) : null}
+      <dialog
+        ref={dialogRef}
+        id={panelId}
+        className="dialog"
+        aria-labelledby={titleId}
+        onClose={() => setOpen(false)}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) close();
+        }}
+      >
+        <div className="dialog__body">
+          <div className="dialog__head">
+            <h2 id={titleId} className="dialog__title">
+              Меню
+            </h2>
+            <button type="button" className="dialog__close" aria-label="Закрыть" onClick={close}>
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <nav className="mobile-nav__panel" aria-label="Мобильная">
+            <a href={phoneHref} onClick={close}>
+              {phone}
+            </a>
+            <a href="#lead" data-lead-dialog onClick={close}>
+              Оставить заявку
+            </a>
+            <a href="/blagoustrojstvo" onClick={close}>
+              Благоустройство
+            </a>
+            <a href="/remont-kvartir" onClick={close}>
+              Ремонт квартир
+            </a>
+            <a href="/politika-konfidencialnosti" onClick={close}>
+              Политика конфиденциальности
+            </a>
+          </nav>
+        </div>
+      </dialog>
       <style>{`
-        .mobile-nav {
-          position: relative;
-        }
         .mobile-nav__toggle {
           border: 1px solid var(--color-border);
           background: var(--color-bg);
@@ -63,23 +91,19 @@ export default function MobileNav({ phone, phoneHref }: Props) {
           transform: scale(var(--press-scale));
         }
         .mobile-nav__panel {
-          position: absolute;
-          right: 0;
-          top: calc(100% + var(--space-2));
-          min-width: 16rem;
           display: flex;
           flex-direction: column;
-          gap: var(--space-3);
-          padding: var(--space-4);
-          background: var(--color-bg);
-          border: 1px solid var(--color-border);
-          border-radius: var(--radius-lg);
-          box-shadow: 0 var(--space-2) var(--space-6) var(--shadow-color);
         }
         .mobile-nav__panel a {
+          padding: var(--space-3) 0;
+          border-bottom: 1px solid var(--color-border);
           color: var(--color-text);
           text-decoration: none;
+          font-size: var(--font-size-lg);
           font-weight: 500;
+        }
+        .mobile-nav__panel a:last-child {
+          border-bottom: 0;
         }
       `}</style>
     </div>

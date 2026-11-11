@@ -120,6 +120,144 @@ a {
   }
 }
 
+/* Модалки на <dialog>: шторка снизу на мобильных, окно по центру от 768px.
+   Отступы — у .dialog__body: клик по самому dialog = клик по фону. */
+.dialog {
+  width: 100%;
+  max-width: 100%;
+  max-height: 90dvh;
+  margin: auto auto 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  box-shadow: 0 0 var(--space-8) var(--shadow-color);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  opacity: 0;
+  translate: 0 100%;
+  transition-property: opacity, translate, scale, display, overlay;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--ease-in-out);
+  transition-behavior: allow-discrete;
+}
+
+.dialog[open] {
+  opacity: 1;
+  translate: 0 0;
+  transition-duration: var(--duration-slow);
+  transition-timing-function: var(--ease-out);
+}
+
+@starting-style {
+  .dialog[open] {
+    opacity: 0;
+    translate: 0 100%;
+  }
+}
+
+.dialog::backdrop {
+  background-color: transparent;
+  transition-property: background-color, display, overlay;
+  transition-duration: var(--duration-base);
+  transition-behavior: allow-discrete;
+}
+
+.dialog[open]::backdrop {
+  background-color: var(--color-scrim);
+  transition-duration: var(--duration-slow);
+}
+
+@starting-style {
+  .dialog[open]::backdrop {
+    background-color: transparent;
+  }
+}
+
+@media (min-width: 768px) {
+  .dialog {
+    width: min(36rem, calc(100% - var(--space-8)));
+    margin: auto;
+    border-radius: var(--radius-2xl);
+    translate: 0 0;
+    scale: 0.96;
+  }
+
+  .dialog[open] {
+    scale: 1;
+  }
+
+  @starting-style {
+    .dialog[open] {
+      translate: 0 0;
+      scale: 0.96;
+    }
+  }
+}
+
+html:has(.dialog[open]) {
+  overflow: hidden;
+}
+
+.dialog__body {
+  padding: var(--space-6);
+}
+
+.dialog__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.dialog__title {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+  line-height: var(--line-height-tight);
+}
+
+.dialog__text {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
+}
+
+.dialog__close {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--font-size-lg);
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.dialog__close:hover {
+  background: var(--color-ghost-hover);
+}
+
+.dialog__close:active {
+  transform: scale(var(--press-scale));
+}
+
+@media (min-width: 768px) {
+  .dialog__body {
+    padding: var(--space-8);
+  }
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

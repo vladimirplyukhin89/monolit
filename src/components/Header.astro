@@ -1,4 +1,5 @@
 ---
+import LeadDialog from './LeadDialog.astro';
 import MobileNav from './MobileNav';
 import ThemeToggle from './ThemeToggle';
 
@@ -33,7 +34,7 @@ const {
           )
         }
         <a class="header__link" href={phoneHref}>{phone}</a>
-        <a class="header__cta" href="#lead">Оставить заявку</a>
+        <a class="header__cta" href="#lead" data-lead-dialog>Оставить заявку</a>
       </nav>
 
       <div class="header__mobile">
@@ -45,6 +46,8 @@ const {
     </div>
   </div>
 </header>
+
+<LeadDialog />
 
 <style>
   .header {

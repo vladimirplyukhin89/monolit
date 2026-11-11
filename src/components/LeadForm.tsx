@@ -1,9 +1,15 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
 type Status = 'idle' | 'ok' | 'error';
 type Field = 'name' | 'phone' | 'consent';
 
-export default function LeadForm() {
+interface Props {
+  /** `dialog` — только форма, заголовок и обёртку даёт LeadDialog */
+  variant?: 'section' | 'dialog';
+}
+
+export default function LeadForm({ variant = 'section' }: Props) {
+  const uid = useId();
   const [status, setStatus] = useState<Status>('idle');
   const [submitting, setSubmitting] = useState(false);
   const [invalid, setInvalid] = useState<Field[]>([]);
@@ -48,6 +54,79 @@ export default function LeadForm() {
     }, 400);
   };
 
+  const form = (
+    <form className="lead__form" onSubmit={onSubmit} noValidate>
+      <div className="lead__honeypot" aria-hidden="true">
+        <label htmlFor={`${uid}-site`}>Сайт</label>
+        <input id={`${uid}-site`} name="company_site" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+      <div className="lead__field">
+        <label htmlFor={`${uid}-name`}>Имя</label>
+        <input
+          id={`${uid}-name`}
+          name="name"
+          type="text"
+          autoComplete="name"
+          required
+          aria-invalid={invalid.includes('name') || undefined}
+          onInput={() => clearInvalid('name')}
+        />
+      </div>
+      <div className="lead__field">
+        <label htmlFor={`${uid}-phone`}>Телефон</label>
+        <input
+          id={`${uid}-phone`}
+          name="phone"
+          type="tel"
+          autoComplete="tel"
+          inputMode="tel"
+          required
+          aria-invalid={invalid.includes('phone') || undefined}
+          onInput={() => clearInvalid('phone')}
+        />
+      </div>
+      <div className="lead__field">
+        <label htmlFor={`${uid}-message`}>Комментарий</label>
+        <textarea id={`${uid}-message`} name="message" rows={3} />
+      </div>
+      <label className="lead__consent">
+        <input
+          name="consent"
+          type="checkbox"
+          required
+          aria-invalid={invalid.includes('consent') || undefined}
+          onChange={() => clearInvalid('consent')}
+        />
+        <span>
+          Согласен(на) на обработку персональных данных и ознакомлен(а) с{' '}
+          <a href="/politika-konfidencialnosti">политикой конфиденциальности</a>
+        </span>
+      </label>
+      <button className="lead__submit" type="submit" disabled={submitting}>
+        {submitting ? 'Отправка…' : 'Отправить'}
+      </button>
+      {status === 'ok' ? (
+        <p className="lead__status" role="status">
+          Заявка принята (тест). Скоро подключим отправку на сервер.
+        </p>
+      ) : null}
+      {status === 'error' ? (
+        <p className="lead__status lead__status--error" role="alert">
+          Заполните имя, телефон и согласие.
+        </p>
+      ) : null}
+    </form>
+  );
+
+  if (variant === 'dialog') {
+    return (
+      <>
+        {form}
+        <style>{styles}</style>
+      </>
+    );
+  }
+
   return (
     <section id="lead" className="lead section" aria-labelledby="lead-title">
       <div className="container">
@@ -56,67 +135,7 @@ export default function LeadForm() {
             Оставить заявку
           </h2>
           <p className="lead__text">Перезвоним и согласуем выезд или консультацию.</p>
-          <form className="lead__form" onSubmit={onSubmit} noValidate>
-            <div className="lead__honeypot" aria-hidden="true">
-              <label htmlFor="company_site">Сайт</label>
-              <input id="company_site" name="company_site" type="text" tabIndex={-1} autoComplete="off" />
-            </div>
-            <div className="lead__field">
-              <label htmlFor="lead-name">Имя</label>
-              <input
-                id="lead-name"
-                name="name"
-                type="text"
-                autoComplete="name"
-                required
-                aria-invalid={invalid.includes('name') || undefined}
-                onInput={() => clearInvalid('name')}
-              />
-            </div>
-            <div className="lead__field">
-              <label htmlFor="lead-phone">Телефон</label>
-              <input
-                id="lead-phone"
-                name="phone"
-                type="tel"
-                autoComplete="tel"
-                inputMode="tel"
-                required
-                aria-invalid={invalid.includes('phone') || undefined}
-                onInput={() => clearInvalid('phone')}
-              />
-            </div>
-            <div className="lead__field">
-              <label htmlFor="lead-message">Комментарий</label>
-              <textarea id="lead-message" name="message" rows={3} />
-            </div>
-            <label className="lead__consent">
-              <input
-                name="consent"
-                type="checkbox"
-                required
-                aria-invalid={invalid.includes('consent') || undefined}
-                onChange={() => clearInvalid('consent')}
-              />
-              <span>
-                Согласен(на) на обработку персональных данных и ознакомлен(а) с{' '}
-                <a href="/politika-konfidencialnosti">политикой конфиденциальности</a>
-              </span>
-            </label>
-            <button className="lead__submit" type="submit" disabled={submitting}>
-              {submitting ? 'Отправка…' : 'Отправить'}
-            </button>
-            {status === 'ok' ? (
-              <p className="lead__status" role="status">
-                Заявка принята (тест). Скоро подключим отправку на сервер.
-              </p>
-            ) : null}
-            {status === 'error' ? (
-              <p className="lead__status lead__status--error" role="alert">
-                Заполните имя, телефон и согласие.
-              </p>
-            ) : null}
-          </form>
+          {form}
         </div>
       </div>
       <style>{styles}</style>
