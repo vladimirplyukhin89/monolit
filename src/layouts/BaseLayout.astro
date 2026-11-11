@@ -45,6 +45,9 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
           document.documentElement.dataset.theme = 'light';
           document.documentElement.style.colorScheme = 'light';
         }
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.documentElement.classList.add('has-motion');
+        }
       })();
     </script>
     <title>{title}</title>
@@ -68,5 +71,8 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
   </head>
   <body>
     <slot />
+    <script>
+      import '../scripts/reveal';
+    </script>
   </body>
 </html>

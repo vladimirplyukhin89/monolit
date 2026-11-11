@@ -70,7 +70,34 @@
   --duration-slow: 320ms;
   --ease-out: cubic-bezier(0.2, 0, 0, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Пружина в CSS (linear) — близка к motion spring stiffness 380 / damping 34 */
+  --ease-spring: linear(
+    0,
+    0.1491 6.16%,
+    0.5455 15.8%,
+    0.739 21.57%,
+    0.8717 27.52%,
+    0.9572 33.85%,
+    0.9992 40.67%,
+    1.014 44.46%,
+    1.02 48.71%,
+    1.016 56.33%,
+    1.001 74.32%,
+    0.998 84.27%,
+    1
+  );
   --press-scale: 0.97;
+
+  /* Liquid glass */
+  --glass-blur: 16px;
+  --glass-border: color-mix(in srgb, var(--color-on-inverse) 18%, transparent);
+  --glass-highlight: color-mix(in srgb, white 45%, transparent);
+
+  /* Подсветка крупных блоков */
+  --glow-color: color-mix(in srgb, var(--color-primary) 28%, transparent);
+  --shadow-glow:
+    0 0 0 1px color-mix(in srgb, var(--color-primary) 22%, transparent),
+    0 var(--space-2) var(--space-8) var(--glow-color);
 }
 
 [data-theme='dark'] {
@@ -90,4 +117,8 @@
 
   --color-scrim: color-mix(in srgb, #000000 65%, transparent);
   --shadow-color: color-mix(in srgb, #000000 50%, transparent);
+
+  --glass-border: color-mix(in srgb, white 14%, transparent);
+  --glass-highlight: color-mix(in srgb, white 22%, transparent);
+  --glow-color: color-mix(in srgb, var(--color-primary) 36%, transparent);
 }
