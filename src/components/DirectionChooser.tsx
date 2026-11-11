@@ -1,7 +1,7 @@
-import { AnimatePresence, LazyMotion, LayoutGroup } from 'motion/react';
+import { AnimatePresence, LazyMotion } from 'motion/react';
 import * as m from 'motion/react-m';
 import { useLayoutEffect, useState } from 'react';
-import { fade, motionTransition, spring } from '../lib/motion';
+import { fade, motionTransition, prefersReducedMotion, spring } from '../lib/motion';
 import loadMotionFeatures from '../lib/motion-features';
 
 type Direction = 'neutral' | 'landscaping' | 'renovation';
@@ -69,6 +69,15 @@ export default function DirectionChooser() {
     window.history.replaceState({}, '', url);
   };
 
+  const shellClass = [
+    'chooser__shell',
+    hasSelection ? 'has-selection' : '',
+    direction === 'landscaping' ? 'is-landscaping' : '',
+    direction === 'renovation' ? 'is-renovation' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <LazyMotion features={loadMotionFeatures} strict>
       <section className="chooser section" aria-labelledby="chooser-title">
@@ -77,45 +86,43 @@ export default function DirectionChooser() {
             Выберите направление
           </h2>
 
-          <div className="chooser__shell">
-            <div className="chooser__glow" aria-hidden="true" />
-            <LayoutGroup>
-              <div className="chooser__grid" role="group" aria-label="Направления работ">
-                <DirectionCard
-                  direction="landscaping"
-                  selected={direction === 'landscaping'}
-                  title="Благоустройство"
-                  text="Участок под ключ: асфальт, брусчатка, дренаж, отмостки"
-                  onSelect={() => select('landscaping')}
-                />
-                <DirectionCard
-                  direction="renovation"
-                  selected={direction === 'renovation'}
-                  title="Ремонт квартир"
-                  text="[Краткое описание направления]"
-                  onSelect={() => select('renovation')}
-                />
-              </div>
-            </LayoutGroup>
+          <div className={shellClass}>
+            <div className="chooser__grid" role="group" aria-label="Направления работ">
+              <DirectionCard
+                direction="landscaping"
+                selected={direction === 'landscaping'}
+                title="Благоустройство"
+                text="Участок под ключ: асфальт, брусчатка, дренаж, отмостки"
+                onSelect={() => select('landscaping')}
+              />
+              <DirectionCard
+                direction="renovation"
+                selected={direction === 'renovation'}
+                title="Ремонт квартир"
+                text="[Краткое описание направления]"
+                onSelect={() => select('renovation')}
+              />
+            </div>
 
             <div className="chooser__preview" aria-live="polite">
               {!hasSelection ? (
                 <p className="chooser__hint">Нажмите на раздел, чтобы увидеть услуги.</p>
-              ) : null}
-
-              <AnimatePresence mode="wait">
-                {direction !== 'neutral' ? (
-                  <m.div
-                    key={direction}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={motionTransition(fade)}
-                  >
-                    <Preview {...previews[direction]} />
-                  </m.div>
-                ) : null}
-              </AnimatePresence>
+              ) : (
+                <div className="preview">
+                  <AnimatePresence mode="wait">
+                    <m.div
+                      key={direction}
+                      className="preview__content"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 10 }}
+                      transition={motionTransition(fade)}
+                    >
+                      <PreviewContent {...previews[direction]} />
+                    </m.div>
+                  </AnimatePresence>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -138,29 +145,27 @@ function DirectionCard({
   text: string;
   onSelect: () => void;
 }) {
+  const reduced = prefersReducedMotion();
+
   return (
-    <button
+    <m.button
       type="button"
       className={`chooser__card chooser__card--${direction}${selected ? ' is-selected' : ''}`}
       aria-pressed={selected}
       onClick={onSelect}
+      whileHover={reduced ? undefined : { scale: 1.02, y: -2 }}
+      whileTap={reduced ? undefined : { scale: 0.97 }}
+      whileFocus={reduced ? undefined : { scale: 1.02 }}
+      transition={motionTransition(spring)}
     >
-      {selected ? (
-        <m.span
-          className="chooser__selected"
-          layoutId="chooser-selected"
-          transition={motionTransition(spring)}
-          aria-hidden="true"
-        />
-      ) : null}
       <span className="chooser__card-title">{title}</span>
       <span className="chooser__card-text">{text}</span>
       <span className="chooser__card-action">{selected ? 'Выбрано' : 'Выбрать'}</span>
-    </button>
+    </m.button>
   );
 }
 
-function Preview({
+function PreviewContent({
   heading,
   services,
   href,
@@ -172,7 +177,7 @@ function Preview({
   cta: string;
 }) {
   return (
-    <div className="preview">
+    <>
       <h3 className="preview__heading">{heading}: услуги</h3>
       <ul className="preview__list">
         {services.map((service) => (
@@ -189,7 +194,7 @@ function Preview({
       <a className="preview__cta" href={href}>
         {cta}
       </a>
-    </div>
+    </>
   );
 }
 
@@ -203,70 +208,65 @@ const styles = `
   .chooser__shell {
     position: relative;
     isolation: isolate;
+    padding: var(--space-4);
+    border-radius: var(--radius-2xl);
+    background: transparent;
+    transition: background-color var(--ambient-duration) var(--ease-out);
   }
-  .chooser__glow {
-    pointer-events: none;
-    position: absolute;
-    inset: -10% -5%;
-    z-index: 0;
-    background:
-      radial-gradient(ellipse 45% 55% at 20% 40%, var(--color-ambient-landscape), transparent 70%),
-      radial-gradient(ellipse 45% 55% at 80% 55%, var(--color-ambient-renovation), transparent 70%);
-    filter: blur(28px);
-    opacity: 0.85;
+  .chooser__shell.is-landscaping {
+    background: var(--color-ambient-landscape);
+  }
+  .chooser__shell.is-renovation {
+    background: var(--color-ambient-renovation);
   }
   .chooser__grid {
     position: relative;
     z-index: 1;
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+  .chooser__shell.has-selection .chooser__grid {
+    margin-bottom: 0;
   }
   .chooser__card {
     position: relative;
-    isolation: isolate;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-3);
     text-align: left;
     padding: var(--space-6);
-    border: 1px solid color-mix(in srgb, var(--color-text) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
     border-radius: var(--radius-xl);
+    background: var(--color-bg);
     color: var(--color-chooser-text);
     font: inherit;
     cursor: pointer;
-    overflow: hidden;
     box-shadow: 0 var(--space-2) var(--space-6) var(--shadow-color);
     transition:
       border-color var(--duration-fast) var(--ease-out),
-      box-shadow var(--duration-fast) var(--ease-out);
-  }
-  .chooser__card > * {
-    position: relative;
-    z-index: 1;
+      box-shadow var(--duration-fast) var(--ease-out),
+      border-radius var(--duration-fast) var(--ease-out),
+      opacity var(--duration-fast) var(--ease-out),
+      margin-top var(--duration-fast) var(--ease-out);
   }
   .chooser__card--landscaping {
-    background: var(--color-ambient-landscape);
     view-transition-name: dir-landscaping;
   }
   .chooser__card--renovation {
-    background: var(--color-ambient-renovation);
     view-transition-name: dir-renovation;
   }
-  .chooser__selected {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    border-radius: inherit;
-    background: var(--color-primary);
+  .chooser__shell.has-selection .chooser__card:not(.is-selected) {
+    opacity: 0.72;
+    margin-top: var(--space-2);
   }
   .chooser__card.is-selected {
-    border-color: color-mix(in srgb, var(--color-primary) 55%, transparent);
-    color: var(--color-primary-contrast);
-  }
-  .chooser__card.is-selected .chooser__card-text,
-  .chooser__card.is-selected .chooser__card-action {
-    color: var(--color-primary-contrast);
+    z-index: 2;
+    border-color: color-mix(in srgb, var(--color-bg) 40%, transparent);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: 0 var(--space-1) var(--space-4) var(--shadow-color);
   }
   .chooser__card-title {
     font-size: var(--font-size-lg);
@@ -283,18 +283,39 @@ const styles = `
   .chooser__preview {
     position: relative;
     z-index: 1;
-    margin-top: var(--space-8);
     min-height: 1.5rem;
   }
   .chooser__hint {
     margin: 0;
+    padding: var(--space-2) 0 0;
     color: var(--color-text-muted);
   }
   .preview {
-    background: var(--color-bg);
+    position: relative;
+    overflow: hidden;
     border-radius: var(--radius-xl);
     padding: var(--space-6);
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--glass-border);
+    background:
+      linear-gradient(
+        180deg,
+        var(--glass-highlight) 0%,
+        color-mix(in srgb, var(--color-bg) 55%, transparent) 40%,
+        color-mix(in srgb, var(--color-bg) 72%, transparent) 100%
+      );
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
+    box-shadow:
+      inset 0 1px 0 var(--glass-highlight),
+      0 var(--space-2) var(--space-6) var(--shadow-color);
+    color: var(--color-text);
+  }
+  .chooser__shell.has-selection .preview {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  .preview__content {
+    will-change: transform, opacity;
   }
   .preview__heading {
     margin: 0 0 var(--space-4);
@@ -313,7 +334,7 @@ const styles = `
     justify-content: space-between;
     gap: var(--space-4);
     padding-bottom: var(--space-3);
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
   }
   .preview__item strong {
     white-space: nowrap;
@@ -327,7 +348,8 @@ const styles = `
   .preview__placeholder {
     min-height: 8rem;
     border-radius: var(--radius-lg);
-    background: var(--color-surface);
+    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
     color: var(--color-text-muted);
     display: grid;
     place-items: center;
@@ -357,7 +379,7 @@ const styles = `
   @media (min-width: 768px) {
     .chooser__grid {
       grid-template-columns: 1fr 1fr;
-      gap: var(--space-6);
+      gap: var(--space-4);
     }
     .preview__media {
       grid-template-columns: 1fr 1fr;

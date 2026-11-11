@@ -83,7 +83,7 @@
 - Форма: фокус-кольцо, `aria-invalid` с коротким «вздрагиванием», статус появляется с fade — CSS.
 - Кейсы: слайдер `CaseSlider` на Motion (свайп, стрелки, точки с `layoutId`); hover — подъём и `--shadow-glow`.
 - Scrollytelling: `.reveal` + `src/scripts/reveal.ts` (`inView` + `animate` из Motion); класс `html.has-motion` из anti-FOUC.
-- `DirectionChooser`: liquid glass на карточках; оранжевый только у выбранной (`layoutId="chooser-selected"`); превью — `AnimatePresence`.
+- `DirectionChooser`: Wallet-вкладки — белые кнопки на tint shell направления; статичная liquid glass-панель; контент превью — `AnimatePresence` с `x: ±10`.
 - Морфинг карточка → hero: `view-transition-name` (CSS, cross-document).
 - Модалка и мобильное меню: панель на Motion (`src/lib/dialog-motion.ts`), backdrop — CSS.
 
@@ -95,7 +95,7 @@
 |---|---|
 | Модалки / меню-шторка | `dialog-motion.ts` + `animate` |
 | Появление при скролле | `reveal.ts` + `inView` |
-| Chooser (layoutId, превью) | `DirectionChooser` + `LazyMotion`/`domMax` |
+| Chooser (вкладки, glass-превью) | `DirectionChooser` + `LazyMotion`/`domMax` |
 | Слайдер кейсов | `CaseSlider` + drag |
 | Переходы между страницами | CSS `@view-transition` + `--ease-spring` (Motion не умеет cross-document) |
 | Hover кнопок, FAQ, shake полей, glow, тема | CSS |
