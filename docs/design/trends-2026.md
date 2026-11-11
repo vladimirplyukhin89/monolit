@@ -27,7 +27,7 @@
 - Текст на оранжевой кнопке — `#222222` (`--color-primary-contrast`). Контраст 6.48:1; белый давал 2.45:1 (не AA).
 - Состояния выводятся из базовых токенов через `color-mix(in oklch, ...)`: `--color-primary-hover`, `--color-primary-active`, `--color-inverse-hover`, `--color-ghost-hover`.
 - Затемнение — `--color-scrim` (тёплый тёмный 55 %, в dark — чёрный 65 %). Для фона модалок и подложек под текст на фото; на фото — градиент снизу вверх, не сплошная плашка.
-- Тёплый фон (пробуем, сверить с Figma): `--color-bg-muted` `#E8E8E8` → `#EBE8E2`, `--color-surface` `#F3F3F1` → `#F5F3EF`, `--color-border` `#D4D4D4` → `#D9D5CE`. Dark-тема пока без изменений.
+- Тёплый фон (пробуем, сверить с Figma): `--color-bg-muted` `#E8E8E8` → `#EBE8E2`, `--color-surface` `#F3F3F1` → `#F5F3EF`, `--color-border` `#D4D4D4` → `#D9D5CE`. Dark-тема — см. раздел «Figma: тренды 5 и 6».
 
 ### Радиусы
 
@@ -52,16 +52,46 @@
 
 ### Форма заявки
 
-- И модалка из шапки/CTA, и форма внизу страницы. Модалка — нативный `<dialog>`: на мобиле шторка снизу, на десктопе fade + scale 0.96 → 1; фон `--color-scrim`. Реализация — отдельной задачей через skill `implement-lead`.
+- И модалка из шапки, и форма внизу страницы. Модалка — нативный `<dialog>` (`LeadDialog.astro`): на мобиле шторка снизу, на десктопе fade + scale 0.96 → 1; фон `--color-scrim`. Открывается ссылками с `data-lead-dialog` (без JS работает как якорь `#lead`). Серверный поток заявок не менялся.
+
+## Figma: тренды 5 и 6
+
+Источник: [Figma — Web design trends 2026](https://www.figma.com/resource-library/web-design-trends/). Тренд 5 — тёмная тема как стандарт с переключателем; тренд 6 — motion-дизайн: hover, анимированные состояния, scrollytelling без потери производительности.
+
+### Тренд 5: тёмная тема
+
+Аудит (до правок): в dark `--color-bg-inverse` становился `#F3F3F1` — тёмные секции (`PhotoHero`, `CaseGrid` dark, CTA `PackageBand`, превью chooser) превращались в светлые пятна; тени смешивались из светлого текста и давали ореол; не было `theme-color`.
+
+Решения (2026-11-11):
+- Контрастные секции в dark остаются тёмными: `--color-bg-inverse: #1B1A18` — глубже фона страницы.
+- Тёплые тонированные тёмные вместо нейтрально-серых: bg `#2A2825`, muted `#211F1D`, surface `#34312E`, border `#4A4642`, text `#F3F1EC`, muted text `#B3AEA6` (сверить с Figma).
+- Тени — только через `--shadow-color` (light — тёплый тёмный 14 %, dark — чёрный 50 %).
+- `<meta name="theme-color">` берёт `--color-bg-muted` и обновляется при переключении.
+- Переключение темы — кроссфейд через `document.startViewTransition` (`--theme-duration`), при reduced-motion — мгновенно.
+
+| Пара (dark) | Контраст |
+|---|---|
+| text `#F3F1EC` на bg `#2A2825` | 13.02:1 |
+| muted `#B3AEA6` на bg `#2A2825` | 6.66:1 |
+| primary `#F28C28` на bg `#2A2825` | 5.99:1 |
+| text `#F3F1EC` на inverse `#1B1A18` | 15.41:1 |
+| muted `#B3AEA6` на surface `#34312E` | 5.86:1 |
+
+### Тренд 6: motion
+
+- FAQ: маркер «+» поворачивается в «×», содержимое плавно раскрывается через `::details-content` (высота — где есть `interpolate-size`).
+- Форма: фокус-кольцо, `aria-invalid` с коротким «вздрагиванием», статус появляется с fade.
+- Кейсы: hover — подъём и тень, заготовка zoom для фото.
+- Scrollytelling — деликатный: утилита `.reveal` на `animation-timeline: view()` (только CSS) у карточек и блоков; hero, шапка и форма не анимируются.
+- `DirectionChooser`: смена направления — кроссфейд превью (`startViewTransition` + `flushSync`).
+- Морфинг: карточка направления на главной перетекает в медиа hero (`view-transition-name: dir-landscaping` / `dir-renovation`, проп `transitionName` у `DirectionHero` и `PhotoHero`). В Firefox — обычный переход.
+- Модалка заявки и мобильное меню — `<dialog class="dialog">` (общие стили в `global.css`).
 
 ## Следующие шаги
 
-- `LeadDialog`: `<dialog>` + `@starting-style`, фокус-ловушка нативная, закрытие по Esc и клику по фону.
-- `MobileNav` как шторка на `<dialog>` с той же анимацией.
-- Морфинг карточки направления на главной в hero страницы направления (`view-transition-name`).
-- Вкладки/выбор в `DirectionChooser`: переезжающая подложка + кроссфейд через `startViewTransition()`.
-- Hover карточек кейсов: подъём 2px, фото `scale(1.03)` внутри `overflow: hidden`.
-- Поля формы: плавное появление фокуса, состояние ошибки и успеха.
+- Hover-zoom фото кейсов заработает, когда в `.cases__media` появятся `<img>`.
+- Поля формы 8px → 12px — решить вместе с макетом.
+- Проверить тёплую палитру (light и dark) с Figma.
 
 ## Источники
 

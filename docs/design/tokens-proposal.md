@@ -29,7 +29,20 @@
 
 ### Dark (`[data-theme='dark']`)
 
-Переопределяет bg / muted / surface / text / border / inverse. Primary без смены. Ambient и chooser-text **не** переопределяются — карточки направлений всегда пастельные с тёмным текстом.
+| Токен | Значение | Роль |
+|---|---|---|
+| `--color-bg` | `#2A2825` | поверхности / карточки |
+| `--color-bg-muted` | `#211F1D` | фон page-shell |
+| `--color-bg-inverse` | `#1B1A18` | контрастные секции — остаются тёмными, глубже фона |
+| `--color-on-inverse` | `#F3F1EC` | текст на inverse |
+| `--color-surface` | `#34312E` | вторичные поверхности |
+| `--color-text` | `#F3F1EC` | основной текст |
+| `--color-text-muted` | `#B3AEA6` | приглушённый текст |
+| `--color-border` | `#4A4642` | границы |
+| `--color-scrim` | чёрный 65 % | фон модалок |
+| `--shadow-color` | чёрный 50 % | тени (в light — тёплый тёмный 14 %) |
+
+Primary и primary-contrast без смены. Ambient и chooser-text **не** переопределяются — карточки направлений всегда пастельные с тёмным текстом. Контраст dark-пар — в `trends-2026.md`.
 
 Тема: `localStorage['monolit-theme']` или `prefers-color-scheme`; anti-FOUC в `BaseLayout`.
 
@@ -57,3 +70,4 @@
 
 - Light/dark + tint только в chooser — внесено в `tokens.css` (2026-11-11).
 - Тёплый фон, состояния кнопок, scrim, капсулы, токены анимаций — внесено (2026-11-11), разбор в `trends-2026.md`.
+- Тёплая dark-тема, inverse тёмный в dark, `--shadow-color` — внесено (2026-11-11).
