@@ -11,6 +11,11 @@ interface PreviewService {
   price: string;
 }
 
+interface PreviewPhoto {
+  src: string;
+  alt: string;
+}
+
 const landscapingServices: PreviewService[] = [
   { title: 'Асфальтирование территорий', price: 'от 800 ₽/м²' },
   { title: 'Укладка брусчатки и тротуарной плитки', price: 'от 900 ₽/м²' },
@@ -19,9 +24,10 @@ const landscapingServices: PreviewService[] = [
 ];
 
 const renovationServices: PreviewService[] = [
-  { title: '[Услуга 1]', price: '[от — ₽]' },
-  { title: '[Услуга 2]', price: '[от — ₽]' },
-  { title: '[Услуга 3]', price: '[от — ₽]' },
+  { title: 'Дизайн-проект квартиры', price: 'от 1 500 ₽/м²' },
+  { title: 'Ремонт под ключ', price: 'от 25 000 ₽/м²' },
+  { title: 'Черновая и чистовая отделка', price: 'от 12 000 ₽/м²' },
+  { title: 'Инженерия и сантехника', price: 'от 4 500 ₽/м²' },
 ];
 
 const previews = {
@@ -30,12 +36,32 @@ const previews = {
     services: landscapingServices,
     href: '/blagoustrojstvo',
     cta: 'Смотреть благоустройство',
+    photos: [
+      {
+        src: '/images/png/объект-1.png',
+        alt: 'Готовый участок: мощение и благоустройство территории',
+      },
+      {
+        src: '/images/png/объект-2.png',
+        alt: 'Благоустройство двора: дорожки и покрытие',
+      },
+    ] satisfies PreviewPhoto[],
   },
   renovation: {
     heading: 'Ремонт квартир',
     services: renovationServices,
     href: '/remont-kvartir',
     cta: 'Смотреть ремонт квартир',
+    photos: [
+      {
+        src: '/images/webp/дизайн-1.webp',
+        alt: 'Интерьер квартиры после ремонта под ключ',
+      },
+      {
+        src: '/images/jpg/дизайн-2.jpg',
+        alt: 'Дизайн и отделка жилой комнаты',
+      },
+    ] satisfies PreviewPhoto[],
   },
 };
 
@@ -83,7 +109,7 @@ export default function DirectionChooser() {
       <section className="chooser section" aria-labelledby="chooser-title">
         <div className="container">
           <h2 id="chooser-title" className="chooser__title">
-            Выберите направление
+            Что нужно сделать
           </h2>
 
           <div className={shellClass}>
@@ -92,21 +118,23 @@ export default function DirectionChooser() {
                 direction="landscaping"
                 selected={direction === 'landscaping'}
                 title="Благоустройство"
-                text="Участок под ключ: асфальт, брусчатка, дренаж, отмостки"
+                text="Участок под ключ: асфальт, брусчатка, дренаж и отмостка — от расчёта до сдачи"
                 onSelect={() => select('landscaping')}
               />
               <DirectionCard
                 direction="renovation"
                 selected={direction === 'renovation'}
                 title="Ремонт квартир"
-                text="[Краткое описание направления]"
+                text="Квартира под ключ: дизайн, отделка и инженерия — одна команда и понятный план работ"
                 onSelect={() => select('renovation')}
               />
             </div>
 
             <div className="chooser__preview" aria-live="polite">
               {!hasSelection ? (
-                <p className="chooser__hint">Нажмите на раздел, чтобы увидеть услуги.</p>
+                <p className="chooser__hint">
+                  Выберите направление — покажем услуги и примеры работ.
+                </p>
               ) : (
                 <div className="preview">
                   <AnimatePresence mode="wait">
@@ -170,11 +198,13 @@ function PreviewContent({
   services,
   href,
   cta,
+  photos,
 }: {
   heading: string;
   services: PreviewService[];
   href: string;
   cta: string;
+  photos: PreviewPhoto[];
 }) {
   return (
     <>
@@ -187,9 +217,19 @@ function PreviewContent({
           </li>
         ))}
       </ul>
-      <div className="preview__media" aria-hidden="true">
-        <div className="preview__placeholder">Фото работ — скоро</div>
-        <div className="preview__placeholder">Фото работ — скоро</div>
+      <div className="preview__media">
+        {photos.map((photo) => (
+          <img
+            key={photo.src}
+            className="preview__photo"
+            src={encodeURI(photo.src)}
+            alt={photo.alt}
+            width={640}
+            height={400}
+            loading="lazy"
+            decoding="async"
+          />
+        ))}
       </div>
       <a className="preview__cta" href={href}>
         {cta}
@@ -199,6 +239,12 @@ function PreviewContent({
 }
 
 const styles = `
+  .chooser {
+    --chooser-ink: var(--color-primary-contrast);
+  }
+  [data-theme='dark'] .chooser {
+    --chooser-ink: #ffffff;
+  }
   .chooser__title {
     margin: 0 0 var(--space-8);
     font-size: var(--font-size-xl);
@@ -207,17 +253,42 @@ const styles = `
   }
   .chooser__shell {
     position: relative;
-    isolation: isolate;
     padding: var(--space-4);
     border-radius: var(--radius-2xl);
-    background: transparent;
-    transition: background-color var(--ambient-duration) var(--ease-out);
+    border: 1px solid var(--glass-border);
+    background:
+      linear-gradient(
+        180deg,
+        var(--glass-highlight) 0%,
+        color-mix(in srgb, var(--color-bg) 42%, transparent) 45%,
+        color-mix(in srgb, var(--color-bg) 58%, transparent) 100%
+      );
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
+    box-shadow:
+      inset 0 1px 0 var(--glass-highlight),
+      0 var(--space-2) var(--space-6) var(--shadow-color);
+    transition:
+      background var(--ambient-duration) var(--ease-out),
+      border-color var(--ambient-duration) var(--ease-out);
   }
   .chooser__shell.is-landscaping {
-    background: var(--color-ambient-landscape);
+    background:
+      linear-gradient(
+        180deg,
+        var(--glass-highlight) 0%,
+        color-mix(in srgb, var(--color-ambient-landscape) 70%, transparent) 45%,
+        color-mix(in srgb, var(--color-ambient-landscape) 82%, transparent) 100%
+      );
   }
   .chooser__shell.is-renovation {
-    background: var(--color-ambient-renovation);
+    background:
+      linear-gradient(
+        180deg,
+        var(--glass-highlight) 0%,
+        color-mix(in srgb, var(--color-ambient-renovation) 70%, transparent) 45%,
+        color-mix(in srgb, var(--color-ambient-renovation) 82%, transparent) 100%
+      );
   }
   .chooser__grid {
     position: relative;
@@ -237,18 +308,18 @@ const styles = `
     gap: var(--space-3);
     text-align: left;
     padding: var(--space-6);
-    border: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--chooser-ink) 16%, transparent);
     border-radius: var(--radius-xl);
-    background: var(--color-bg);
-    color: var(--color-chooser-text);
+    background: var(--color-primary);
+    color: var(--chooser-ink);
     font: inherit;
     cursor: pointer;
     box-shadow: 0 var(--space-2) var(--space-6) var(--shadow-color);
     transition:
       border-color var(--duration-fast) var(--ease-out),
       box-shadow var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out),
       border-radius var(--duration-fast) var(--ease-out),
-      opacity var(--duration-fast) var(--ease-out),
       margin-bottom var(--duration-fast) var(--ease-out);
   }
   .chooser__card--landscaping {
@@ -258,27 +329,28 @@ const styles = `
     view-transition-name: dir-renovation;
   }
   .chooser__shell.has-selection .chooser__card:not(.is-selected) {
-    opacity: 0.72;
+    background: var(--color-primary-active);
     margin-bottom: var(--space-2);
   }
   .chooser__card.is-selected {
     z-index: 2;
-    border-color: color-mix(in srgb, var(--color-bg) 40%, transparent);
+    border-color: color-mix(in srgb, var(--chooser-ink) 22%, transparent);
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     box-shadow: 0 var(--space-1) var(--space-4) var(--shadow-color);
   }
   .chooser__card-title {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-xl);
     font-weight: 700;
+    line-height: var(--line-height-tight);
   }
   .chooser__card-text {
-    color: var(--color-chooser-text-muted);
+    color: color-mix(in srgb, var(--chooser-ink) 88%, transparent);
   }
   .chooser__card-action {
     margin-top: auto;
     font-weight: 600;
-    color: var(--color-primary);
+    color: var(--chooser-ink);
   }
   .chooser__preview {
     position: relative;
@@ -295,20 +367,10 @@ const styles = `
     overflow: hidden;
     border-radius: var(--radius-xl);
     padding: var(--space-6);
-    border: 1px solid var(--glass-border);
-    background:
-      linear-gradient(
-        180deg,
-        var(--glass-highlight) 0%,
-        color-mix(in srgb, var(--color-bg) 55%, transparent) 40%,
-        color-mix(in srgb, var(--color-bg) 72%, transparent) 100%
-      );
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    backdrop-filter: blur(var(--glass-blur));
-    box-shadow:
-      inset 0 1px 0 var(--glass-highlight),
-      0 var(--space-2) var(--space-6) var(--shadow-color);
-    color: var(--color-text);
+    border: 1px solid color-mix(in srgb, var(--chooser-ink) 16%, transparent);
+    background: var(--color-primary);
+    box-shadow: 0 var(--space-2) var(--space-6) var(--shadow-color);
+    color: var(--chooser-ink);
   }
   .chooser__shell.has-selection .preview {
     border-top-left-radius: 0;
@@ -334,7 +396,7 @@ const styles = `
     justify-content: space-between;
     gap: var(--space-4);
     padding-bottom: var(--space-3);
-    border-bottom: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--chooser-ink) 18%, transparent);
   }
   .preview__item strong {
     white-space: nowrap;
@@ -345,15 +407,15 @@ const styles = `
     gap: var(--space-3);
     margin-bottom: var(--space-6);
   }
-  .preview__placeholder {
-    min-height: 8rem;
+  .preview__photo {
+    display: block;
+    width: 100%;
+    height: 20rem;
+    object-fit: cover;
+    object-position: top;
     border-radius: var(--radius-lg);
-    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
-    border: 1px solid color-mix(in srgb, var(--color-text) 8%, transparent);
-    color: var(--color-text-muted);
-    display: grid;
-    place-items: center;
-    font-size: 0.875rem;
+    border: 1px solid color-mix(in srgb, var(--chooser-ink) 14%, transparent);
+    background: color-mix(in srgb, var(--chooser-ink) 8%, transparent);
   }
   .preview__cta {
     display: inline-flex;
