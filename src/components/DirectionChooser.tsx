@@ -1,5 +1,8 @@
+import { AnimatePresence, LazyMotion, LayoutGroup } from 'motion/react';
+import * as m from 'motion/react-m';
 import { useLayoutEffect, useState } from 'react';
-import { flushSync } from 'react-dom';
+import { fade, motionTransition, spring } from '../lib/motion';
+import loadMotionFeatures from '../lib/motion-features';
 
 type Direction = 'neutral' | 'landscaping' | 'renovation';
 
@@ -56,13 +59,7 @@ export default function DirectionChooser() {
   }, []);
 
   const select = (next: Direction) => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const swapsPreview = hasSelection && next !== direction;
-    if (swapsPreview && !reduced && typeof document.startViewTransition === 'function') {
-      document.startViewTransition(() => flushSync(() => setDirection(next)));
-    } else {
-      setDirection(next);
-    }
+    setDirection(next);
     const url = new URL(window.location.href);
     if (next === 'neutral') {
       url.searchParams.delete('dir');
@@ -73,51 +70,93 @@ export default function DirectionChooser() {
   };
 
   return (
-    <section className="chooser section" aria-labelledby="chooser-title">
-      <div className="container">
-        <h2 id="chooser-title" className="chooser__title">
-          Выберите направление
-        </h2>
+    <LazyMotion features={loadMotionFeatures} strict>
+      <section className="chooser section" aria-labelledby="chooser-title">
+        <div className="container">
+          <h2 id="chooser-title" className="chooser__title">
+            Выберите направление
+          </h2>
 
-        <div
-          className={`chooser__shell${hasSelection ? ' is-active' : ''}`}
-        >
-          <div className="chooser__grid" role="group" aria-label="Направления работ">
-            <button
-              type="button"
-              className={`chooser__card chooser__card--landscaping${direction === 'landscaping' ? ' is-selected' : ''}`}
-              aria-pressed={direction === 'landscaping'}
-              onClick={() => select('landscaping')}
-            >
-              <span className="chooser__card-title">Благоустройство</span>
-              <span className="chooser__card-text">
-                Участок под ключ: асфальт, брусчатка, дренаж, отмостки
-              </span>
-              <span className="chooser__card-action">Выбрать</span>
-            </button>
-            <button
-              type="button"
-              className={`chooser__card chooser__card--renovation${direction === 'renovation' ? ' is-selected' : ''}`}
-              aria-pressed={direction === 'renovation'}
-              onClick={() => select('renovation')}
-            >
-              <span className="chooser__card-title">Ремонт квартир</span>
-              <span className="chooser__card-text">[Краткое описание направления]</span>
-              <span className="chooser__card-action">Выбрать</span>
-            </button>
-          </div>
+          <div className="chooser__shell">
+            <div className="chooser__glow" aria-hidden="true" />
+            <LayoutGroup>
+              <div className="chooser__grid" role="group" aria-label="Направления работ">
+                <DirectionCard
+                  direction="landscaping"
+                  selected={direction === 'landscaping'}
+                  title="Благоустройство"
+                  text="Участок под ключ: асфальт, брусчатка, дренаж, отмостки"
+                  onSelect={() => select('landscaping')}
+                />
+                <DirectionCard
+                  direction="renovation"
+                  selected={direction === 'renovation'}
+                  title="Ремонт квартир"
+                  text="[Краткое описание направления]"
+                  onSelect={() => select('renovation')}
+                />
+              </div>
+            </LayoutGroup>
 
-          <div className="chooser__preview" aria-live="polite">
-            {!hasSelection ? (
-              <p className="chooser__hint">Нажмите на раздел, чтобы увидеть услуги.</p>
-            ) : null}
+            <div className="chooser__preview" aria-live="polite">
+              {!hasSelection ? (
+                <p className="chooser__hint">Нажмите на раздел, чтобы увидеть услуги.</p>
+              ) : null}
 
-            {direction !== 'neutral' ? <Preview {...previews[direction]} /> : null}
+              <AnimatePresence mode="wait">
+                {direction !== 'neutral' ? (
+                  <m.div
+                    key={direction}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={motionTransition(fade)}
+                  >
+                    <Preview {...previews[direction]} />
+                  </m.div>
+                ) : null}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
-      </div>
-      <style>{styles}</style>
-    </section>
+        <style>{styles}</style>
+      </section>
+    </LazyMotion>
+  );
+}
+
+function DirectionCard({
+  direction,
+  selected,
+  title,
+  text,
+  onSelect,
+}: {
+  direction: 'landscaping' | 'renovation';
+  selected: boolean;
+  title: string;
+  text: string;
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      className={`chooser__card chooser__card--${direction}${selected ? ' is-selected' : ''}`}
+      aria-pressed={selected}
+      onClick={onSelect}
+    >
+      {selected ? (
+        <m.span
+          className="chooser__selected"
+          layoutId="chooser-selected"
+          transition={motionTransition(spring)}
+          aria-hidden="true"
+        />
+      ) : null}
+      <span className="chooser__card-title">{title}</span>
+      <span className="chooser__card-text">{text}</span>
+      <span className="chooser__card-action">{selected ? 'Выбрано' : 'Выбрать'}</span>
+    </button>
   );
 }
 
@@ -162,58 +201,87 @@ const styles = `
     line-height: var(--line-height-tight);
   }
   .chooser__shell {
-    border-radius: var(--radius-xl);
-    padding: 0;
-    transition:
-      background-color var(--ambient-duration) ease,
-      padding var(--ambient-duration) ease;
+    position: relative;
+    isolation: isolate;
   }
-  .chooser__shell.is-active {
-    background: var(--color-primary);
-    padding: var(--space-4);
+  .chooser__glow {
+    pointer-events: none;
+    position: absolute;
+    inset: -10% -5%;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 45% 55% at 20% 40%, var(--color-ambient-landscape), transparent 70%),
+      radial-gradient(ellipse 45% 55% at 80% 55%, var(--color-ambient-renovation), transparent 70%);
+    filter: blur(28px);
+    opacity: 0.85;
   }
   .chooser__grid {
+    position: relative;
+    z-index: 1;
     display: grid;
     gap: var(--space-4);
   }
   .chooser__card {
+    position: relative;
+    isolation: isolate;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-3);
     text-align: left;
     padding: var(--space-6);
-    border: 2px solid var(--color-border);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-xl);
     color: var(--color-chooser-text);
     font: inherit;
     cursor: pointer;
-    transition:
-      border-color var(--ambient-duration) ease,
-      transform var(--ambient-duration) ease,
-      background-color var(--ambient-duration) ease,
-      box-shadow var(--ambient-duration) ease,
-      border-radius var(--ambient-duration) ease;
+    overflow: hidden;
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    box-shadow:
+      inset 0 1px 0 var(--glass-highlight),
+      0 var(--space-2) var(--space-6) var(--shadow-color);
+  }
+  .chooser__card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, white 35%, transparent) 0%,
+      transparent 42%,
+      transparent 100%
+    );
+    opacity: 0.55;
+  }
+  .chooser__card > * {
+    position: relative;
+    z-index: 1;
   }
   .chooser__card--landscaping {
-    background: var(--color-ambient-landscape);
+    background: color-mix(in srgb, var(--color-ambient-landscape) 72%, transparent);
     view-transition-name: dir-landscaping;
   }
   .chooser__card--renovation {
-    background: var(--color-ambient-renovation);
+    background: color-mix(in srgb, var(--color-ambient-renovation) 72%, transparent);
     view-transition-name: dir-renovation;
   }
-  .chooser__card:hover {
-    border-color: color-mix(in srgb, var(--color-primary) 50%, var(--color-border));
+  .chooser__selected {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    background: var(--color-primary);
   }
   .chooser__card.is-selected {
-    border-color: var(--color-bg-inverse);
-    transform: translateY(-2px);
-    box-shadow: 0 var(--space-2) var(--space-6) var(--shadow-color);
+    border-color: color-mix(in srgb, var(--color-primary) 55%, transparent);
+    color: var(--color-primary-contrast);
   }
-  .chooser__shell:not(.is-active) .chooser__card.is-selected {
-    border-color: var(--color-primary);
-    box-shadow: none;
+  .chooser__card.is-selected .chooser__card-text,
+  .chooser__card.is-selected .chooser__card-action {
+    color: var(--color-primary-contrast);
   }
   .chooser__card-title {
     font-size: var(--font-size-lg);
@@ -228,17 +296,10 @@ const styles = `
     color: var(--color-primary);
   }
   .chooser__preview {
-    margin-top: var(--space-4);
-  }
-  .chooser__shell.is-active .chooser__preview {
-    margin-top: var(--space-4);
-  }
-  .chooser__shell.is-active .preview,
-  .chooser__shell.is-active .chooser__card {
-    border-radius: max(var(--radius-md), calc(var(--radius-xl) - var(--space-4)));
-  }
-  .chooser__shell:not(.is-active) .chooser__preview {
+    position: relative;
+    z-index: 1;
     margin-top: var(--space-8);
+    min-height: 1.5rem;
   }
   .chooser__hint {
     margin: 0;
@@ -248,12 +309,7 @@ const styles = `
     background: var(--color-bg);
     border-radius: var(--radius-xl);
     padding: var(--space-6);
-    animation: preview-in var(--ambient-duration) ease;
-    view-transition-name: chooser-preview;
-  }
-  ::view-transition-group(chooser-preview) {
-    animation-duration: var(--duration-base);
-    animation-timing-function: var(--ease-out);
+    border: 1px solid var(--color-border);
   }
   .preview__heading {
     margin: 0 0 var(--space-4);
@@ -313,25 +369,7 @@ const styles = `
   .preview__cta:active {
     transform: scale(var(--press-scale));
   }
-  @keyframes preview-in {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
   @media (min-width: 768px) {
-    .chooser__shell.is-active {
-      padding: var(--space-6);
-      border-radius: var(--radius-2xl);
-    }
-    .chooser__shell.is-active .preview,
-    .chooser__shell.is-active .chooser__card {
-      border-radius: max(var(--radius-md), calc(var(--radius-2xl) - var(--space-6)));
-    }
     .chooser__grid {
       grid-template-columns: 1fr 1fr;
       gap: var(--space-6);
