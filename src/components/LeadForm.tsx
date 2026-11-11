@@ -4,10 +4,24 @@ type Status = 'idle' | 'ok' | 'error';
 type Field = 'name' | 'contact' | 'consent';
 type ContactChannel = 'phone' | 'telegram' | 'max';
 
+interface LeadImage {
+  src: string;
+  width: number;
+  height: number;
+}
+
 interface Props {
   /** `dialog` — только форма, заголовок и обёртку даёт LeadDialog */
   variant?: 'section' | 'dialog';
+  /** Фото справа на desktop (секция); в dialog не показывается */
+  image?: LeadImage;
 }
+
+const DEFAULT_IMAGE: LeadImage = {
+  src: '/images/jpg/участок-3.jpg',
+  width: 1003,
+  height: 1280,
+};
 
 const CHANNELS: readonly {
   id: ContactChannel;
@@ -114,7 +128,7 @@ function ChannelIcon({ channel }: { channel: ContactChannel }) {
   );
 }
 
-export default function LeadForm({ variant = 'section' }: Props) {
+export default function LeadForm({ variant = 'section', image = DEFAULT_IMAGE }: Props) {
   const uid = useId();
   const [status, setStatus] = useState<Status>('idle');
   const [submitting, setSubmitting] = useState(false);
@@ -297,12 +311,25 @@ export default function LeadForm({ variant = 'section' }: Props) {
   return (
     <section id="lead" className="lead section" aria-labelledby="lead-title">
       <div className="container">
-        <div className="lead__panel glow">
-          <h2 id="lead-title" className="lead__title">
-            Оставить заявку
-          </h2>
-          <p className="lead__text">Перезвоним и согласуем выезд или консультацию.</p>
-          {form}
+        <div className="lead__layout">
+          <div className="lead__panel glow">
+            <h2 id="lead-title" className="lead__title">
+              Оставить заявку
+            </h2>
+            <p className="lead__text">Перезвоним и согласуем выезд или консультацию.</p>
+            {form}
+          </div>
+          <div className="lead__media" aria-hidden="true">
+            <img
+              className="lead__photo"
+              src={encodeURI(image.src)}
+              alt=""
+              width={image.width}
+              height={image.height}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
       </div>
       <style>{styles}</style>
@@ -311,11 +338,40 @@ export default function LeadForm({ variant = 'section' }: Props) {
 }
 
 const styles = `
+  .lead__layout {
+    display: grid;
+    gap: var(--space-6);
+  }
   .lead__panel {
     background: var(--color-bg);
     border-radius: var(--radius-xl);
     padding: var(--space-8);
     max-width: 36rem;
+  }
+  .lead__media {
+    display: none;
+  }
+  .lead__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius-xl);
+  }
+  @media (min-width: 768px) {
+    .lead__layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: stretch;
+      gap: var(--space-8);
+    }
+    .lead__panel {
+      max-width: none;
+    }
+    .lead__media {
+      display: block;
+      min-height: 100%;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+    }
   }
   .lead__title {
     margin: 0 0 var(--space-3);

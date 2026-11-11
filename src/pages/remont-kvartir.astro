@@ -67,7 +67,14 @@ import {
         metrics={about.metrics}
       />
       <FAQ items={faq} />
-      <LeadForm client:load />
+      <LeadForm
+        client:load
+        image={{
+          src: '/images/jpg/дизайн-3.jpg',
+          width: 1680,
+          height: 1120,
+        }}
+      />
     </main>
     <Footer />
   </div>
