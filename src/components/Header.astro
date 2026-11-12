@@ -54,20 +54,17 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
         }
       </nav>
 
-      <MobileNav
-        client:load
-        phone={phone}
-        phoneHref={phoneHref}
-        links={links}
-        pageLinks={pageLinks}
-      />
-
       <ThemeToggle client:load />
 
       <div class="header__contacts">
-        <a class="header__phone" href={phoneHref}>{phone}</a>
-        <a class="header__phone-icon" href={phoneHref} aria-label={`Позвонить ${phone}`}>
-          тел.
+        <a
+          class="header__social"
+          href={maxHref || '#'}
+          aria-label="Max"
+          aria-disabled={maxHref ? undefined : 'true'}
+          onclick={maxHref ? undefined : 'event.preventDefault()'}
+        >
+          <img src="/icons/max.svg" width="20" height="20" alt="" />
         </a>
         <a
           class="header__social"
@@ -83,16 +80,24 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
             ></path>
           </svg>
         </a>
-        <a
-          class="header__social"
-          href={maxHref || '#'}
-          aria-label="Max"
-          aria-disabled={maxHref ? undefined : 'true'}
-          onclick={maxHref ? undefined : 'event.preventDefault()'}
-        >
-          <img src="/icons/max.svg" width="20" height="20" alt="" />
+        <a class="header__phone" href={phoneHref}>{phone}</a>
+        <a class="header__phone-icon" href={phoneHref} aria-label={`Позвонить ${phone}`}>
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+            <path
+              fill="currentColor"
+              d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"
+            ></path>
+          </svg>
         </a>
       </div>
+
+      <MobileNav
+        client:load
+        phone={phone}
+        phoneHref={phoneHref}
+        links={links}
+        pageLinks={pageLinks}
+      />
 
       <a class="header__cta" href="#lead" data-lead-dialog>Оставить заявку</a>
     </div>
@@ -123,8 +128,8 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 4.25rem;
-    gap: var(--space-4);
+    min-height: 3.5rem;
+    gap: var(--space-2);
   }
 
   .header__logo {
@@ -142,14 +147,14 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 
   .header__logo :global(svg) {
     display: block;
-    height: 2rem;
+    height: 1.5rem;
     width: auto;
   }
 
   .header__actions {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
+    gap: var(--space-2);
     min-width: 0;
   }
 
@@ -175,22 +180,27 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
   .header__contacts {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-1);
   }
 
-  .header__social {
+  .header__social,
+  .header__phone-icon {
     display: inline-flex;
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: var(--radius-md);
+    color: var(--color-text);
+    text-decoration: none;
     cursor: pointer;
   }
 
-  .header__social:hover {
+  .header__social:hover,
+  .header__phone-icon:hover {
     background: var(--color-ghost-hover);
+    color: var(--color-primary);
   }
 
   .header__social[aria-disabled='true'] {
@@ -198,7 +208,8 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
   }
 
   .header__social svg,
-  .header__social img {
+  .header__social img,
+  .header__phone-icon svg {
     width: 1.25rem;
     height: 1.25rem;
   }
@@ -237,22 +248,32 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     transition: color var(--duration-fast) var(--ease-out);
   }
 
-  .header__phone:hover,
-  .header__phone-icon:hover {
+  .header__phone:hover {
     color: var(--color-primary);
   }
 
-  .header__phone-icon {
-    color: var(--color-text);
-    text-decoration: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: color var(--duration-fast) var(--ease-out);
-  }
-
   @media (min-width: 768px) {
+    .header__inner {
+      min-height: 4.25rem;
+      gap: var(--space-4);
+    }
+
     .header__logo :global(svg) {
-      height: 2.5rem;
+      height: 2rem;
+    }
+
+    .header__actions {
+      gap: var(--space-3);
+    }
+
+    .header__contacts {
+      gap: var(--space-2);
+    }
+
+    .header__social,
+    .header__phone-icon {
+      width: 2.25rem;
+      height: 2.25rem;
     }
 
     .header__phone {

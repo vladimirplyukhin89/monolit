@@ -10,15 +10,21 @@ const ttNorms = (file) => `./src/fonts/tt-norms/TT Norms Std Trial Condensed ${f
 /**
  * Canonical / sitemap / robots:
  * 1. PUBLIC_SITE_URL — явный URL (прод на Beget или зафиксированный стейджинг)
- * 2. DEPLOY_PRIME_URL / URL — Netlify inject при сборке (preview и site URL)
+ * 2. VERCEL_URL — Vercel inject при сборке (хост без протокола)
  * 3. иначе плейсхолдер до появления реального домена
  * @returns {string}
  */
 function resolveSite() {
   const explicit = process.env.PUBLIC_SITE_URL?.trim();
-  const netlify = process.env.DEPLOY_PRIME_URL?.trim() || process.env.URL?.trim();
-  const raw = explicit || netlify || 'https://example.com';
-  return raw.replace(/\/$/, '');
+  if (explicit) return explicit.replace(/\/$/, '');
+
+  const vercelHost = process.env.VERCEL_URL?.trim();
+  if (vercelHost) {
+    const host = vercelHost.replace(/^https?:\/\//, '');
+    return `https://${host}`;
+  }
+
+  return 'https://example.com';
 }
 
 export default defineConfig({

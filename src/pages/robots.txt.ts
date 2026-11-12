@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = ({ site }) => {
-  // Прод (Beget): PUBLIC_INDEXING_ENABLED=true. Netlify staging — false (см. netlify.toml).
+  // Прод (Beget): PUBLIC_INDEXING_ENABLED=true. Vercel staging — false (см. vercel.json).
   const indexingEnabled = import.meta.env.PUBLIC_INDEXING_ENABLED === 'true';
 
   if (!indexingEnabled) {
