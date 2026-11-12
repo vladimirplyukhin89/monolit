@@ -122,6 +122,9 @@ export default function DirectionChooser() {
                 text="Участок под ключ: асфальт, брусчатка, дренаж и отмостка — от расчёта до сдачи"
                 onSelect={() => select('landscaping')}
               />
+              {direction === 'landscaping' ? (
+                <DirectionPreview direction="landscaping" />
+              ) : null}
               <DirectionCard
                 direction="renovation"
                 selected={direction === 'renovation'}
@@ -129,30 +132,15 @@ export default function DirectionChooser() {
                 text="Квартира под ключ: дизайн, отделка и инженерия — одна команда и понятный план работ"
                 onSelect={() => select('renovation')}
               />
+              {direction === 'renovation' ? (
+                <DirectionPreview direction="renovation" />
+              ) : null}
             </div>
-
-            <div className="chooser__preview" aria-live="polite">
-              {!hasSelection ? (
-                <p className="chooser__hint">
-                  Выберите направление — покажем услуги и примеры работ.
-                </p>
-              ) : (
-                <div className="preview">
-                  <AnimatePresence mode="wait">
-                    <m.div
-                      key={direction}
-                      className="preview__content"
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 10 }}
-                      transition={motionTransition(fade)}
-                    >
-                      <PreviewContent {...previews[direction]} />
-                    </m.div>
-                  </AnimatePresence>
-                </div>
-              )}
-            </div>
+            {!hasSelection ? (
+              <p className="chooser__hint">
+                Выберите направление — покажем услуги и примеры работ.
+              </p>
+            ) : null}
           </div>
         </div>
         <style>{styles}</style>
@@ -191,6 +179,27 @@ function DirectionCard({
       <span className="chooser__card-text">{text}</span>
       <span className="chooser__card-action">{selected ? 'Выбрано' : 'Выбрать'}</span>
     </m.button>
+  );
+}
+
+function DirectionPreview({ direction }: { direction: 'landscaping' | 'renovation' }) {
+  return (
+    <div className="chooser__preview" aria-live="polite">
+      <div className="preview">
+        <AnimatePresence mode="wait">
+          <m.div
+            key={direction}
+            className="preview__content"
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 10 }}
+            transition={motionTransition(fade)}
+          >
+            <PreviewContent {...previews[direction]} />
+          </m.div>
+        </AnimatePresence>
+      </div>
+    </div>
   );
 }
 
@@ -248,7 +257,7 @@ const styles = `
   }
   .chooser__title {
     margin: 0 0 var(--space-8);
-    font-size: 2rem;
+    font-size: var(--font-size-xl);
     font-weight: 500;
     line-height: var(--line-height-tight);
   }
@@ -300,6 +309,9 @@ const styles = `
   }
   .chooser__shell.has-selection .chooser__grid {
     margin-bottom: 0;
+  }
+  .chooser__card.is-selected + .chooser__preview {
+    margin-top: calc(var(--space-3) * -1);
   }
   .chooser__card {
     position: relative;
@@ -411,9 +423,9 @@ const styles = `
   .preview__photo {
     display: block;
     width: 100%;
-    height: 20rem;
+    height: 14rem;
     object-fit: cover;
-    object-position: top;
+    object-position: top center;
     border-radius: var(--radius-lg);
     border: 1px solid color-mix(in srgb, var(--chooser-ink) 14%, transparent);
     background: color-mix(in srgb, var(--chooser-ink) 8%, transparent);
@@ -444,8 +456,24 @@ const styles = `
       grid-template-columns: 1fr 1fr;
       gap: var(--space-4);
     }
+    .chooser__card--landscaping {
+      order: 1;
+    }
+    .chooser__card--renovation {
+      order: 2;
+    }
+    .chooser__preview {
+      order: 3;
+      grid-column: 1 / -1;
+    }
+    .chooser__card.is-selected + .chooser__preview {
+      margin-top: calc(var(--space-4) * -1);
+    }
     .preview__media {
       grid-template-columns: 1fr 1fr;
+    }
+    .preview__photo {
+      height: 16rem;
     }
   }
 `;

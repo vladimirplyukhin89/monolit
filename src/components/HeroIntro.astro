@@ -34,7 +34,7 @@ const slidesDefault: readonly HeroSlide[] = [
 ];
 
 const {
-  eyebrow = 'Тюмень',
+  eyebrow = '',
   chips = [
     'Асфальтирование',
     'Брусчатка',
@@ -111,7 +111,7 @@ const {
   .hero__title {
     margin: 0 0 var(--space-4);
     color: var(--color-on-inverse);
-    font-size: var(--font-size-2xl);
+    font-size: var(--font-size-xl);
     font-weight: 700;
     line-height: var(--line-height-tight);
   }
@@ -130,11 +130,11 @@ const {
   }
 
   .hero__chips li {
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-1) var(--space-2);
     border: 1px solid color-mix(in srgb, var(--color-on-inverse) 55%, transparent);
     border-radius: var(--radius-full);
     color: var(--color-on-inverse);
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-sm);
     font-weight: 500;
     background-image: linear-gradient(
       105deg,
@@ -149,7 +149,7 @@ const {
 
   .hero__actions {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     align-items: stretch;
     gap: var(--space-3);
   }
@@ -186,14 +186,13 @@ const {
     align-items: center;
     justify-content: center;
     width: 100%;
-    min-height: 3.5rem;
     margin: 0;
     padding: var(--space-2) var(--space-3);
     text-align: center;
     border-radius: var(--radius-md);
     background: color-mix(in srgb, var(--color-primary) 18%, var(--color-bg));
     color: color-mix(in oklch, var(--color-primary) 55%, var(--color-text));
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-sm);
     font-weight: 300;
     line-height: var(--line-height-tight);
   }
@@ -214,6 +213,14 @@ const {
     .hero__title {
       width: 50cqi;
       font-size: calc(var(--font-size-2xl) * 1.35);
+    }
+
+    .hero__actions {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .hero__note {
+      min-height: 3.5rem;
     }
   }
 

@@ -48,6 +48,8 @@ Primary и primary-contrast без смены. Ambient и chooser-text **не** 
 
 Шрифт: TT Norms Pro (`--font-tt-norms`; сейчас пробные Condensed OTF — заменить до релиза). Радиусы: sm/md/lg/xl/2xl + `--radius-full` (кнопки, чипы). Контейнер: `72rem`. Анимации: `--duration-*`, `--ease-*`, `--press-scale` — см. `trends-2026.md`.
 
+Типографика (mobile / с `768px`): `--font-size-sm` 14px; `--font-size-base` 16 / 17px; `--font-size-lg` 18 / 20px; `--font-size-xl` 24 / 32px; `--font-size-2xl` 28 / 40px. Шкала под чтение на узком экране (iPhone SE), с `2026-11-12`.
+
 ## Контраст (промер)
 
 | Пара | Контраст | WCAG 2.1 AA |
@@ -76,3 +78,4 @@ Primary и primary-contrast без смены. Ambient и chooser-text **не** 
 - Токены `--ease-spring`, `--glass-*`, `--glow-color`, `--shadow-glow` — в `tokens.css`.
 - Light: только два фона — `#e8e8e8` (`--color-bg-muted`) и `#ffffff` (`--color-bg` / `--color-surface`); тёплые `#ebe8e2` / `#f5f3ef` убраны — внесено (2026-11-11).
 - DirectionChooser: `--color-ambient-renovation` `#F3DDE6` → `#E2D8F0` (лаванда, сплит к оранжевому) — внесено (2026-11-11).
+- Типографика mobile-first (`--font-size-sm` … `--font-size-2xl`, bump с `768px`) — внесено (2026-11-12).
