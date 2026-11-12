@@ -191,7 +191,7 @@ export default function LeadForm({ variant = 'section', image = DEFAULT_IMAGE }:
     };
 
     // Отправка только если задан PUBLIC_LEAD_ENDPOINT (прод на Beget).
-    // На Netlify staging переменная не задаётся — сеть и прод-каналы не трогаем.
+    // На Vercel staging переменная не задаётся — сеть и прод-каналы не трогаем.
     const endpoint = import.meta.env.PUBLIC_LEAD_ENDPOINT?.trim();
     if (!endpoint) {
       console.info('lead stub (no PUBLIC_LEAD_ENDPOINT)', payload);

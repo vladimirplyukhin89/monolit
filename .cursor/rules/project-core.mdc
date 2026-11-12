@@ -12,7 +12,7 @@ alwaysApply: true
 - Astro SSG, TypeScript strict, npm
 - React только для островов (форма, калькулятор, галерея); остальное — `.astro` без клиентского JS
 - Хостинг прода Beget: сборка в `dist/`, без SSR/серверных адаптеров без согласования
-- Стейджинг: Netlify (статика only; см. `docs/architecture/deploy.md` и `netlify.toml`)
+- Стейджинг: Vercel (статика only; см. `docs/architecture/deploy.md` и `vercel.json`)
 
 ## Обязательно
 

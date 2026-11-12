@@ -13,7 +13,7 @@ description: Реализует или правит форму заявок и �
 
 ## Целевой поток
 
-1. Остров `LeadForm`: клиентская валидация → `POST` JSON на `PUBLIC_LEAD_ENDPOINT` (обычно `/api/lead`). Без переменной — stub (Netlify staging).
+1. Остров `LeadForm`: клиентская валидация → `POST` JSON на `PUBLIC_LEAD_ENDPOINT` (обычно `/api/lead`). Без переменной — stub (Vercel staging).
 2. Сервер: метод, размер, honeypot (`website`), `startedAt`, rate limit, поля, `consent === true`.
 3. **Сначала сохранить** заявку, потом независимая рассылка в Telegram / Max / почту (таймаут 5–10 с на канал).
 4. Ответ `200 {"ok": true}`, если сохранено; `400` с `errors`; `429`; `500` только если не сохранили.
@@ -34,4 +34,4 @@ description: Реализует или правит форму заявок и �
 
 - Сверь `.env.example` с новыми именами переменных (без значений).
 - Напомни про проверки на Beget из раздела «Открытые вопросы» в `leads.md`.
-- На Netlify staging не задавать секреты каналов и `PUBLIC_LEAD_ENDPOINT` (см. `docs/architecture/deploy.md`).
+- На Vercel staging не задавать секреты каналов и `PUBLIC_LEAD_ENDPOINT` (см. `docs/architecture/deploy.md`).
