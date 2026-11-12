@@ -5,17 +5,19 @@ interface Metric {
 }
 
 interface Props {
+  eyebrow?: string;
   title?: string;
   text: string;
   metrics?: readonly Metric[];
 }
 
-const { title = 'О нас', text, metrics = [] } = Astro.props;
+const { eyebrow = 'Компания', title = 'О нас', text, metrics = [] } = Astro.props;
 ---
 
-<section class="about section" aria-labelledby="about-title">
+<section id="about" class="about section" aria-labelledby="about-title">
   <div class="container">
-    <div class="about__panel">
+    <div class="about__panel reveal glow">
+      <p class="eyebrow">{eyebrow}</p>
       <h2 id="about-title" class="about__title">{title}</h2>
       <p class="about__text">{text}</p>
       {

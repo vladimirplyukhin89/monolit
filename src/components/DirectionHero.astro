@@ -1,26 +1,32 @@
 ---
 interface Props {
+  eyebrow?: string;
   title: string;
   support: string;
   ctaLabel?: string;
   ctaHref?: string;
   chips?: readonly string[];
   photoAlt?: string;
+  /** view-transition-name медиа: морфинг из карточки DirectionChooser */
+  transitionName?: string;
 }
 
 const {
+  eyebrow = 'Благоустройство',
   title,
   support,
   ctaLabel = 'Оставить заявку',
   ctaHref = '#lead',
   chips = [],
   photoAlt = 'Фото работ по направлению',
+  transitionName,
 } = Astro.props;
 ---
 
 <section class="dir-hero section">
   <div class="container dir-hero__grid">
     <div class="dir-hero__copy">
+      <p class="eyebrow">{eyebrow}</p>
       <h1 class="dir-hero__title">{title}</h1>
       <p class="dir-hero__support">{support}</p>
       {
@@ -32,9 +38,14 @@ const {
           </ul>
         )
       }
-      <a class="dir-hero__cta" href={ctaHref}>{ctaLabel}</a>
+      <a class="dir-hero__cta" href={ctaHref} data-lead-dialog>{ctaLabel}</a>
     </div>
-    <div class="dir-hero__media" role="img" aria-label={photoAlt}>
+    <div
+      class="dir-hero__media"
+      role="img"
+      aria-label={photoAlt}
+      style={transitionName ? `view-transition-name: ${transitionName}` : undefined}
+    >
       <span class="dir-hero__media-label">Фото работ</span>
     </div>
   </div>
@@ -61,7 +72,7 @@ const {
   .dir-hero__support {
     margin: 0 0 var(--space-6);
     color: var(--color-text-muted);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
   }
 
   .dir-hero__chips {
@@ -75,10 +86,10 @@ const {
 
   .dir-hero__chips li {
     padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-full);
     background: color-mix(in srgb, var(--color-bg) 80%, transparent);
     border: 1px solid var(--color-border);
-    font-size: 0.875rem;
+    font-size: var(--font-size-base);
     color: var(--color-text-muted);
   }
 
@@ -87,11 +98,23 @@ const {
     align-items: center;
     justify-content: center;
     padding: var(--space-3) var(--space-6);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-full);
     background: var(--color-primary);
     color: var(--color-primary-contrast);
     text-decoration: none;
     font-weight: 600;
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .dir-hero__cta:hover {
+    background: var(--color-primary-hover);
+  }
+
+  .dir-hero__cta:active {
+    background: var(--color-primary-active);
+    transform: scale(var(--press-scale));
   }
 
   .dir-hero__media {
@@ -105,7 +128,7 @@ const {
 
   .dir-hero__media-label {
     color: var(--color-text-muted);
-    font-size: 0.875rem;
+    font-size: var(--font-size-base);
   }
 
   @media (min-width: 768px) {

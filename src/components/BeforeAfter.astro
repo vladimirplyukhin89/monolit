@@ -1,27 +1,30 @@
 ---
 interface Props {
+  eyebrow?: string;
   title?: string;
   text?: string;
 }
 
 const {
+  eyebrow = 'До и после',
   title = 'Как меняется участок после благоустройства',
   text = 'Добавим пары фото «до / после», когда будут материалы в docs/content/media/blagoustrojstvo/before-after/.',
 } = Astro.props;
 ---
 
-<section class="ba section" aria-labelledby="ba-title">
+<section id="before-after" class="ba section" aria-labelledby="ba-title">
   <div class="container">
+    <p class="eyebrow">{eyebrow}</p>
     <h2 id="ba-title" class="ba__title">{title}</h2>
     <p class="ba__text">{text}</p>
     <div class="ba__pair">
-      <figure class="ba__frame">
+      <figure class="ba__frame reveal">
         <div class="ba__placeholder" role="img" aria-label="Фото участка до работ — будет добавлено">
           <span>До</span>
         </div>
         <figcaption>До</figcaption>
       </figure>
-      <figure class="ba__frame">
+      <figure class="ba__frame reveal">
         <div class="ba__placeholder" role="img" aria-label="Фото участка после работ — будет добавлено">
           <span>После</span>
         </div>
@@ -67,7 +70,7 @@ const {
 
   .ba__frame figcaption {
     margin-top: var(--space-2);
-    font-size: 0.875rem;
+    font-size: var(--font-size-base);
     color: var(--color-text-muted);
   }
 

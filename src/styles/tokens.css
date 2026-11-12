@@ -1,22 +1,41 @@
 /* Дизайн-токены. Согласованы: docs/design/tokens-proposal.md */
 :root {
-  /* Цвета */
+  color-scheme: light;
+
+  /* Цвета — light: только #e8e8e8 (страница) и #ffffff (компоненты) */
   --color-bg: #ffffff;
   --color-bg-muted: #e8e8e8;
-  --color-surface: #f3f3f1;
-  --color-text: #2e2e2e;
+  --color-bg-inverse: #222222;
+  --color-on-inverse: #ffffff;
+  --color-surface: #ffffff;
+  --color-text: #222222;
   --color-text-muted: #5c5c5c;
-  --color-primary: #ed581f;
-  --color-primary-contrast: #ffffff;
-  --color-border: #d4d4d4;
+  --color-primary: #f28c28;
+  --color-primary-contrast: #222222;
+  --color-border: #d9d5ce;
+
+  /* Состояния — производные от базовых токенов */
+  --color-primary-hover: color-mix(in oklch, var(--color-primary), white 12%);
+  --color-primary-active: color-mix(in oklch, var(--color-primary), black 10%);
+  --color-inverse-hover: color-mix(in oklch, var(--color-bg-inverse), var(--color-on-inverse) 14%);
+  --color-ghost-hover: color-mix(in srgb, var(--color-text) 6%, transparent);
+
+  /* Затемнения: фон модалок, подложки под текст на фото */
+  --color-scrim: color-mix(in srgb, #1c1a17 55%, transparent);
+  --shadow-color: color-mix(in srgb, #1c1a17 14%, transparent);
+
+  /* Tint DirectionChooser: сплит-комплемент к оранжевому (Иттен) */
   --color-ambient-landscape: #d5e8da;
-  --color-ambient-renovation: #f3e2c4;
+  --color-ambient-renovation: #e2d8f0;
+  /* Текст на пастельных карточках (не следует за dark theme) */
+  --color-chooser-text: #222222;
+  --color-chooser-text-muted: #5c5c5c;
 
   /* Типографика */
-  --font-sans: 'Golos Text', system-ui, -apple-system, sans-serif;
-  --font-size-base: 1rem;
+  --font-sans: var(--font-tt-norms), system-ui, -apple-system, sans-serif;
+  --font-size-base: 1.125rem; /* 18px */
   --font-size-lg: 1.25rem;
-  --font-size-xl: 1.75rem;
+  --font-size-xl: 2.25rem;
   --font-size-2xl: 2.5rem;
   --line-height-base: 1.6;
   --line-height-tight: 1.2;
@@ -36,11 +55,70 @@
   --radius-md: 8px;
   --radius-lg: 16px;
   --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-full: 999px;
 
   /* Контейнер */
   --container-max: 72rem;
   --container-gutter: var(--space-4);
 
-  /* Ambient transition */
+  /* Переходы */
   --ambient-duration: 400ms;
+  --theme-duration: 280ms;
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Пружина в CSS (linear) — близка к motion spring stiffness 380 / damping 34 */
+  --ease-spring: linear(
+    0,
+    0.1491 6.16%,
+    0.5455 15.8%,
+    0.739 21.57%,
+    0.8717 27.52%,
+    0.9572 33.85%,
+    0.9992 40.67%,
+    1.014 44.46%,
+    1.02 48.71%,
+    1.016 56.33%,
+    1.001 74.32%,
+    0.998 84.27%,
+    1
+  );
+  --press-scale: 0.97;
+
+  /* Liquid glass */
+  --glass-blur: 16px;
+  --glass-border: color-mix(in srgb, var(--color-on-inverse) 18%, transparent);
+  --glass-highlight: color-mix(in srgb, white 45%, transparent);
+
+  /* Подсветка крупных блоков */
+  --glow-color: color-mix(in srgb, var(--color-primary) 28%, transparent);
+  --shadow-glow:
+    0 0 0 1px color-mix(in srgb, var(--color-primary) 22%, transparent),
+    0 var(--space-2) var(--space-8) var(--glow-color);
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-bg: #2a2825;
+  --color-bg-muted: #211f1d;
+  /* Контрастные секции в dark остаются тёмными — глубже фона страницы */
+  --color-bg-inverse: #1b1a18;
+  --color-on-inverse: #f3f1ec;
+  --color-surface: #34312e;
+  --color-text: #f3f1ec;
+  --color-text-muted: #b3aea6;
+  --color-primary: #f28c28;
+  --color-primary-contrast: #222222;
+  --color-border: #4a4642;
+
+  --color-scrim: color-mix(in srgb, #000000 65%, transparent);
+  --shadow-color: color-mix(in srgb, #000000 50%, transparent);
+
+  --glass-border: color-mix(in srgb, white 14%, transparent);
+  --glass-highlight: color-mix(in srgb, white 22%, transparent);
+  --glow-color: color-mix(in srgb, var(--color-primary) 36%, transparent);
 }

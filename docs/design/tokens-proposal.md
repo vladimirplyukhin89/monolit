@@ -1,32 +1,78 @@
 # Предложения по токенам
 
-Согласовать до правок в `src/styles/tokens.css`. Источники: фирменные цвета monolit, ритм география.рф, ambient направлений из wireframe.
+Источники: фирменные цвета monolit, ритм география.рф, nikakih-nervov (структура ремонта), light/dark тема.
 
-## Было → стало
+## Актуальные (в `src/styles/tokens.css`)
 
-| Токен | Сейчас | Предложение | Зачем |
-|---|---|---|---|
-| `--color-bg` | `#ffffff` | `#ffffff` (поверхности/карточки) | светлые плиты на muted-фоне |
-| `--color-bg-muted` | — | `#E8E8E8` | ambient страницы «как у Географии» |
-| `--color-surface` | `#f5f5f3` | `#F3F3F1` или оставить близкий светлый | вторичные поверхности |
-| `--color-text` | `#1c1c1a` | `#2E2E2E` | фирменный тёмный |
-| `--color-text-muted` | `#5c5c57` | `#5C5C5C` | приглушённый текст на светлом |
-| `--color-primary` | `#2f5d3a` | `#ED581F` | фирменный оранжевый (кнопки, ссылки-акценты) |
-| `--color-primary-contrast` | `#ffffff` | `#ffffff` | текст на оранжевом |
-| `--color-border` | `#d9d9d4` | `#D4D4D4` | границы на сером ambient |
-| `--color-ambient-landscape` | — | `#D5E8DA` (зеленоватый ambient) | фон при выборе благоустройства |
-| `--color-ambient-renovation` | — | `#F3E2C4` (тёплый желтоватый ambient) | фон при выборе ремонта |
-| `--font-sans` | system-ui stack | `'Golos Text', system-ui, sans-serif` | кириллица, близко к TT Norms Pro без лицензии |
-| `--font-size-xl` / `--font-size-2xl` | `1.75rem` / `2.5rem` | оставить порядок; в макете сверить с ~26–32px H2/H1 mobile | масштаб референса |
-| `--radius-sm` / `--radius-md` | `4px` / `8px` | добавить `--radius-lg: 16px`, `--radius-xl: 24px` | крупные скругления секций/плит |
-| `--container-max` | `72rem` | `72rem` (при необходимости позже `80rem`) | без расширения без макета |
+### Light (`:root`)
+
+| Токен | Значение | Роль |
+|---|---|---|
+| `--color-bg` | `#FFFFFF` | фон компонентов / светлых секций |
+| `--color-bg-muted` | `#E8E8E8` | фон page-shell (как география.рф) |
+| `--color-bg-inverse` | `#222222` | контрастные секции (кейсы ремонта и т. п.) |
+| `--color-on-inverse` | `#FFFFFF` | текст на inverse |
+| `--color-surface` | `#FFFFFF` | вторичные поверхности (= `--color-bg` в light) |
+| `--color-text` | `#222222` | основной текст |
+| `--color-text-muted` | `#5C5C5C` | приглушённый текст |
+| `--color-primary` | `#F28C28` | фирменный оранжевый (CTA) |
+| `--color-primary-contrast` | `#222222` | текст на оранжевом (см. контраст) |
+| `--color-border` | `#D9D5CE` | границы |
+| `--color-primary-hover` / `-active` | `color-mix` от primary | hover / нажатие оранжевых кнопок |
+| `--color-inverse-hover` | `color-mix` от inverse | hover тёмных кнопок |
+| `--color-ghost-hover` | `color-mix` от text | hover кнопок-контуров |
+| `--color-scrim` | тёплый тёмный 55 % | фон модалок, подложки на фото |
+| `--color-ambient-landscape` | `#D5E8DA` | мятный tint карточки «Благоустройство» (сплит к `#F28C28`) |
+| `--color-ambient-renovation` | `#E2D8F0` | лавандовый tint карточки «Ремонт» (сплит к `#F28C28`) |
+| `--color-chooser-text` | `#222222` | текст на пастельных карточках chooser |
+| `--color-chooser-text-muted` | `#5C5C5C` | приглушённый на карточках chooser |
+
+### Dark (`[data-theme='dark']`)
+
+| Токен | Значение | Роль |
+|---|---|---|
+| `--color-bg` | `#2A2825` | поверхности / карточки |
+| `--color-bg-muted` | `#211F1D` | фон page-shell |
+| `--color-bg-inverse` | `#1B1A18` | контрастные секции — остаются тёмными, глубже фона |
+| `--color-on-inverse` | `#F3F1EC` | текст на inverse |
+| `--color-surface` | `#34312E` | вторичные поверхности |
+| `--color-text` | `#F3F1EC` | основной текст |
+| `--color-text-muted` | `#B3AEA6` | приглушённый текст |
+| `--color-border` | `#4A4642` | границы |
+| `--color-scrim` | чёрный 65 % | фон модалок |
+| `--shadow-color` | чёрный 50 % | тени (в light — тёплый тёмный 14 %) |
+
+Primary и primary-contrast без смены. Ambient и chooser-text **не** переопределяются — карточки направлений всегда пастельные с тёмным текстом. Контраст dark-пар — в `trends-2026.md`.
+
+Тема: `localStorage['monolit-theme']` или `prefers-color-scheme`; anti-FOUC в `BaseLayout`.
+
+Шрифт: TT Norms Pro (`--font-tt-norms`; сейчас пробные Condensed OTF — заменить до релиза). Радиусы: sm/md/lg/xl/2xl + `--radius-full` (кнопки, чипы). Контейнер: `72rem`. Анимации: `--duration-*`, `--ease-*`, `--press-scale` — см. `trends-2026.md`.
+
+## Контраст (промер)
+
+| Пара | Контраст | WCAG 2.1 AA |
+|---|---|---|
+| `#222222` на `#FFFFFF` | 15.91:1 | ок |
+| `#FFFFFF` на `#F28C28` | **2.45:1** | **не ок** |
+| `#222222` на `#F28C28` | 6.48:1 | ок |
+| `#222222` на `#D5E8DA` / `#E2D8F0` | высокий | ок для текста на карточках |
+
+**Решено (2026-11-11):** на оранжевой кнопке текст `#222222`.
 
 ## Правила применения
 
-- Оранжевый — CTA и акценты, не заливка всей страницы.
-- Ambient-tint — только фон обёртки/`body` в состояниях направления; текст на нём — `--color-text` (`#2E2E2E`).
-- Перед фиксацией tint проверить контраст WCAG 2.1 AA для текста и оранжевых кнопок на обоих ambient.
+- Оранжевый — CTA и редкие плашки (`PackageBand`), не фон страницы.
+- Мята / лаванда — **только** карточки DirectionChooser на главной (сплит-комплемент к оранжевому).
+- Глобально — light/dark через `data-theme` на `<html>`, переключатель в Header.
+- `/remont-kvartir`: локальные inverse-секции (PhotoHero, CaseGrid dark) — контентный контраст, не тема сайта.
 
 ## Статус
 
-Токены внесены в `src/styles/tokens.css` (согласовано). Golos Text подключён в `BaseLayout.astro`.
+- Light/dark + tint только в chooser — внесено в `tokens.css` (2026-11-11).
+- Тёплый фон, состояния кнопок, scrim, капсулы, токены анимаций — внесено (2026-11-11), разбор в `trends-2026.md`.
+- Тёплая dark-тема, inverse тёмный в dark, `--shadow-color` — внесено (2026-11-11).
+
+- Motion + liquid glass + glow + слайдер кейсов — внесено (2026-11-11).
+- Токены `--ease-spring`, `--glass-*`, `--glow-color`, `--shadow-glow` — в `tokens.css`.
+- Light: только два фона — `#e8e8e8` (`--color-bg-muted`) и `#ffffff` (`--color-bg` / `--color-surface`); тёплые `#ebe8e2` / `#f5f3ef` убраны — внесено (2026-11-11).
+- DirectionChooser: `--color-ambient-renovation` `#F3DDE6` → `#E2D8F0` (лаванда, сплит к оранжевому) — внесено (2026-11-11).

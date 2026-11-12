@@ -1,9 +1,13 @@
 ---
+import Logo from './Logo.astro';
+
 interface Props {
   phone?: string;
   phoneHref?: string;
   email?: string;
   address?: string;
+  /** Прямая ссылка на точку в 2ГИС; иначе — поиск по адресу */
+  addressHref?: string;
   legal?: string;
 }
 
@@ -12,22 +16,34 @@ const {
   phoneHref = 'tel:+79199507722',
   email = 'monolittmn@mail.ru',
   address = 'г. Тюмень, ул. Депутатская, 129',
+  addressHref,
   legal = 'ИП Ерамасов В.Н. · ИНН 723011554086 · ОГРНИП 323723200019722',
 } = Astro.props;
 
 const year = new Date().getFullYear();
+const mapHref =
+  addressHref ?? `https://2gis.ru/tyumen/search/${encodeURIComponent(address)}`;
 ---
 
 <footer class="footer">
   <div class="container footer__inner">
     <div class="footer__brand">
-      <a class="footer__logo" href="/">Монолит</a>
+      <a class="footer__logo" href="/" aria-label="Монолит">
+        <Logo />
+      </a>
       <p class="footer__legal">{legal}</p>
     </div>
     <div class="footer__contacts">
       <a href={phoneHref}>{phone}</a>
       <a href={`mailto:${email}`}>{email}</a>
-      <p>{address}</p>
+      <a
+        href={mapHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Открыть в 2ГИС: ${address}`}
+      >
+        {address}
+      </a>
     </div>
     <div class="footer__links">
       <a href="/blagoustrojstvo">Благоустройство</a>
@@ -51,19 +67,29 @@ const year = new Date().getFullYear();
   }
 
   .footer__logo {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     margin-bottom: var(--space-3);
-    font-size: var(--font-size-lg);
-    font-weight: 700;
     color: var(--color-text);
     text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .footer__logo:hover {
+    color: var(--color-primary);
+  }
+
+  .footer__logo :global(svg) {
+    display: block;
+    height: 1.75rem;
+    width: auto;
   }
 
   .footer__legal,
   .footer__copy {
     margin: 0;
     color: var(--color-text-muted);
-    font-size: 0.875rem;
+    font-size: var(--font-size-base);
   }
 
   .footer__contacts,
@@ -78,11 +104,12 @@ const year = new Date().getFullYear();
     color: var(--color-text);
     text-decoration: none;
     font-weight: 500;
+    transition: color var(--duration-fast) var(--ease-out);
   }
 
-  .footer__contacts p {
-    margin: 0;
-    color: var(--color-text-muted);
+  .footer__contacts a:hover,
+  .footer__links a:hover {
+    color: var(--color-primary);
   }
 
   @media (min-width: 768px) {
@@ -107,6 +134,10 @@ const year = new Date().getFullYear();
 
     .footer__copy {
       grid-area: copy;
+    }
+
+    .footer__logo :global(svg) {
+      height: 2rem;
     }
   }
 </style>

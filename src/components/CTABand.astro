@@ -1,5 +1,6 @@
 ---
 interface Props {
+  eyebrow?: string;
   title?: string;
   text?: string;
   href?: string;
@@ -7,6 +8,7 @@ interface Props {
 }
 
 const {
+  eyebrow = 'Выезд',
   title = 'Закажите бесплатный выезд специалиста и получите скидку 5%',
   text = 'Специалист приедет в удобное время, сделает замеры и подготовит предварительную смету.',
   href = '#lead',
@@ -14,21 +16,74 @@ const {
 } = Astro.props;
 ---
 
-<section class="cta section">
+<section id="visit" class="cta section">
   <div class="container">
     <div class="cta__panel">
+      <p class="eyebrow">{eyebrow}</p>
       <h2 class="cta__title">{title}</h2>
       <p class="cta__text">{text}</p>
-      <a class="cta__button" href={href}>{ctaLabel}</a>
+      <a class="cta__button" href={href} data-lead-dialog>{ctaLabel}</a>
     </div>
   </div>
 </section>
 
 <style>
+  @property --cta-border-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
   .cta__panel {
+    --cta-border-width: 2px;
+    --cta-border-spin: 4s;
+
+    position: relative;
     background: var(--color-bg);
     border-radius: var(--radius-xl);
     padding: var(--space-8);
+    box-shadow: var(--shadow-glow);
+  }
+
+  .cta__panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: var(--cta-border-width);
+    background: conic-gradient(
+      from var(--cta-border-angle),
+      transparent 0%,
+      transparent 32%,
+      color-mix(in oklch, var(--color-primary), black 18%) 42%,
+      var(--color-primary) 50%,
+      color-mix(in oklch, var(--color-primary), white 28%) 58%,
+      transparent 68%,
+      transparent 100%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    animation: cta-border-spin var(--cta-border-spin) linear infinite;
+  }
+
+  @keyframes cta-border-spin {
+    to {
+      --cta-border-angle: 360deg;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta__panel::before {
+      animation: none;
+      --cta-border-angle: 135deg;
+    }
   }
 
   .cta__title {
@@ -41,7 +96,8 @@ const {
   .cta__text {
     margin: 0 0 var(--space-6);
     color: var(--color-text-muted);
-    max-width: 36rem;
+    font-size: var(--font-size-base);
+    max-width: 38rem;
   }
 
   .cta__button {
@@ -49,10 +105,22 @@ const {
     align-items: center;
     justify-content: center;
     padding: var(--space-3) var(--space-6);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-full);
     background: var(--color-primary);
     color: var(--color-primary-contrast);
     text-decoration: none;
     font-weight: 600;
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .cta__button:hover {
+    background: var(--color-primary-hover);
+  }
+
+  .cta__button:active {
+    background: var(--color-primary-active);
+    transform: scale(var(--press-scale));
   }
 </style>

@@ -1,4 +1,6 @@
 ---
+import { Font } from 'astro:assets';
+import { PAGE_NAV_LOCKED } from '../lib/page-nav';
 import '../styles/global.css';
 
 interface Props {
@@ -16,22 +18,47 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
 ---
 
 <!doctype html>
-<html lang="ru">
+<!-- TODO: убрать data-page-nav-locked вместе с PAGE_NAV_LOCKED в src/lib/page-nav.ts -->
+<html lang="ru" data-page-nav-locked={PAGE_NAV_LOCKED ? '' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" />
+    <script is:inline>
+      (function () {
+        document.addEventListener('DOMContentLoaded', function () {
+          var color = getComputedStyle(document.documentElement)
+            .getPropertyValue('--color-bg-muted')
+            .trim();
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta && color) meta.setAttribute('content', color);
+        });
+        try {
+          var stored = localStorage.getItem('monolit-theme');
+          var theme =
+            stored === 'light' || stored === 'dark'
+              ? stored
+              : window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (e) {
+          document.documentElement.dataset.theme = 'light';
+          document.documentElement.style.colorScheme = 'light';
+        }
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.documentElement.classList.add('has-motion');
+        }
+      })();
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL.href} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <Font cssVariable="--font-tt-norms" preload />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ru_RU" />
@@ -46,5 +73,9 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
   </head>
   <body>
     <slot />
+    <script>
+      import '../scripts/reveal';
+      import '../scripts/page-nav-lock';
+    </script>
   </body>
 </html>

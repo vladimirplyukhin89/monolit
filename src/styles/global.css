@@ -8,6 +8,11 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 4.5rem;
+}
+
+html.nav-open {
+  overflow: hidden;
 }
 
 body {
@@ -17,20 +22,15 @@ body {
   line-height: var(--line-height-base);
   color: var(--color-text);
   background-color: var(--color-bg-muted);
+  transition:
+    color var(--theme-duration) ease,
+    background-color var(--theme-duration) ease;
 }
 
 .page-shell {
   min-height: 100vh;
   background-color: var(--color-bg-muted);
-  transition: background-color var(--ambient-duration) ease;
-}
-
-.page-shell[data-direction='landscaping'] {
-  background-color: var(--color-ambient-landscape);
-}
-
-.page-shell[data-direction='renovation'] {
-  background-color: var(--color-ambient-renovation);
+  transition: background-color var(--theme-duration) ease;
 }
 
 img,
@@ -44,6 +44,15 @@ video {
 
 a {
   color: var(--color-primary);
+}
+
+/* TODO: удалить вместе с PAGE_NAV_LOCKED в src/lib/page-nav.ts */
+html[data-page-nav-locked] a[href^='/'],
+html[data-page-nav-locked] a[href^='./'],
+html[data-page-nav-locked] a[href^='../'] {
+  cursor: not-allowed;
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 :focus-visible {
@@ -62,9 +71,207 @@ a {
   padding-block: var(--space-12);
 }
 
+.eyebrow {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: var(--line-height-tight);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.eyebrow--on-inverse {
+  color: color-mix(in srgb, var(--color-on-inverse) 72%, transparent);
+}
+
+.eyebrow--on-primary {
+  color: inherit;
+  opacity: 0.9;
+}
+
 @media (min-width: 768px) {
   .section {
     padding-block: var(--space-16);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+::view-transition-old(root) {
+  animation: vt-root-out var(--duration-slow) var(--ease-spring) both;
+}
+
+::view-transition-new(root) {
+  animation: vt-root-in var(--duration-slow) var(--ease-spring) both;
+}
+
+@keyframes vt-root-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-root-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-4));
+  }
+}
+
+/* Начальное скрытие только когда JS готов анимировать (см. BaseLayout + reveal.ts) */
+html.has-motion .reveal {
+  opacity: 0;
+}
+
+/* Лаконичная подсветка крупных блоков */
+.glow {
+  transition: box-shadow var(--duration-base) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .glow:hover {
+    box-shadow: var(--shadow-glow);
+  }
+}
+
+.glow:focus-within {
+  box-shadow: var(--shadow-glow);
+}
+
+.is-theme-switching *,
+.is-theme-switching *::before,
+.is-theme-switching *::after {
+  transition: none !important;
+}
+
+.is-theme-switching::view-transition-group(*),
+.is-theme-switching::view-transition-old(*),
+.is-theme-switching::view-transition-new(*) {
+  animation-duration: var(--theme-duration);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --press-scale: 1;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Модалки на <dialog>: панель анимирует Motion (dialog-motion.ts),
+   фон (::backdrop) — CSS. Отступы у .dialog__body: клик по dialog = фон. */
+.dialog {
+  width: 100%;
+  max-width: 100%;
+  max-height: 90dvh;
+  margin: auto auto 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  box-shadow: 0 0 var(--space-8) var(--shadow-color);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.dialog::backdrop {
+  background-color: transparent;
+  transition-property: background-color, display, overlay;
+  transition-duration: var(--duration-base);
+  transition-behavior: allow-discrete;
+}
+
+.dialog[open]::backdrop {
+  background-color: var(--color-scrim);
+  transition-duration: var(--duration-slow);
+}
+
+@starting-style {
+  .dialog[open]::backdrop {
+    background-color: transparent;
+  }
+}
+
+@media (min-width: 768px) {
+  .dialog {
+    width: min(36rem, calc(100% - var(--space-8)));
+    margin: auto;
+    border-radius: var(--radius-2xl);
+  }
+}
+
+html:has(.dialog[open]) {
+  overflow: hidden;
+}
+
+.dialog__body {
+  padding: var(--space-6);
+}
+
+.dialog__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.dialog__title {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+  line-height: var(--line-height-tight);
+}
+
+.dialog__text {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-muted);
+}
+
+.dialog__close {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--font-size-lg);
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.dialog__close:hover {
+  background: var(--color-ghost-hover);
+}
+
+.dialog__close:active {
+  transform: scale(var(--press-scale));
+}
+
+@media (min-width: 768px) {
+  .dialog__body {
+    padding: var(--space-8);
   }
 }
 

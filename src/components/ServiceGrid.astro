@@ -1,21 +1,27 @@
 ---
-import type { ServiceItem } from '../data/blagoustrojstvo';
+interface ServiceItem {
+  title: string;
+  summary: string;
+  priceFrom: string;
+}
 
 interface Props {
+  eyebrow?: string;
   title?: string;
   items: ServiceItem[];
 }
 
-const { title = 'Наши услуги', items } = Astro.props;
+const { eyebrow = 'Услуги', title = 'Наши услуги', items } = Astro.props;
 ---
 
-<section class="services section" aria-labelledby="services-title">
+<section id="services" class="services section" aria-labelledby="services-title">
   <div class="container">
+    <p class="eyebrow">{eyebrow}</p>
     <h2 id="services-title" class="services__title">{title}</h2>
     <ul class="services__list">
       {
         items.map((item) => (
-          <li class="services__card">
+          <li class="services__card reveal glow">
             <h3 class="services__card-title">{item.title}</h3>
             <p class="services__card-summary">{item.summary}</p>
             <p class="services__card-price">{item.priceFrom}</p>
