@@ -7,6 +7,7 @@ interface CaseItem {
 }
 
 interface Props {
+  eyebrow?: string;
   title?: string;
   items: CaseItem[];
   variant?: 'light' | 'dark';
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const {
+  eyebrow = 'Работы',
   title = 'Наши работы',
   items,
   variant = 'light',
@@ -30,10 +32,12 @@ const isDark = variant === 'dark';
 ---
 
 <section
+  id="cases"
   class:list={['cases', 'section', isDark && 'cases--dark']}
   aria-labelledby="cases-title"
 >
   <div class="container">
+    <p class:list={['eyebrow', isDark && 'eyebrow--on-inverse']}>{eyebrow}</p>
     <h2 id="cases-title" class="cases__title">{title}</h2>
     <CaseSlider
       client:visible

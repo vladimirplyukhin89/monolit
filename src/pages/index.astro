@@ -14,7 +14,13 @@ import Footer from '../components/Footer.astro';
   description="Ландшафтное благоустройство участка и ремонт квартир под ключ в Тюмени. Бесплатный выезд и расчёт стоимости."
 >
   <div class="page-shell">
-    <Header />
+    <Header
+      links={[
+        { href: '#directions', label: 'Направления' },
+        { href: '#trust', label: 'Доверие' },
+        { href: '#visit', label: 'Выезд' },
+      ]}
+    />
     <main>
       <HeroIntro />
       <DirectionChooser client:load />

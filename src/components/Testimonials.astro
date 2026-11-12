@@ -2,15 +2,17 @@
 import type { TestimonialItem } from '../data/blagoustrojstvo';
 
 interface Props {
+  eyebrow?: string;
   title?: string;
   items: TestimonialItem[];
 }
 
-const { title = 'Что говорят клиенты', items } = Astro.props;
+const { eyebrow = 'Отзывы', title = 'Что говорят клиенты', items } = Astro.props;
 ---
 
-<section class="reviews section" aria-labelledby="reviews-title">
+<section id="reviews" class="reviews section" aria-labelledby="reviews-title">
   <div class="container">
+    <p class="eyebrow">{eyebrow}</p>
     <h2 id="reviews-title" class="reviews__title">{title}</h2>
     <ul class="reviews__list">
       {
@@ -57,7 +59,7 @@ const { title = 'Что говорят клиенты', items } = Astro.props;
 
   .reviews__quote p {
     margin: 0 0 var(--space-4);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
     line-height: var(--line-height-base);
   }
 

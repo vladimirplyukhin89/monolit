@@ -1,5 +1,6 @@
 ---
 interface Props {
+  eyebrow?: string;
   title?: string;
   text?: string;
   href?: string;
@@ -7,6 +8,7 @@ interface Props {
 }
 
 const {
+  eyebrow = 'Выезд',
   title = 'Закажите бесплатный выезд специалиста и получите скидку 5%',
   text = 'Специалист приедет в удобное время, сделает замеры и подготовит предварительную смету.',
   href = '#lead',
@@ -14,9 +16,10 @@ const {
 } = Astro.props;
 ---
 
-<section class="cta section">
+<section id="visit" class="cta section">
   <div class="container">
     <div class="cta__panel">
+      <p class="eyebrow">{eyebrow}</p>
       <h2 class="cta__title">{title}</h2>
       <p class="cta__text">{text}</p>
       <a class="cta__button" href={href} data-lead-dialog>{ctaLabel}</a>
@@ -93,7 +96,8 @@ const {
   .cta__text {
     margin: 0 0 var(--space-6);
     color: var(--color-text-muted);
-    max-width: 36rem;
+    font-size: var(--font-size-base);
+    max-width: 38rem;
   }
 
   .cta__button {

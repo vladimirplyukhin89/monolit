@@ -33,9 +33,9 @@
 
   /* Типографика */
   --font-sans: var(--font-tt-norms), system-ui, -apple-system, sans-serif;
-  --font-size-base: 1rem;
+  --font-size-base: 1.125rem; /* 18px */
   --font-size-lg: 1.25rem;
-  --font-size-xl: 1.75rem;
+  --font-size-xl: 2.25rem;
   --font-size-2xl: 2.5rem;
   --line-height-base: 1.6;
   --line-height-tight: 1.2;

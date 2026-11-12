@@ -8,6 +8,11 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 4.5rem;
+}
+
+html.nav-open {
+  overflow: hidden;
 }
 
 body {
@@ -41,6 +46,15 @@ a {
   color: var(--color-primary);
 }
 
+/* TODO: удалить вместе с PAGE_NAV_LOCKED в src/lib/page-nav.ts */
+html[data-page-nav-locked] a[href^='/'],
+html[data-page-nav-locked] a[href^='./'],
+html[data-page-nav-locked] a[href^='../'] {
+  cursor: not-allowed;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
 :focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
@@ -55,6 +69,25 @@ a {
 
 .section {
   padding-block: var(--space-12);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: var(--line-height-tight);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.eyebrow--on-inverse {
+  color: color-mix(in srgb, var(--color-on-inverse) 72%, transparent);
+}
+
+.eyebrow--on-primary {
+  color: inherit;
+  opacity: 0.9;
 }
 
 @media (min-width: 768px) {

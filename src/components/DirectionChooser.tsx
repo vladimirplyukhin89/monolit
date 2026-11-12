@@ -106,8 +106,9 @@ export default function DirectionChooser() {
 
   return (
     <LazyMotion features={loadMotionFeatures} strict>
-      <section className="chooser section" aria-labelledby="chooser-title">
+      <section id="directions" className="chooser section" aria-labelledby="chooser-title">
         <div className="container">
+          <p className="eyebrow">Направления</p>
           <h2 id="chooser-title" className="chooser__title">
             Что нужно сделать
           </h2>
@@ -247,7 +248,7 @@ const styles = `
   }
   .chooser__title {
     margin: 0 0 var(--space-8);
-    font-size: var(--font-size-xl);
+    font-size: 2rem;
     font-weight: 500;
     line-height: var(--line-height-tight);
   }

@@ -1,5 +1,6 @@
 ---
 interface Props {
+  eyebrow?: string;
   title: string;
   support: string;
   ctaLabel?: string;
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const {
+  eyebrow = 'Ремонт',
   title,
   support,
   ctaLabel = 'Оставить заявку',
@@ -30,6 +32,7 @@ const {
   </div>
   <div class="photo-hero__scrim" aria-hidden="true"></div>
   <div class="container photo-hero__content">
+    <p class="eyebrow eyebrow--on-inverse">{eyebrow}</p>
     <h1 id="photo-hero-title" class="photo-hero__title">{title}</h1>
     <p class="photo-hero__support">{support}</p>
     <a class="photo-hero__cta" href={ctaHref} data-lead-dialog>{ctaLabel}</a>
@@ -59,7 +62,7 @@ const {
     position: relative;
     z-index: 1;
     color: color-mix(in srgb, var(--color-on-inverse) 55%, transparent);
-    font-size: 0.875rem;
+    font-size: var(--font-size-base);
   }
 
   .photo-hero__scrim {
@@ -91,7 +94,7 @@ const {
   .photo-hero__support {
     margin: 0 0 var(--space-6);
     color: color-mix(in srgb, var(--color-on-inverse) 78%, transparent);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
   }
 
   .photo-hero__cta {

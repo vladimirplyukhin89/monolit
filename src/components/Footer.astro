@@ -1,4 +1,6 @@
 ---
+import Logo from './Logo.astro';
+
 interface Props {
   phone?: string;
   phoneHref?: string;
@@ -21,7 +23,9 @@ const year = new Date().getFullYear();
 <footer class="footer">
   <div class="container footer__inner">
     <div class="footer__brand">
-      <a class="footer__logo" href="/">Монолит</a>
+      <a class="footer__logo" href="/" aria-label="Монолит">
+        <Logo />
+      </a>
       <p class="footer__legal">{legal}</p>
     </div>
     <div class="footer__contacts">
@@ -51,19 +55,29 @@ const year = new Date().getFullYear();
   }
 
   .footer__logo {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     margin-bottom: var(--space-3);
-    font-size: var(--font-size-lg);
-    font-weight: 700;
     color: var(--color-text);
     text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .footer__logo:hover {
+    color: var(--color-primary);
+  }
+
+  .footer__logo :global(svg) {
+    display: block;
+    height: 1.75rem;
+    width: auto;
   }
 
   .footer__legal,
   .footer__copy {
     margin: 0;
     color: var(--color-text-muted);
-    font-size: 0.875rem;
+    font-size: var(--font-size-base);
   }
 
   .footer__contacts,
@@ -78,6 +92,12 @@ const year = new Date().getFullYear();
     color: var(--color-text);
     text-decoration: none;
     font-weight: 500;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .footer__contacts a:hover,
+  .footer__links a:hover {
+    color: var(--color-primary);
   }
 
   .footer__contacts p {
@@ -107,6 +127,10 @@ const year = new Date().getFullYear();
 
     .footer__copy {
       grid-area: copy;
+    }
+
+    .footer__logo :global(svg) {
+      height: 2rem;
     }
   }
 </style>

@@ -31,8 +31,14 @@ import {
   />
   <div class="page-shell">
     <Header
-      secondaryHref="/blagoustrojstvo"
-      secondaryLabel="Благоустройство"
+      links={[
+        { href: '#trust', label: 'Доверие' },
+        { href: '#package', label: 'Пакет' },
+        { href: '#services', label: 'Услуги' },
+        { href: '#cases', label: 'Работы' },
+        { href: '#about', label: 'Компания' },
+        { href: '#faq', label: 'Вопросы' },
+      ]}
     />
     <main>
       <PhotoHero

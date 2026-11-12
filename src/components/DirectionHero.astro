@@ -1,5 +1,6 @@
 ---
 interface Props {
+  eyebrow?: string;
   title: string;
   support: string;
   ctaLabel?: string;
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const {
+  eyebrow = 'Благоустройство',
   title,
   support,
   ctaLabel = 'Оставить заявку',
@@ -24,6 +26,7 @@ const {
 <section class="dir-hero section">
   <div class="container dir-hero__grid">
     <div class="dir-hero__copy">
+      <p class="eyebrow">{eyebrow}</p>
       <h1 class="dir-hero__title">{title}</h1>
       <p class="dir-hero__support">{support}</p>
       {
@@ -69,7 +72,7 @@ const {
   .dir-hero__support {
     margin: 0 0 var(--space-6);
     color: var(--color-text-muted);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
   }
 
   .dir-hero__chips {
@@ -86,7 +89,7 @@ const {
     border-radius: var(--radius-full);
     background: color-mix(in srgb, var(--color-bg) 80%, transparent);
     border: 1px solid var(--color-border);
-    font-size: 0.875rem;
+    font-size: var(--font-size-base);
     color: var(--color-text-muted);
   }
 
@@ -125,7 +128,7 @@ const {
 
   .dir-hero__media-label {
     color: var(--color-text-muted);
-    font-size: 0.875rem;
+    font-size: var(--font-size-base);
   }
 
   @media (min-width: 768px) {

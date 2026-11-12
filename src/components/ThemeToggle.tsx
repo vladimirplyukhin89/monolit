@@ -86,7 +86,7 @@ const styles = `
     background: transparent;
     color: var(--color-text);
     font: inherit;
-    font-size: 0.875rem;
+    font-size: var(--font-size-base);
     font-weight: 500;
     cursor: pointer;
     border-radius: var(--radius-lg);

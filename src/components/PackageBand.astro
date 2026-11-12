@@ -18,10 +18,10 @@ const {
 } = Astro.props;
 ---
 
-<section class="package section" aria-labelledby="package-title">
+<section id="package" class="package section" aria-labelledby="package-title">
   <div class="container">
     <div class="package__band reveal glow">
-      <p class="package__eyebrow">{eyebrow}</p>
+      <p class="eyebrow eyebrow--on-primary">{eyebrow}</p>
       <h2 id="package-title" class="package__title">{title}</h2>
       <ol class="package__list">
         {
@@ -42,14 +42,6 @@ const {
     color: var(--color-primary-contrast);
     border-radius: var(--radius-xl);
     padding: var(--space-8);
-  }
-
-  .package__eyebrow {
-    margin: 0 0 var(--space-2);
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    opacity: 0.9;
   }
 
   .package__title {

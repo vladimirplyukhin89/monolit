@@ -313,6 +313,7 @@ export default function LeadForm({ variant = 'section', image = DEFAULT_IMAGE }:
       <div className="container">
         <div className="lead__layout">
           <div className="lead__panel glow">
+            <p className="eyebrow">Заявка</p>
             <h2 id="lead-title" className="lead__title">
               Оставить заявку
             </h2>
@@ -408,7 +409,7 @@ const styles = `
     background: var(--color-bg);
     color: var(--color-text-muted);
     font: inherit;
-    font-size: 0.875rem;
+    font-size: var(--font-size-base);
     font-weight: 600;
     cursor: pointer;
     transition:

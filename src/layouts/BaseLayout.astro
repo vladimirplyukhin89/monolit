@@ -1,5 +1,6 @@
 ---
 import { Font } from 'astro:assets';
+import { PAGE_NAV_LOCKED } from '../lib/page-nav';
 import '../styles/global.css';
 
 interface Props {
@@ -17,7 +18,8 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
 ---
 
 <!doctype html>
-<html lang="ru">
+<!-- TODO: убрать data-page-nav-locked вместе с PAGE_NAV_LOCKED в src/lib/page-nav.ts -->
+<html lang="ru" data-page-nav-locked={PAGE_NAV_LOCKED ? '' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -73,6 +75,7 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
     <slot />
     <script>
       import '../scripts/reveal';
+      import '../scripts/page-nav-lock';
     </script>
   </body>
 </html>

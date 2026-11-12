@@ -1,63 +1,100 @@
 ---
 import LeadDialog from './LeadDialog.astro';
-import MobileNav from './MobileNav';
+import Logo from './Logo.astro';
+import MobileNav, { type HeaderLink } from './MobileNav';
 import ThemeToggle from './ThemeToggle';
 
 interface Props {
   phone?: string;
   phoneHref?: string;
-  secondaryHref?: string;
-  secondaryLabel?: string;
+  links?: HeaderLink[];
 }
 
 const {
   phone = '8 (919) 950-77-22',
   phoneHref = 'tel:+79199507722',
-  secondaryHref,
-  secondaryLabel,
+  links = [],
 } = Astro.props;
+
+/** Адреса появятся позже. Пустая строка — иконка без перехода. */
+const telegramHref = '';
+const maxHref = '';
+
+const directionLinks: HeaderLink[] = [
+  { href: '/blagoustrojstvo', label: 'Благоустройство' },
+  { href: '/remont-kvartir', label: 'Ремонт квартир' },
+];
+
+const pageLinks: HeaderLink[] = [
+  ...directionLinks,
+  { href: '/politika-konfidencialnosti', label: 'Политика конфиденциальности' },
+];
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 
 <header class="header">
   <div class="container header__inner">
     <a class="header__logo" href="/" aria-label="Монолит">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 1493 297"
-        width="1493"
-        height="297"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <path
-          fill="currentColor"
-          fill-rule="evenodd"
-          d="M 378.193 73.019 C 368.624 74.342, 361.410 76.717, 351.500 81.805 C 340.256 87.578, 326.519 100.651, 320.190 111.601 C 315.916 118.996, 311.687 130.426, 310.502 137.786 L 309.812 142.072 320.044 141.786 L 330.276 141.500 331.609 136.282 C 336.539 116.990, 352.640 100.339, 371.893 94.624 C 384.928 90.754, 401.518 91.853, 413.454 97.375 C 428.778 104.465, 440.942 119.030, 445.634 135.908 L 447.328 142 457.258 142 L 467.188 142 466.466 136.750 C 464.174 120.086, 451.895 100.048, 437.112 88.849 C 420.857 76.535, 397.721 70.319, 378.193 73.019 M 843.533 73.029 C 834.733 74.100, 825.710 77.095, 815.500 82.334 C 805.420 87.507, 791.294 101.104, 785.164 111.533 C 780.568 119.352, 776.592 130.003, 775.551 137.286 L 774.867 142.071 785.083 141.786 L 795.300 141.500 796.948 135.500 C 804.264 108.874, 830.230 90.398, 857.532 92.392 C 861.949 92.714, 868.024 93.701, 871.032 94.584 C 889.781 100.092, 905.779 116.510, 910.708 135.303 L 912.465 142 922.232 142 L 932 142 932 139.210 C 932 125.023, 918.788 102.102, 903.465 89.705 C 887.760 77, 864.378 70.494, 843.533 73.029 M 47 152.036 L 47 228.072 56.750 227.786 L 66.500 227.500 67 172.754 L 67.500 118.008 75 129.057 C 79.125 135.134, 86.500 145.820, 91.390 152.803 C 96.279 159.787, 106.812 175.175, 114.797 187 C 122.782 198.825, 129.662 208.896, 130.087 209.380 C 130.512 209.863, 132.886 210.411, 135.363 210.596 L 139.867 210.934 154.089 190.217 C 161.912 178.823, 169.955 167.250, 171.963 164.500 C 173.971 161.750, 181.888 150.293, 189.557 139.040 L 203.500 118.579 203.759 173.290 L 204.017 228 214.009 228 L 224 228 224 152 L 224 76 216.250 76.037 L 208.500 76.074 202.007 85.787 C 189.660 104.259, 141.325 174.330, 136.753 180.384 C 135.178 182.470, 134.092 181, 96.577 126 C 87.386 112.525, 75.959 95.779, 71.183 88.786 L 62.500 76.073 54.750 76.036 L 47 76 47 152.036 M 546.244 151.750 L 546.500 227.500 556.250 227.786 L 566 228.072 566 170.036 C 566 138.116, 566.367 112, 566.816 112 C 567.266 112, 570.978 115.745, 575.066 120.322 C 579.155 124.899, 589.250 136.050, 597.500 145.103 C 605.750 154.155, 618.125 167.827, 625 175.484 C 631.875 183.141, 645.523 198.090, 655.329 208.703 L 673.159 228 681.079 228 L 689 228 689 152 L 689 76 679.008 76 L 669.016 76 668.758 135.531 L 668.500 195.061 652 176.690 C 642.925 166.586, 618.891 139.797, 598.590 117.159 L 561.680 76 553.834 76 L 545.987 76 546.244 151.750 M 1012 152 L 1012 228 1068.500 228 L 1125 228 1125 218.500 L 1125 209 1078.500 209 L 1032 209 1032 142.500 L 1032 76 1022 76 L 1012 76 1012 152 M 1199.460 77.250 C 1199.198 77.938, 1199.099 112.025, 1199.241 153 L 1199.500 227.500 1209.250 227.786 L 1219 228.072 1219 152.036 L 1219 76 1209.469 76 C 1202.765 76, 1199.796 76.371, 1199.460 77.250 M 1299.212 85.250 L 1299.500 94.500 1327.500 94.657 L 1355.500 94.813 1355.757 161.407 L 1356.014 228 1366.007 228 L 1376 228 1376 161.515 L 1376 95.030 1405.250 94.765 L 1434.500 94.500 1434.788 85.250 L 1435.075 76 1367 76 L 1298.925 76 1299.212 85.250 M 310.569 167.750 C 314.955 187.618, 327.063 205.691, 343.619 217.082 C 350.676 221.937, 361.918 226.827, 370 228.555 C 380.075 230.710, 397.390 230.705, 407.454 228.543 C 436.148 222.381, 460.699 197.303, 466.517 168.214 L 467.175 164.928 456.974 165.214 L 446.774 165.500 444.563 171.612 C 441.244 180.786, 437.366 186.794, 430.078 194.049 C 423.084 201.013, 415.953 205.509, 407 208.601 C 402.612 210.116, 398.771 210.489, 388 210.444 C 372.411 210.379, 367.387 208.954, 355.775 201.308 C 344.868 194.126, 335.610 181.674, 331.939 169.250 L 330.683 165 320.323 165 L 309.962 165 310.569 167.750 M 775.572 167.715 C 777.349 175.591, 778.451 179.032, 780.991 184.637 C 790.805 206.292, 812.226 223.655, 835.184 228.564 C 844.835 230.628, 862.394 230.633, 872.500 228.574 C 888.313 225.352, 906.798 213.771, 916.662 200.904 C 924.381 190.837, 932 174.258, 932 167.532 L 932 165 922.143 165 L 912.285 165 910.201 171.106 C 903.778 189.917, 887.436 205.093, 868.897 209.463 C 843.853 215.366, 818.234 205.658, 804.555 185.083 C 802.044 181.305, 798.915 175.354, 797.601 171.857 L 795.214 165.500 785.079 165.215 L 774.944 164.929 775.572 167.715"
-        />
-      </svg>
+      <Logo />
     </a>
 
     <div class="header__actions">
-      <ThemeToggle client:load />
-
-      <nav class="header__nav" aria-label="Основная">
+      <nav class="header__pages" aria-label="Страницы">
         {
-          secondaryHref && secondaryLabel && (
-            <a class="header__link header__link--secondary" href={secondaryHref}>
-              {secondaryLabel}
+          directionLinks.map((item) => (
+            <a
+              class="header__page"
+              href={item.href}
+              aria-current={path === item.href ? 'page' : undefined}
+            >
+              {item.label}
             </a>
-          )
+          ))
         }
-        <a class="header__link" href={phoneHref}>{phone}</a>
-        <a class="header__cta" href="#lead" data-lead-dialog>Оставить заявку</a>
       </nav>
 
-      <div class="header__mobile">
+      <MobileNav
+        client:load
+        phone={phone}
+        phoneHref={phoneHref}
+        links={links}
+        pageLinks={pageLinks}
+      />
+
+      <ThemeToggle client:load />
+
+      <div class="header__contacts">
+        <a class="header__phone" href={phoneHref}>{phone}</a>
         <a class="header__phone-icon" href={phoneHref} aria-label={`Позвонить ${phone}`}>
           тел.
         </a>
-        <MobileNav client:load phone={phone} phoneHref={phoneHref} />
+        <a
+          class="header__social"
+          href={telegramHref || '#'}
+          aria-label="Telegram"
+          aria-disabled={telegramHref ? undefined : 'true'}
+          onclick={telegramHref ? undefined : 'event.preventDefault()'}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+            <path
+              fill="#1d98dc"
+              d="M21.5 4.3 3.8 11.1c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.4-2.3 5 3.7c.9.5 1.6.2 1.8-.9l3.3-15.5c.3-1.3-.5-1.9-1.5-1.3zM9.8 14.2l-.3 3.7-1.2-4 10.8-6.7-9.3 7z"
+            ></path>
+          </svg>
+        </a>
+        <a
+          class="header__social"
+          href={maxHref || '#'}
+          aria-label="Max"
+          aria-disabled={maxHref ? undefined : 'true'}
+          onclick={maxHref ? undefined : 'event.preventDefault()'}
+        >
+          <img src="/icons/max.svg" width="20" height="20" alt="" />
+        </a>
       </div>
+
+      <a class="header__cta" href="#lead" data-lead-dialog>Оставить заявку</a>
     </div>
   </div>
 </header>
@@ -78,51 +115,96 @@ const {
       border-color var(--theme-duration) ease;
   }
 
+  :global(html.nav-open) .header {
+    background: var(--color-bg);
+  }
+
   .header__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 3.5rem;
+    min-height: 4.25rem;
     gap: var(--space-4);
   }
 
   .header__logo {
     display: inline-flex;
+    flex-shrink: 0;
     align-items: center;
     color: var(--color-text);
     text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
   }
 
-  .header__logo svg {
+  .header__logo:hover {
+    color: var(--color-primary);
+  }
+
+  .header__logo :global(svg) {
     display: block;
-    height: 1.25rem;
+    height: 2rem;
     width: auto;
   }
 
   .header__actions {
     display: flex;
     align-items: center;
-    gap: var(--space-4);
+    gap: var(--space-3);
+    min-width: 0;
   }
 
-  .header__nav {
+  .header__pages {
     display: none;
     align-items: center;
-    gap: var(--space-6);
+    gap: var(--space-3);
   }
 
-  .header__link {
-    color: var(--color-text);
-    text-decoration: none;
-    font-weight: 500;
-  }
-
-  .header__link--secondary {
+  .header__page {
     color: var(--color-text-muted);
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .header__page:hover,
+  .header__page[aria-current='page'] {
+    color: var(--color-primary);
+  }
+
+  .header__contacts {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .header__social {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+  }
+
+  .header__social:hover {
+    background: var(--color-ghost-hover);
+  }
+
+  .header__social[aria-disabled='true'] {
+    cursor: default;
+  }
+
+  .header__social svg,
+  .header__social img {
+    width: 1.25rem;
+    height: 1.25rem;
   }
 
   .header__cta {
-    display: inline-flex;
+    display: none;
     align-items: center;
     justify-content: center;
     padding: var(--space-2) var(--space-4);
@@ -131,6 +213,7 @@ const {
     color: var(--color-primary-contrast);
     text-decoration: none;
     font-weight: 600;
+    white-space: nowrap;
     transition:
       background-color var(--duration-fast) var(--ease-out),
       transform var(--duration-fast) var(--ease-out);
@@ -145,34 +228,50 @@ const {
     transform: scale(var(--press-scale));
   }
 
-  .header__mobile {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
+  .header__phone {
+    display: none;
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .header__phone:hover,
+  .header__phone-icon:hover {
+    color: var(--color-primary);
   }
 
   .header__phone-icon {
     color: var(--color-text);
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.875rem;
+    cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-out);
   }
 
   @media (min-width: 768px) {
-    .header__logo svg {
-      height: 1.5rem;
+    .header__logo :global(svg) {
+      height: 2.5rem;
     }
 
-    .header__actions {
-      gap: var(--space-6);
+    .header__phone {
+      display: inline;
     }
 
-    .header__nav {
-      display: flex;
-    }
-
-    .header__mobile {
+    .header__phone-icon {
       display: none;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .header__actions {
+      gap: var(--space-4);
+    }
+
+    .header__pages,
+    .header__cta {
+      display: flex;
     }
   }
 </style>

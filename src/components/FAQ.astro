@@ -5,15 +5,17 @@ interface FaqItem {
 }
 
 interface Props {
+  eyebrow?: string;
   title?: string;
   items: FaqItem[];
 }
 
-const { title = 'Частые вопросы', items } = Astro.props;
+const { eyebrow = 'Вопросы', title = 'Частые вопросы', items } = Astro.props;
 ---
 
-<section class="faq section" aria-labelledby="faq-title">
+<section id="faq" class="faq section" aria-labelledby="faq-title">
   <div class="container">
+    <p class="eyebrow">{eyebrow}</p>
     <h2 id="faq-title" class="faq__title">{title}</h2>
     <div class="faq__list">
       {

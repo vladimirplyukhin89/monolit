@@ -282,7 +282,7 @@ const styles = `
     display: grid;
     place-items: center;
     color: var(--color-text-muted);
-    font-size: 0.875rem;
+    font-size: var(--font-size-base);
   }
   .cases-slider.is-dark .cases__media {
     background: color-mix(in srgb, var(--color-on-inverse) 10%, var(--color-bg-inverse));
@@ -298,7 +298,7 @@ const styles = `
   .cases__category {
     margin: 0 var(--space-4);
     color: var(--color-text-muted);
-    font-size: 0.875rem;
+    font-size: var(--font-size-base);
   }
   .cases-slider.is-dark .cases__category {
     color: color-mix(in srgb, var(--color-on-inverse) 65%, transparent);
@@ -316,7 +316,7 @@ const styles = `
     padding: var(--space-2) var(--space-4);
     border-radius: var(--radius-full);
     text-decoration: none;
-    font-size: 0.875rem;
+    font-size: var(--font-size-base);
     font-weight: 600;
     transition:
       background-color var(--duration-fast) var(--ease-out),

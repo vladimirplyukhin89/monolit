@@ -33,8 +33,16 @@ import {
   />
   <div class="page-shell">
     <Header
-      secondaryHref="/remont-kvartir"
-      secondaryLabel="Ремонт квартир"
+      links={[
+        { href: '#trust', label: 'Доверие' },
+        { href: '#services', label: 'Услуги' },
+        { href: '#before-after', label: 'До и после' },
+        { href: '#visit', label: 'Выезд' },
+        { href: '#cases', label: 'Работы' },
+        { href: '#about', label: 'Компания' },
+        { href: '#reviews', label: 'Отзывы' },
+        { href: '#faq', label: 'Вопросы' },
+      ]}
     />
     <main>
       <DirectionHero
