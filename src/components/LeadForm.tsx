@@ -182,20 +182,50 @@ export default function LeadForm({ variant = 'section', image = DEFAULT_IMAGE }:
     }
 
     setSubmitting(true);
-    // Заглушка до API lead (Telegram / Max / почта)
-    console.info('lead stub', {
+
+    const payload = {
       name,
       contactChannel: channel,
       contact:
         channel === 'phone' ? normalizeRuPhoneDigits(contactValue) : contactValue,
-    });
-    window.setTimeout(() => {
-      setSubmitting(false);
-      setStatus('ok');
-      form.reset();
-      setChannel('phone');
-      setContact('');
-    }, 400);
+    };
+
+    // Отправка только если задан PUBLIC_LEAD_ENDPOINT (прод на Beget).
+    // На Netlify staging переменная не задаётся — сеть и прод-каналы не трогаем.
+    const endpoint = import.meta.env.PUBLIC_LEAD_ENDPOINT?.trim();
+    if (!endpoint) {
+      console.info('lead stub (no PUBLIC_LEAD_ENDPOINT)', payload);
+      window.setTimeout(() => {
+        setSubmitting(false);
+        setStatus('ok');
+        form.reset();
+        setChannel('phone');
+        setContact('');
+      }, 400);
+      return;
+    }
+
+    void (async () => {
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        setSubmitting(false);
+        if (!response.ok) {
+          setStatus('error');
+          return;
+        }
+        setStatus('ok');
+        form.reset();
+        setChannel('phone');
+        setContact('');
+      } catch {
+        setSubmitting(false);
+        setStatus('error');
+      }
+    })();
   };
 
   const form = (

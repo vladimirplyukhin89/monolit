@@ -7,10 +7,22 @@ import react from '@astrojs/react';
 /** @param {string} file */
 const ttNorms = (file) => `./src/fonts/tt-norms/TT Norms Std Trial Condensed ${file}.otf`;
 
+/**
+ * Canonical / sitemap / robots:
+ * 1. PUBLIC_SITE_URL — явный URL (прод на Beget или зафиксированный стейджинг)
+ * 2. DEPLOY_PRIME_URL / URL — Netlify inject при сборке (preview и site URL)
+ * 3. иначе плейсхолдер до появления реального домена
+ * @returns {string}
+ */
+function resolveSite() {
+  const explicit = process.env.PUBLIC_SITE_URL?.trim();
+  const netlify = process.env.DEPLOY_PRIME_URL?.trim() || process.env.URL?.trim();
+  const raw = explicit || netlify || 'https://example.com';
+  return raw.replace(/\/$/, '');
+}
+
 export default defineConfig({
-  // TODO: заменить на реальный домен сайта.
-  // От него зависят canonical, sitemap.xml и robots.txt.
-  site: 'https://example.com',
+  site: resolveSite(),
   integrations: [sitemap(), react()],
   // TODO: пробные файлы TT Norms Std Condensed — до запуска заменить на купленные TT Norms Pro (woff2).
   fonts: [
