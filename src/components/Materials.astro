@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import photo from '../../public/images/png/объект-3.png';
+
 interface Props {
   eyebrow?: string;
   title: string;
@@ -9,14 +12,32 @@ const { eyebrow = 'Материалы', title, text } = Astro.props;
 ---
 
 <section id="materials" class="materials section" aria-labelledby="materials-title">
-  <div class="container">
-    <p class="eyebrow">{eyebrow}</p>
-    <h2 id="materials-title" class="materials__title">{title}</h2>
-    <p class="materials__text">{text}</p>
+  <div class="container materials__grid">
+    <div class="materials__copy">
+      <p class="eyebrow">{eyebrow}</p>
+      <h2 id="materials-title" class="materials__title">{title}</h2>
+      <p class="materials__text">{text}</p>
+    </div>
+    <div class="materials__media">
+      <Image
+        src={photo}
+        alt="Тротуарная плитка, щебень и мешки с песком на поддоне у дома"
+        widths={[480, 768, 1024]}
+        sizes="(min-width: 768px) 42vw, 100vw"
+        loading="lazy"
+        class="materials__photo"
+      />
+    </div>
   </div>
 </section>
 
 <style>
+  .materials__grid {
+    display: grid;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
   .materials__title {
     margin: 0 0 var(--space-4);
     font-size: var(--font-size-xl);
@@ -28,5 +49,23 @@ const { eyebrow = 'Материалы', title, text } = Astro.props;
     margin: 0;
     max-width: 40rem;
     color: var(--color-text-muted);
+  }
+
+  .materials__media {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+
+  .materials__photo {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-xl);
+  }
+
+  @media (min-width: 768px) {
+    .materials__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-12);
+    }
   }
 </style>

@@ -15,6 +15,27 @@ function readTokenPx(name: string): number {
   return px;
 }
 
+/** Появление и пересчёт первой группы цифр — как у метрик «О нас». */
+function animateCountFigure(figure: HTMLElement, delay: number): void {
+  const original = figure.textContent ?? '';
+  const match = /(\d+)/.exec(original);
+  void animate(figure, { opacity: [0, 1] }, motionTransition({ ...fadeSlow, delay }));
+  if (!match || match.index === undefined) return;
+
+  const target = Number(match[1]);
+  const prefix = original.slice(0, match.index);
+  const suffix = original.slice(match.index + match[1].length);
+  figure.textContent = `${prefix}0${suffix}`;
+  void animate(0, target, {
+    duration: 1.05,
+    ease: [0.2, 0, 0, 1],
+    delay,
+    onUpdate: (latest) => {
+      figure.textContent = `${prefix}${Math.round(latest)}${suffix}`;
+    },
+  });
+}
+
 if (!prefersReducedMotion()) {
   inView(
     '.reveal:not(.services__card)',
@@ -44,11 +65,14 @@ if (!prefersReducedMotion()) {
         });
         const shift = readTokenPx('--space-12');
         batch.forEach((card, index) => {
+          const delay = 0.12 + index * 0.08;
           void animate(
             card,
             { opacity: [0, 1], x: [-shift, 0] },
             motionTransition({ ...spring, delay: index * 0.06 }),
           );
+          const figure = card.querySelector<HTMLElement>('.services__card-price-figure');
+          if (figure) animateCountFigure(figure, delay);
         });
       });
     },
@@ -74,24 +98,7 @@ if (!prefersReducedMotion()) {
     (element) => {
       const figures = element.querySelectorAll<HTMLElement>('.about__metric-figure');
       figures.forEach((figure, index) => {
-        const original = figure.textContent ?? '';
-        const match = /(\d+)/.exec(original);
-        const delay = 0.12 + index * 0.08;
-        void animate(figure, { opacity: [0, 1] }, motionTransition({ ...fadeSlow, delay }));
-        if (!match || match.index === undefined) return;
-
-        const target = Number(match[1]);
-        const prefix = original.slice(0, match.index);
-        const suffix = original.slice(match.index + match[1].length);
-        figure.textContent = `${prefix}0${suffix}`;
-        void animate(0, target, {
-          duration: 1.05,
-          ease: [0.2, 0, 0, 1],
-          delay,
-          onUpdate: (latest) => {
-            figure.textContent = `${prefix}${Math.round(latest)}${suffix}`;
-          },
-        });
+        animateCountFigure(figure, 0.12 + index * 0.08);
       });
     },
     { amount: 0.4 },
