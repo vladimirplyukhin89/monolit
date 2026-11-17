@@ -1,7 +1,7 @@
 # Wireframe: главная и схема внутренних страниц
 
 - **Приоритет:** главная `/`
-- **Карта сайта:** `/` · `/blagoustrojstvo` · `/remont-kvartir` · `/politika-konfidencialnosti`
+- **Карта сайта:** `/` · `/blagoustrojstvo` · `/remont-kvartir` · `/politika-konfidencialnosti` · `/politika-cookie`
 - **Стиль блоков:** крупные секции на фоне темы (light/dark); без сетки мелких карточек в первом экране
 - **Контент:** благоустройство — из Tilda; ремонт — плейсхолдеры до материалов заказчика
 
@@ -110,6 +110,10 @@ Footer
 ## Политика `/politika-konfidencialnosti`
 
 Простая текстовая страница: Header → H1 → текст политики → Footer. Без DirectionChooser и ambient-tint направлений.
+
+## Политика cookie `/politika-cookie`
+
+Тот же каркас: Header → H1 → текст → Footer.
 
 ## Анимация и motion (минимум)
 
