@@ -59,7 +59,8 @@ const previews = {
   renovation: {
     heading: 'Ремонт квартир',
     services: renovationServices,
-    href: '/remont-kvartir',
+    // href: '/remont-kvartir',
+    href: '/',
     cta: 'Смотреть ремонт квартир',
     photos: [
       {

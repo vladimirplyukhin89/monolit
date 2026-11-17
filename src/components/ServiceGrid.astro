@@ -1,4 +1,6 @@
 ---
+import Logo from './Logo.astro';
+
 interface ServiceItem {
   title: string;
   summary?: string;
@@ -23,19 +25,29 @@ const { eyebrow = 'Услуги', title = 'Наши услуги', items } = Ast
       {
         items.map((item) => (
           <li class="services__card reveal glow">
+            <span class="services__card-logo" aria-hidden="true">
+              <Logo />
+            </span>
             <h3 class="services__card-title">{item.title}</h3>
-            {
-              item.points && item.points.length > 0 ? (
-                <ul class="services__points">
-                  {item.points.map((point) => (
-                    <li>{point}</li>
-                  ))}
-                </ul>
-              ) : (
-                item.summary && <p class="services__card-summary">{item.summary}</p>
-              )
-            }
-            <p class="services__card-price">{item.priceFrom}</p>
+            <div class="services__card-body">
+              {
+                item.points && item.points.length > 0 ? (
+                  <ul class="services__points">
+                    {item.points.map((point) => (
+                      <li>{point}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  item.summary && <p class="services__card-summary">{item.summary}</p>
+                )
+              }
+            </div>
+            <p class="services__card-price">
+              <span class="visually-hidden">{item.priceFrom}</span>
+              <span class="services__card-price-figure" aria-hidden="true">
+                {item.priceFrom}
+              </span>
+            </p>
           </li>
         ))
       }
@@ -60,11 +72,29 @@ const { eyebrow = 'Услуги', title = 'Наши услуги', items } = Ast
   }
 
   .services__card {
+    position: relative;
+    overflow: hidden;
     background: var(--color-bg);
     border-radius: var(--radius-xl);
     padding: var(--space-6);
+    padding-bottom: calc(var(--space-6) + var(--space-12));
     display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
     gap: var(--space-2);
+  }
+
+  .services__card-logo {
+    position: absolute;
+    right: var(--space-4);
+    bottom: var(--space-4);
+    color: color-mix(in srgb, var(--color-text) 18%, transparent);
+    pointer-events: none;
+  }
+
+  .services__card-logo :global(svg) {
+    display: block;
+    width: 8rem;
+    height: auto;
   }
 
   .services__card-title {
@@ -128,9 +158,20 @@ const { eyebrow = 'Услуги', title = 'Наши услуги', items } = Ast
   }
 
   .services__card-price {
-    margin: var(--space-2) 0 0;
+    margin: 0;
+    align-self: end;
     font-weight: 600;
+    line-height: var(--line-height-tight);
     color: var(--color-text);
+  }
+
+  .services__card-price-figure {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* До скрипта reveal цифра не мелькает финальным значением */
+  :global(html.has-motion) .services__card-price-figure {
+    opacity: 0;
   }
 
   @media (min-width: 768px) {
@@ -138,11 +179,19 @@ const { eyebrow = 'Услуги', title = 'Наши услуги', items } = Ast
       grid-template-columns: repeat(2, 1fr);
       gap: var(--space-6);
     }
+
+    .services__card-logo :global(svg) {
+      width: 12rem;
+    }
   }
 
   @media (min-width: 1024px) {
     .services__list {
       grid-template-columns: repeat(3, 1fr);
+    }
+
+    .services__card-logo :global(svg) {
+      width: 14rem;
     }
   }
 </style>
