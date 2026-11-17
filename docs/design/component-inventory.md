@@ -16,7 +16,8 @@
 | DirectionPreview | Тизер услуг/фото/CTA выбранного направления | главная | часть DirectionChooser | в коде |
 | DirectionHero | H1, оффер, CTA, чипы, фото-якорь страницы направления | благоустройство | статика | в коде |
 | PhotoHero | Full-bleed hero ремонта: H1, оффер, CTA, фото-плейсхолдер | ремонт | статика | в коде |
-| ServiceGrid | Сетка услуг с описанием и ценой «от» | благоустройство, ремонт | статика | в коде |
+| ServiceGrid | Сетка услуг с составом работ и ценой «от» | благоустройство, ремонт | статика | в коде |
+| Materials | Короткий текст: материалы напрямую от производителей | благоустройство | статика | в коде |
 | PackageBand | Пакет «под ключ»: цветная плашка, список включений, цена «от», CTA | ремонт | статика | в коде |
 | TrustStrip | Смета, сроки, гарантия: bento, номер и черта, без иконок и без клиентского JS | главная, страницы услуг | статика | в коде |
 | CTABand | Промежуточный призыв (выезд, скидка) | главная, страницы услуг | статика | в коде |
@@ -24,7 +25,7 @@
 | BeforeAfter | Сравнение до и после (пока плейсхолдеры фото) | благоустройство, ремонт | статика | в коде (без JS до фото) |
 | CaseGrid | Кейсы: фото + название + категория; `variant=dark`, dual-CTA | благоустройство, ремонт | статика | в коде |
 | AboutSection | Текст о компании и метрики; опционально цитата «лица» бренда | благоустройство, ремонт | статика | в коде |
-| Testimonials | Отзывы / цитаты (плейсхолдеры) | благоустройство, ремонт | статика | в коде |
+| Testimonials | Скриншоты отзывов без выдуманных цитат | благоустройство | статика | в коде |
 | FAQ | Частые вопросы (`details`) | благоустройство, ремонт | статика | в коде |
 | PolicyContent | Текст политики конфиденциальности | политика | статика | согласовано (wireframe) |
 | Базовые элементы | Кнопки, поля, заголовки секций | все | статика | в коде на страницах |
@@ -52,5 +53,5 @@
 - **Цены:** отдельной страницы «Цены» нет; диапазоны «от» в карточках услуг + форма расчёта.
 - **Два направления:** общая фирма (`#222222`, `#F28C28`); на главной tint только на карточках chooser (мята `#D5E8DA` / лаванда `#E2D8F0`); сайт — light/dark через ThemeToggle.
 - **Главная обязательно:** Header (+ ThemeToggle), HeroIntro, DirectionChooser, DirectionPreview, TrustStrip, CTABand/LeadForm, Footer.
-- **`/blagoustrojstvo`:** DirectionHero → TrustStrip → ServiceGrid → BeforeAfter → CTABand → CaseGrid → About → Testimonials → FAQ → LeadForm.
+- **`/blagoustrojstvo`:** DirectionHero → TrustStrip → ServiceGrid → Materials → BeforeAfter → CTABand → CaseGrid (группы по категории) → About → Testimonials → FAQ → LeadForm.
 - **`/remont-kvartir`:** см. `wireframes/remont-kvartir.md` — PhotoHero → TrustStrip → PackageBand (опц.) → ServiceGrid → CaseGrid (inverse) → About → FAQ → LeadForm.

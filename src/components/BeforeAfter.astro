@@ -1,14 +1,23 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 interface Props {
   eyebrow?: string;
   title?: string;
-  text?: string;
+  before?: ImageMetadata;
+  after?: ImageMetadata;
+  beforeAlt?: string;
+  afterAlt?: string;
 }
 
 const {
   eyebrow = 'До и после',
   title = 'Как меняется участок после благоустройства',
-  text = 'Добавим пары фото «до / после», когда будут материалы в docs/content/media/blagoustrojstvo/before-after/.',
+  before,
+  after,
+  beforeAlt = 'Участок до работ',
+  afterAlt = 'Участок после работ',
 } = Astro.props;
 ---
 
@@ -16,18 +25,43 @@ const {
   <div class="container">
     <p class="eyebrow">{eyebrow}</p>
     <h2 id="ba-title" class="ba__title">{title}</h2>
-    <p class="ba__text">{text}</p>
     <div class="ba__pair">
       <figure class="ba__frame reveal">
-        <div class="ba__placeholder" role="img" aria-label="Фото участка до работ — будет добавлено">
-          <span>До</span>
-        </div>
+        {
+          before ? (
+            <Image
+              src={before}
+              alt={beforeAlt}
+              widths={[480, 800]}
+              sizes="(min-width: 768px) 46vw, 100vw"
+              loading="lazy"
+              class="ba__photo"
+            />
+          ) : (
+            <div class="ba__placeholder" role="img" aria-label={beforeAlt}>
+              <span>До</span>
+            </div>
+          )
+        }
         <figcaption>До</figcaption>
       </figure>
       <figure class="ba__frame reveal">
-        <div class="ba__placeholder" role="img" aria-label="Фото участка после работ — будет добавлено">
-          <span>После</span>
-        </div>
+        {
+          after ? (
+            <Image
+              src={after}
+              alt={afterAlt}
+              widths={[480, 800]}
+              sizes="(min-width: 768px) 46vw, 100vw"
+              loading="lazy"
+              class="ba__photo"
+            />
+          ) : (
+            <div class="ba__placeholder" role="img" aria-label={afterAlt}>
+              <span>После</span>
+            </div>
+          )
+        }
         <figcaption>После</figcaption>
       </figure>
     </div>
@@ -36,16 +70,10 @@ const {
 
 <style>
   .ba__title {
-    margin: 0 0 var(--space-4);
+    margin: 0 0 var(--space-8);
     font-size: var(--font-size-xl);
     font-weight: 500;
     line-height: var(--line-height-tight);
-  }
-
-  .ba__text {
-    margin: 0 0 var(--space-8);
-    color: var(--color-text-muted);
-    max-width: 40rem;
   }
 
   .ba__pair {
@@ -55,6 +83,13 @@ const {
 
   .ba__frame {
     margin: 0;
+  }
+
+  .ba__photo {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-xl);
+    object-fit: cover;
   }
 
   .ba__placeholder {

@@ -1,7 +1,8 @@
 ---
 interface ServiceItem {
   title: string;
-  summary: string;
+  summary?: string;
+  points?: readonly string[];
   priceFrom: string;
 }
 
@@ -23,7 +24,17 @@ const { eyebrow = 'Услуги', title = 'Наши услуги', items } = Ast
         items.map((item) => (
           <li class="services__card reveal glow">
             <h3 class="services__card-title">{item.title}</h3>
-            <p class="services__card-summary">{item.summary}</p>
+            {
+              item.points && item.points.length > 0 ? (
+                <ul class="services__points">
+                  {item.points.map((point) => (
+                    <li>{point}</li>
+                  ))}
+                </ul>
+              ) : (
+                item.summary && <p class="services__card-summary">{item.summary}</p>
+              )
+            }
             <p class="services__card-price">{item.priceFrom}</p>
           </li>
         ))
@@ -66,6 +77,16 @@ const { eyebrow = 'Услуги', title = 'Наши услуги', items } = Ast
   .services__card-summary {
     margin: 0;
     color: var(--color-text-muted);
+  }
+
+  .services__points {
+    margin: 0;
+    padding-left: var(--space-4);
+    color: var(--color-text-muted);
+  }
+
+  .services__points li + li {
+    margin-top: var(--space-1);
   }
 
   .services__card-price {

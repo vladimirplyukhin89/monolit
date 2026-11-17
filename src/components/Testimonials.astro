@@ -1,13 +1,19 @@
 ---
-import type { TestimonialItem } from '../data/blagoustrojstvo';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Shot {
+  src: ImageMetadata;
+  alt: string;
+}
 
 interface Props {
   eyebrow?: string;
   title?: string;
-  items: TestimonialItem[];
+  items: readonly Shot[];
 }
 
-const { eyebrow = 'Отзывы', title = 'Что говорят клиенты', items } = Astro.props;
+const { eyebrow = 'Отзывы', title = 'Что говорят наши клиенты', items } = Astro.props;
 ---
 
 <section id="reviews" class="reviews section" aria-labelledby="reviews-title">
@@ -17,13 +23,15 @@ const { eyebrow = 'Отзывы', title = 'Что говорят клиенты'
     <ul class="reviews__list">
       {
         items.map((item) => (
-          <li class="reviews__item reveal glow">
-            <blockquote class="reviews__quote">
-              <p>{item.quote}</p>
-              <footer>
-                <cite>{item.author}</cite>
-              </footer>
-            </blockquote>
+          <li class="reviews__item reveal">
+            <Image
+              src={item.src}
+              alt={item.alt}
+              widths={[360, 640]}
+              sizes="(min-width: 768px) 46vw, 100vw"
+              loading="lazy"
+              class="reviews__shot"
+            />
           </li>
         ))
       }
@@ -48,25 +56,16 @@ const { eyebrow = 'Отзывы', title = 'Что говорят клиенты'
   }
 
   .reviews__item {
+    margin: 0;
     background: var(--color-bg);
     border-radius: var(--radius-xl);
-    padding: var(--space-6);
+    padding: var(--space-3);
   }
 
-  .reviews__quote {
-    margin: 0;
-  }
-
-  .reviews__quote p {
-    margin: 0 0 var(--space-4);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-base);
-  }
-
-  .reviews__quote cite {
-    font-style: normal;
-    color: var(--color-text-muted);
-    font-weight: 500;
+  .reviews__shot {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
   }
 
   @media (min-width: 768px) {

@@ -1,4 +1,5 @@
 ---
+import { contacts } from '../data/blagoustrojstvo';
 import Logo from './Logo.astro';
 
 interface Props {
@@ -8,6 +9,8 @@ interface Props {
   address?: string;
   /** Прямая ссылка на точку в 2ГИС; иначе — поиск по адресу */
   addressHref?: string;
+  telegramHref?: string;
+  maxHref?: string;
   legal?: string;
 }
 
@@ -17,6 +20,8 @@ const {
   email = 'monolittmn@mail.ru',
   address = 'г. Тюмень, ул. Депутатская, 129',
   addressHref,
+  telegramHref = contacts.telegramHref,
+  maxHref = contacts.maxHref,
   legal = 'ИП Ерамасов В.Н. · ИНН 723011554086 · ОГРНИП 323723200019722',
 } = Astro.props;
 
@@ -34,6 +39,8 @@ const mapHref =
     </div>
     <div class="footer__contacts">
       <a href={phoneHref}>{phone}</a>
+      <a href={telegramHref} target="_blank" rel="noopener noreferrer">Telegram</a>
+      <a href={maxHref} target="_blank" rel="noopener noreferrer">Max</a>
       <a href={`mailto:${email}`}>{email}</a>
       <a
         href={mapHref}

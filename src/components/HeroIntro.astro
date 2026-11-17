@@ -1,9 +1,14 @@
 ---
-import HeroSlider, { type HeroSlide } from './HeroSlider';
+import HeroSlider, { type HeroSlide, type HeroWork } from './HeroSlider';
+
+interface HeroChip {
+  label: string;
+  work: HeroWork;
+}
 
 interface Props {
   eyebrow?: string;
-  chips?: readonly string[];
+  chips?: readonly HeroChip[];
   ctaLabel?: string;
   ctaHref?: string;
   note?: string;
@@ -31,23 +36,25 @@ const slidesDefault: readonly HeroSlide[] = [
     width: 1024,
     height: 1024,
     objectPosition: 'center 60%',
+    work: 'landscaping',
   },
   {
     src: '/images/webp/дизайн-1.webp',
     alt: 'Гостиная-столовая: диван, обеденный стол у окна и подвесные светильники',
     width: 1680,
     height: 1121,
+    work: 'renovation',
   },
 ];
 
 const {
   eyebrow = '',
   chips = [
-    'Асфальтирование',
-    'Брусчатка',
-    'Водоотведение',
-    'Дизайн-проект',
-    'Ремонт под ключ',
+    { label: 'Асфальтирование', work: 'landscaping' },
+    { label: 'Брусчатка', work: 'landscaping' },
+    { label: 'Водоотведение', work: 'landscaping' },
+    { label: 'Дизайн-проект', work: 'renovation' },
+    { label: 'Ремонт под ключ', work: 'renovation' },
   ],
   ctaLabel = 'Оставить заявку',
   ctaHref = '#lead',
@@ -69,7 +76,7 @@ const {
         </h1>
         <ul class="hero__chips" aria-label="Услуги">
           {chips.map((chip) => (
-            <li>{chip}</li>
+            <li data-work={chip.work}>{chip.label}</li>
           ))}
         </ul>
         <div class="hero__actions">
@@ -134,6 +141,11 @@ const {
     margin: 0 0 var(--space-6);
     padding: 0;
     list-style: none;
+  }
+
+  .hero__plate[data-hero-work='landscaping'] .hero__chips li:not([data-work='landscaping']),
+  .hero__plate[data-hero-work='renovation'] .hero__chips li:not([data-work='renovation']) {
+    display: none;
   }
 
   .hero__chips li {
