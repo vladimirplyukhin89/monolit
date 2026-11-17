@@ -2,9 +2,9 @@
 :root {
   color-scheme: light;
 
-  /* Цвета — light: только #e8e8e8 (страница) и #ffffff (компоненты) */
+  /* Цвета — light: кремовый холст (как плашка выезда) и #ffffff (компоненты) */
   --color-bg: #ffffff;
-  --color-bg-muted: #e8e8e8;
+  --color-bg-muted: color-mix(in srgb, var(--color-primary) 18%, var(--color-bg));
   --color-bg-inverse: #222222;
   --color-on-inverse: #ffffff;
   --color-surface: #ffffff;

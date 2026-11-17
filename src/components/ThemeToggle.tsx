@@ -19,7 +19,7 @@ function applyTheme(theme: Theme) {
   const root = document.documentElement;
   root.dataset.theme = theme;
   root.style.colorScheme = theme;
-  const color = getComputedStyle(root).getPropertyValue('--color-bg-muted').trim();
+  const color = getComputedStyle(document.body).backgroundColor;
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', color);
   try {
     localStorage.setItem(STORAGE_KEY, theme);
