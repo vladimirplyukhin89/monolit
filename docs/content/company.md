@@ -9,8 +9,8 @@
 - **Телефон:** 8 (919) 950-77-22
 - **Email:** monolittmn@mail.ru
 - **Адрес:** г. Тюмень, ул. Депутатская, 129
-- **Telegram:** <!-- вставить: ссылка или @ -->
-- **Max:** <!-- вставить: ссылка -->
+- **Telegram:** https://t.me/monolit_tmn
+- **Max:** https://max.ru/u/f9LHodD0cOJhTkS6prGJ8o49TuvILO6zc_hZU-wWTW5PndjpPNJwVpP0eE4
 
 ## Логотип
 

@@ -30,6 +30,9 @@ function resolveSite() {
 export default defineConfig({
   site: resolveSite(),
   integrations: [sitemap(), react()],
+  redirects: {
+    '/privacy': '/politika-konfidencialnosti',
+  },
   // TODO: пробные файлы TT Norms Std Condensed — до запуска заменить на купленные TT Norms Pro (woff2).
   fonts: [
     {

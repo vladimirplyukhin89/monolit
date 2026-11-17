@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import DirectionHero from '../components/DirectionHero.astro';
 import TrustStrip from '../components/TrustStrip.astro';
 import ServiceGrid from '../components/ServiceGrid.astro';
+import Materials from '../components/Materials.astro';
 import BeforeAfter from '../components/BeforeAfter.astro';
 import CTABand from '../components/CTABand.astro';
 import CaseGrid from '../components/CaseGrid.astro';
@@ -14,15 +15,23 @@ import LeadForm from '../components/LeadForm';
 import Footer from '../components/Footer.astro';
 import {
   about,
-  cases,
+  beforeAfter,
   cta,
   faq,
   hero,
   jsonLdService,
+  materials,
   pageMeta,
   services,
-  testimonials,
+  trust,
 } from '../data/blagoustrojstvo';
+import {
+  afterPhoto,
+  beforePhoto,
+  caseGroups,
+  heroPhoto,
+  reviewShots,
+} from '../data/blagoustrojstvo-media';
 ---
 
 <BaseLayout title={pageMeta.title} description={pageMeta.description}>
@@ -36,6 +45,7 @@ import {
       links={[
         { href: '#trust', label: 'Доверие' },
         { href: '#services', label: 'Услуги' },
+        { href: '#materials', label: 'Материалы' },
         { href: '#before-after', label: 'До и после' },
         { href: '#visit', label: 'Выезд' },
         { href: '#cases', label: 'Работы' },
@@ -51,21 +61,28 @@ import {
         ctaLabel={hero.ctaLabel}
         ctaHref={hero.ctaHref}
         chips={hero.chips}
+        photo={heroPhoto}
         photoAlt={hero.photoAlt}
         transitionName="dir-landscaping"
       />
-      <TrustStrip />
+      <TrustStrip items={[...trust]} />
       <ServiceGrid items={services} />
-      <BeforeAfter />
+      <Materials title={materials.title} text={materials.text} />
+      <BeforeAfter
+        before={beforePhoto}
+        after={afterPhoto}
+        beforeAlt={beforeAfter.beforeAlt}
+        afterAlt={beforeAfter.afterAlt}
+      />
       <CTABand
         title={cta.title}
         text={cta.text}
         href={cta.href}
         ctaLabel={cta.ctaLabel}
       />
-      <CaseGrid items={cases} />
+      <CaseGrid groups={caseGroups} />
       <AboutSection text={about.text} metrics={about.metrics} />
-      <Testimonials items={testimonials} />
+      <Testimonials items={reviewShots} />
       <FAQ items={faq} />
       <LeadForm client:load />
     </main>

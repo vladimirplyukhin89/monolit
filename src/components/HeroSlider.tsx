@@ -4,12 +4,16 @@ import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 're
 import { instant, prefersReducedMotion, spring } from '../lib/motion';
 import loadMotionFeatures from '../lib/motion-features';
 
+export type HeroWork = 'landscaping' | 'renovation';
+
 export interface HeroSlide {
   src: string;
   alt: string;
   width: number;
   height: number;
   objectPosition?: string;
+  /** Вид работ кадра. Без поля на плите остаются все плашки. */
+  work?: HeroWork;
   secondary?: {
     src: string;
     alt: string;
@@ -40,6 +44,7 @@ export default function HeroSlider({ slides }: Props) {
   const [hidden, setHidden] = useState(false);
   const reduced = prefersReducedMotion();
   const dot = count === 0 ? 0 : index % count;
+  const work = slides[dot]?.work ?? 'all';
 
   indexRef.current = index;
 
@@ -96,6 +101,12 @@ export default function HeroSlider({ slides }: Props) {
     }, 480);
     return () => window.clearTimeout(timer);
   }, [index, count]);
+
+  useEffect(() => {
+    const plate = rootRef.current?.closest('.hero__plate');
+    if (!(plate instanceof HTMLElement)) return;
+    plate.dataset.heroWork = work;
+  }, [work]);
 
   useEffect(() => {
     const plate = rootRef.current?.closest('.hero__plate');

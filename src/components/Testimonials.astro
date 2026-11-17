@@ -1,33 +1,52 @@
 ---
-import type { TestimonialItem } from '../data/blagoustrojstvo';
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import PhotoSlider, { type PhotoSlide } from './PhotoSlider';
+
+interface Shot {
+  src: ImageMetadata;
+  alt: string;
+}
 
 interface Props {
   eyebrow?: string;
   title?: string;
-  items: TestimonialItem[];
+  items: readonly Shot[];
 }
 
-const { eyebrow = 'Отзывы', title = 'Что говорят клиенты', items } = Astro.props;
+const { eyebrow = 'Отзывы', title = 'Что говорят наши клиенты', items } = Astro.props;
+
+const REVIEW_SIZES = '(min-width: 768px) 46vw, 100vw';
+
+function dimension(value: unknown, fallback: number): number {
+  const n = typeof value === 'number' ? value : Number(value);
+  return Number.isFinite(n) && n > 0 ? n : fallback;
+}
+
+const slides: PhotoSlide[] = await Promise.all(
+  items.map(async (item) => {
+    const image = await getImage({
+      src: item.src,
+      widths: [360, 640],
+      sizes: REVIEW_SIZES,
+    });
+    return {
+      src: image.src,
+      srcSet: image.srcSet.attribute,
+      sizes: REVIEW_SIZES,
+      width: dimension(image.attributes.width, item.src.width),
+      height: dimension(image.attributes.height, item.src.height),
+      alt: item.alt,
+    };
+  }),
+);
 ---
 
 <section id="reviews" class="reviews section" aria-labelledby="reviews-title">
   <div class="container">
     <p class="eyebrow">{eyebrow}</p>
     <h2 id="reviews-title" class="reviews__title">{title}</h2>
-    <ul class="reviews__list">
-      {
-        items.map((item) => (
-          <li class="reviews__item reveal glow">
-            <blockquote class="reviews__quote">
-              <p>{item.quote}</p>
-              <footer>
-                <cite>{item.author}</cite>
-              </footer>
-            </blockquote>
-          </li>
-        ))
-      }
-    </ul>
+    <PhotoSlider client:visible slides={slides} variant="snap" label="Скриншоты отзывов" />
   </div>
 </section>
 
@@ -37,42 +56,5 @@ const { eyebrow = 'Отзывы', title = 'Что говорят клиенты'
     font-size: var(--font-size-xl);
     font-weight: 500;
     line-height: var(--line-height-tight);
-  }
-
-  .reviews__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: var(--space-4);
-  }
-
-  .reviews__item {
-    background: var(--color-bg);
-    border-radius: var(--radius-xl);
-    padding: var(--space-6);
-  }
-
-  .reviews__quote {
-    margin: 0;
-  }
-
-  .reviews__quote p {
-    margin: 0 0 var(--space-4);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-base);
-  }
-
-  .reviews__quote cite {
-    font-style: normal;
-    color: var(--color-text-muted);
-    font-weight: 500;
-  }
-
-  @media (min-width: 768px) {
-    .reviews__list {
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--space-6);
-    }
   }
 </style>

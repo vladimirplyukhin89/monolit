@@ -17,18 +17,88 @@ const { eyebrow = 'Вопросы', title = 'Частые вопросы', items
   <div class="container">
     <p class="eyebrow">{eyebrow}</p>
     <h2 id="faq-title" class="faq__title">{title}</h2>
-    <div class="faq__list">
+    <div class="faq__list" data-faq>
       {
-        items.map((item) => (
-          <details class="faq__item glow">
-            <summary>{item.question}</summary>
-            <p>{item.answer}</p>
-          </details>
-        ))
+        items.map((item, index) => {
+          const panelId = `faq-panel-${index}`;
+          const buttonId = `faq-button-${index}`;
+          return (
+            <div class="faq__item glow">
+              <h3 class="faq__question">
+                <button
+                  type="button"
+                  id={buttonId}
+                  class="faq__trigger"
+                  aria-expanded="false"
+                  aria-controls={panelId}
+                >
+                  <span>{item.question}</span>
+                  <span class="faq__icon" aria-hidden="true">
+                    +
+                  </span>
+                </button>
+              </h3>
+              <div id={panelId} class="faq__panel" role="region" aria-labelledby={buttonId} hidden>
+                <div class="faq__panel-inner">
+                  <p>{item.answer}</p>
+                </div>
+              </div>
+            </div>
+          );
+        })
       }
     </div>
   </div>
 </section>
+
+<script>
+  const roots = document.querySelectorAll('[data-faq]');
+
+  for (const root of roots) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const items = Array.from(root.querySelectorAll('.faq__item'));
+
+    const setOpen = (item: Element, open: boolean) => {
+      const trigger = item.querySelector('.faq__trigger');
+      const panel = item.querySelector<HTMLElement>('.faq__panel');
+      if (!(trigger instanceof HTMLElement) || !panel) return;
+      if (item.classList.contains('is-open') === open) return;
+
+      trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      item.classList.toggle('is-open', open);
+
+      if (open) {
+        panel.hidden = false;
+        void panel.offsetHeight;
+        panel.classList.add('is-expanded');
+      } else if (reduceMotion) {
+        panel.classList.remove('is-expanded');
+        panel.hidden = true;
+      } else {
+        panel.classList.remove('is-expanded');
+        const onEnd = (event: TransitionEvent) => {
+          if (event.target !== panel || event.propertyName !== 'grid-template-rows') return;
+          panel.removeEventListener('transitionend', onEnd);
+          if (!item.classList.contains('is-open')) panel.hidden = true;
+        };
+        panel.addEventListener('transitionend', onEnd);
+      }
+    };
+
+    for (const item of items) {
+      const trigger = item.querySelector('.faq__trigger');
+      if (!trigger) continue;
+
+      trigger.addEventListener('click', () => {
+        const willOpen = !item.classList.contains('is-open');
+        for (const other of items) {
+          if (other !== item) setOpen(other, false);
+        }
+        setOpen(item, willOpen);
+      });
+    }
+  }
+</script>
 
 <style>
   .faq__title {
@@ -44,74 +114,86 @@ const { eyebrow = 'Вопросы', title = 'Частые вопросы', items
   }
 
   .faq__item {
+    --faq-duration: calc(var(--duration-slow) * 2);
     background: var(--color-bg);
     border-radius: var(--radius-xl);
     padding: var(--space-4) var(--space-6);
   }
 
-  .faq__item summary {
+  .faq__question {
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+  }
+
+  .faq__trigger {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: var(--space-4);
-    cursor: pointer;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-size: var(--font-size-lg);
     font-weight: 600;
-    list-style: none;
+    line-height: var(--line-height-base);
+    text-align: left;
+    cursor: pointer;
   }
 
-  .faq__item summary::-webkit-details-marker {
-    display: none;
+  .faq__trigger:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
   }
 
-  .faq__item summary::after {
-    content: '+' / '';
+  .faq__icon {
     flex-shrink: 0;
     color: var(--color-primary);
     font-size: var(--font-size-xl);
     font-weight: 400;
     line-height: 1;
-    transition: rotate var(--duration-base) var(--ease-out);
+    transition: rotate var(--faq-duration) var(--ease-in-out);
   }
 
-  .faq__item[open] summary::after {
+  .faq__item.is-open .faq__icon {
     rotate: 45deg;
   }
 
-  .faq__item summary:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 4px;
+  .faq__panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--faq-duration) var(--ease-in-out);
   }
 
-  .faq__item::details-content {
-    opacity: 0;
-    transition:
-      opacity var(--duration-base) var(--ease-out),
-      block-size var(--duration-slow) var(--ease-out),
-      content-visibility var(--duration-slow);
-    transition-behavior: allow-discrete;
+  .faq__panel[hidden] {
+    display: none;
   }
 
-  .faq__item[open]::details-content {
-    opacity: 1;
+  .faq__panel.is-expanded {
+    grid-template-rows: 1fr;
   }
 
-  @supports (interpolate-size: allow-keywords) {
-    .faq__item {
-      interpolate-size: allow-keywords;
-    }
-
-    .faq__item::details-content {
-      block-size: 0;
-      overflow: hidden;
-    }
-
-    .faq__item[open]::details-content {
-      block-size: auto;
-    }
+  .faq__panel-inner {
+    overflow: hidden;
+    min-height: 0;
   }
 
   .faq__item p {
     margin: var(--space-3) 0 0;
     color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-base);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq__panel,
+    .faq__icon {
+      transition: none;
+    }
   }
 </style>

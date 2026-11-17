@@ -46,15 +46,6 @@ a {
   color: var(--color-primary);
 }
 
-/* TODO: удалить вместе с PAGE_NAV_LOCKED в src/lib/page-nav.ts */
-html[data-page-nav-locked] a[href^='/'],
-html[data-page-nav-locked] a[href^='./'],
-html[data-page-nav-locked] a[href^='../'] {
-  cursor: not-allowed;
-  opacity: 0.55;
-  pointer-events: none;
-}
-
 :focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;

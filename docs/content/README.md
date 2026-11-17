@@ -11,6 +11,7 @@
 | `blagoustrojstvo.md` | услуги, FAQ, about, CTA |
 | `remont-kvartir.md` | то же для ремонта (сейчас плейсхолдеры) |
 | `politika-konfidencialnosti.md` | текст политики |
+| `politika-cookie.md` | политика файлов cookie |
 
 Маркеры `<!-- вставить: ... -->` — места для вашей вставки. Можно затирать плейсхолдеры целиком.
 
