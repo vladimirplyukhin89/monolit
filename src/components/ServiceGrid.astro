@@ -80,13 +80,51 @@ const { eyebrow = 'Услуги', title = 'Наши услуги', items } = Ast
   }
 
   .services__points {
+    list-style: none;
     margin: 0;
-    padding-left: var(--space-4);
+    padding: 0;
     color: var(--color-text-muted);
+  }
+
+  .services__points li {
+    position: relative;
+    padding-left: var(--space-4);
+  }
+
+  .services__points li::before {
+    content: '';
+    position: absolute;
+    top: 0.5lh;
+    left: 0;
+    width: 0.4em;
+    height: 0.4em;
+    border-radius: var(--radius-full);
+    background-color: var(--color-primary);
+    transform: translateY(-50%);
+    animation: services-point-pulse calc(var(--duration-slow) * 5) var(--ease-in-out) infinite;
   }
 
   .services__points li + li {
     margin-top: var(--space-1);
+  }
+
+  @keyframes services-point-pulse {
+    0%,
+    100% {
+      transform: translateY(-50%) scale(1);
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 50%, transparent);
+    }
+
+    50% {
+      transform: translateY(-50%) scale(1.2);
+      box-shadow: 0 0 0 0.28em color-mix(in srgb, var(--color-primary) 0%, transparent);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .services__points li::before {
+      animation: none;
+    }
   }
 
   .services__card-price {

@@ -25,7 +25,12 @@ const { eyebrow = 'Компания', title = 'О нас', text, metrics = [] } 
           <ul class="about__metrics">
             {metrics.map((metric) => (
               <li>
-                <p class="about__metric-value">{metric.value}</p>
+                <p class="about__metric-value">
+                  <span class="visually-hidden">{metric.value}</span>
+                  <span class="about__metric-figure" aria-hidden="true">
+                    {metric.value}
+                  </span>
+                </p>
                 <p class="about__metric-label">{metric.label}</p>
               </li>
             ))}
@@ -52,8 +57,9 @@ const { eyebrow = 'Компания', title = 'О нас', text, metrics = [] } 
 
   .about__text {
     margin: 0;
+    max-width: 42rem;
+    font-size: var(--font-size-lg);
     color: var(--color-text-muted);
-    max-width: 40rem;
   }
 
   .about__metrics {
@@ -66,19 +72,29 @@ const { eyebrow = 'Компания', title = 'О нас', text, metrics = [] } 
 
   .about__metric-value {
     margin: 0;
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-2xl);
     font-weight: 700;
     line-height: var(--line-height-tight);
   }
 
+  .about__metric-figure {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* До скрипта reveal цифры не мелькают финальным значением */
+  :global(html.has-motion) .about__metric-figure {
+    opacity: 0;
+  }
+
   .about__metric-label {
     margin: var(--space-1) 0 0;
+    font-size: var(--font-size-lg);
     color: var(--color-text-muted);
   }
 
   @media (min-width: 768px) {
     .about__metrics {
-      grid-template-columns: repeat(2, minmax(0, 12rem));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: var(--space-8);
     }
   }

@@ -111,6 +111,7 @@ export const about = {
   metrics: [
     { value: '300+', label: 'выполненных объектов' },
     { value: '5+', label: 'лет опыта в благоустройстве территорий' },
+    { value: 'до 5', label: 'лет гарантии на работы' },
   ] as const,
 };
 

@@ -98,6 +98,7 @@ export const about = {
   metrics: [
     { value: '[N+]', label: '[метрика 1]' },
     { value: '[N+]', label: '[метрика 2]' },
+    { value: '[N]', label: '[метрика 3]' },
   ] as const,
 };
 
