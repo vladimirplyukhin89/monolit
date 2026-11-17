@@ -1,5 +1,6 @@
 ---
 import { Font } from 'astro:assets';
+import BackToTop from '../components/BackToTop.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -69,6 +70,7 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
   </head>
   <body>
     <slot />
+    <BackToTop />
     <script>
       import '../scripts/reveal';
     </script>

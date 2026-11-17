@@ -405,7 +405,15 @@ const styles = `
   }
   .chooser__card-action {
     margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    color: var(--color-primary-contrast);
     font-weight: 600;
+    line-height: var(--line-height-tight);
   }
   .chooser__preview {
     position: relative;

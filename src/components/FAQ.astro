@@ -47,6 +47,7 @@ const { eyebrow = 'Вопросы', title = 'Частые вопросы', items
     background: var(--color-bg);
     border-radius: var(--radius-xl);
     padding: var(--space-4) var(--space-6);
+    interpolate-size: allow-keywords;
   }
 
   .faq__item summary {
@@ -55,7 +56,9 @@ const { eyebrow = 'Вопросы', title = 'Частые вопросы', items
     align-items: center;
     gap: var(--space-4);
     cursor: pointer;
+    font-size: var(--font-size-lg);
     font-weight: 600;
+    line-height: var(--line-height-base);
     list-style: none;
   }
 
@@ -83,35 +86,25 @@ const { eyebrow = 'Вопросы', title = 'Частые вопросы', items
   }
 
   .faq__item::details-content {
+    block-size: 0;
+    overflow: clip;
     opacity: 0;
     transition:
-      opacity var(--duration-base) var(--ease-out),
       block-size var(--duration-slow) var(--ease-out),
+      opacity var(--duration-slow) var(--ease-out),
       content-visibility var(--duration-slow);
     transition-behavior: allow-discrete;
   }
 
   .faq__item[open]::details-content {
+    block-size: auto;
     opacity: 1;
-  }
-
-  @supports (interpolate-size: allow-keywords) {
-    .faq__item {
-      interpolate-size: allow-keywords;
-    }
-
-    .faq__item::details-content {
-      block-size: 0;
-      overflow: hidden;
-    }
-
-    .faq__item[open]::details-content {
-      block-size: auto;
-    }
   }
 
   .faq__item p {
     margin: var(--space-3) 0 0;
     color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-base);
   }
 </style>
