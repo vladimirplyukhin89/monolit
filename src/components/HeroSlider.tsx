@@ -10,6 +10,13 @@ export interface HeroSlide {
   width: number;
   height: number;
   objectPosition?: string;
+  secondary?: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    objectPosition?: string;
+  };
 }
 
 interface Props {
@@ -175,17 +182,47 @@ export default function HeroSlider({ slides }: Props) {
                   className="hero-slider__slide"
                   aria-hidden={current ? undefined : true}
                 >
-                  <img
-                    src={slide.src}
-                    alt={current ? slide.alt : ''}
-                    width={slide.width}
-                    height={slide.height}
-                    decoding="async"
-                    draggable={false}
-                    fetchPriority={slideIndex === 0 ? 'high' : undefined}
-                    loading={slideIndex === 0 ? undefined : 'lazy'}
-                    style={{ objectPosition: slide.objectPosition ?? 'center' }}
-                  />
+                  {slide.secondary ? (
+                    <div className="hero-slider__split">
+                      <div className="hero-slider__pane hero-slider__pane--primary">
+                        <img
+                          src={slide.src}
+                          alt={current ? slide.alt : ''}
+                          width={slide.width}
+                          height={slide.height}
+                          decoding="async"
+                          draggable={false}
+                          fetchPriority={slideIndex === 0 ? 'high' : undefined}
+                          loading={slideIndex === 0 ? undefined : 'lazy'}
+                          style={{ objectPosition: slide.objectPosition ?? 'center' }}
+                        />
+                      </div>
+                      <div className="hero-slider__pane hero-slider__pane--secondary">
+                        <img
+                          src={slide.secondary.src}
+                          alt={current ? slide.secondary.alt : ''}
+                          width={slide.secondary.width}
+                          height={slide.secondary.height}
+                          decoding="async"
+                          draggable={false}
+                          loading={slideIndex === 0 ? undefined : 'lazy'}
+                          style={{ objectPosition: slide.secondary.objectPosition ?? 'center' }}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <img
+                      src={slide.src}
+                      alt={current ? slide.alt : ''}
+                      width={slide.width}
+                      height={slide.height}
+                      decoding="async"
+                      draggable={false}
+                      fetchPriority={slideIndex === 0 ? 'high' : undefined}
+                      loading={slideIndex === 0 ? undefined : 'lazy'}
+                      style={{ objectPosition: slide.objectPosition ?? 'center' }}
+                    />
+                  )}
                 </div>
               );
             })}
@@ -279,6 +316,40 @@ const styles = `
     object-fit: cover;
     pointer-events: none;
     user-select: none;
+  }
+
+  .hero-slider__split {
+    position: relative;
+    height: 100%;
+  }
+
+  .hero-slider__pane {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-slider__pane--primary {
+    right: 50%;
+  }
+
+  .hero-slider__pane--secondary {
+    left: 50%;
+  }
+
+  @media (min-width: 768px) {
+    .hero-slider__pane--primary,
+    .hero-slider__pane--secondary {
+      right: 0;
+      left: 0;
+    }
+
+    .hero-slider__pane--primary {
+      clip-path: polygon(0 0, 100% 0, 0 100%);
+    }
+
+    .hero-slider__pane--secondary {
+      clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    }
   }
 
   .hero-slider__dots {

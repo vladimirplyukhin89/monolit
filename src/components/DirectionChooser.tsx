@@ -1,8 +1,17 @@
+import type { Transition } from 'motion';
 import { AnimatePresence, LazyMotion } from 'motion/react';
 import * as m from 'motion/react-m';
 import { useLayoutEffect, useState } from 'react';
 import { fade, motionTransition, prefersReducedMotion, spring } from '../lib/motion';
 import loadMotionFeatures from '../lib/motion-features';
+
+/** Мягче общей пружины: только перетекание вкладки и списка. */
+const liquid: Transition = {
+  type: 'spring',
+  stiffness: 200,
+  damping: 30,
+  mass: 1,
+};
 
 type Direction = 'neutral' | 'landscaping' | 'renovation';
 
@@ -79,6 +88,7 @@ function readDirectionFromUrl(): Direction {
 export default function DirectionChooser() {
   const [direction, setDirection] = useState<Direction>('neutral');
   const hasSelection = direction !== 'neutral';
+  const reduced = prefersReducedMotion();
 
   useLayoutEffect(() => {
     setDirection(readDirectionFromUrl());
@@ -122,9 +132,9 @@ export default function DirectionChooser() {
                 text="Участок под ключ: асфальт, брусчатка, дренаж и отмостка — от расчёта до сдачи"
                 onSelect={() => select('landscaping')}
               />
-              {direction === 'landscaping' ? (
-                <DirectionPreview direction="landscaping" />
-              ) : null}
+              <AnimatePresence initial={false} mode="popLayout">
+                {direction === 'landscaping' ? renderPreview('landscaping', reduced) : null}
+              </AnimatePresence>
               <DirectionCard
                 direction="renovation"
                 selected={direction === 'renovation'}
@@ -132,9 +142,9 @@ export default function DirectionChooser() {
                 text="Квартира под ключ: дизайн, отделка и инженерия — одна команда и понятный план работ"
                 onSelect={() => select('renovation')}
               />
-              {direction === 'renovation' ? (
-                <DirectionPreview direction="renovation" />
-              ) : null}
+              <AnimatePresence initial={false} mode="popLayout">
+                {direction === 'renovation' ? renderPreview('renovation', reduced) : null}
+              </AnimatePresence>
             </div>
             {!hasSelection ? (
               <p className="chooser__hint">
@@ -175,6 +185,18 @@ function DirectionCard({
       whileFocus={reduced ? undefined : { scale: 1.02 }}
       transition={motionTransition(spring)}
     >
+      {selected ? (
+        reduced ? (
+          <span className="chooser__fill" aria-hidden="true" />
+        ) : (
+          <m.span
+            className="chooser__fill"
+            layoutId="chooser-fill"
+            transition={liquid}
+            aria-hidden="true"
+          />
+        )
+      ) : null}
       <span className="chooser__card-title">{title}</span>
       <span className="chooser__card-text">{text}</span>
       <span className="chooser__card-action">{selected ? 'Выбрано' : 'Выбрать'}</span>
@@ -182,24 +204,21 @@ function DirectionCard({
   );
 }
 
-function DirectionPreview({ direction }: { direction: 'landscaping' | 'renovation' }) {
+function renderPreview(direction: 'landscaping' | 'renovation', reduced: boolean) {
   return (
-    <div className="chooser__preview" aria-live="polite">
+    <m.div
+      key={direction}
+      className="chooser__preview"
+      aria-live="polite"
+      initial={reduced ? false : { opacity: 0, y: '0.75rem' }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={reduced ? undefined : { opacity: 0, y: '0.75rem' }}
+      transition={motionTransition(liquid)}
+    >
       <div className="preview">
-        <AnimatePresence mode="wait">
-          <m.div
-            key={direction}
-            className="preview__content"
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 10 }}
-            transition={motionTransition(fade)}
-          >
-            <PreviewContent {...previews[direction]} />
-          </m.div>
-        </AnimatePresence>
+        <PreviewContent {...previews[direction]} reduced={reduced} />
       </div>
-    </div>
+    </m.div>
   );
 }
 
@@ -209,22 +228,33 @@ function PreviewContent({
   href,
   cta,
   photos,
+  reduced,
 }: {
   heading: string;
   services: PreviewService[];
   href: string;
   cta: string;
   photos: PreviewPhoto[];
+  reduced: boolean;
 }) {
   return (
     <>
       <h3 className="preview__heading">{heading}: услуги</h3>
       <ul className="preview__list">
-        {services.map((service) => (
-          <li key={service.title} className="preview__item">
-            <span>{service.title}</span>
+        {services.map((service, index) => (
+          <m.li
+            key={service.title}
+            className="preview__item"
+            initial={reduced ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              ...motionTransition(fade),
+              delay: reduced ? 0 : index * 0.04,
+            }}
+          >
+            <span className="preview__name">{service.title}</span>
             <strong>{service.price}</strong>
-          </li>
+          </m.li>
         ))}
       </ul>
       <div className="preview__media">
@@ -249,12 +279,6 @@ function PreviewContent({
 }
 
 const styles = `
-  .chooser {
-    --chooser-ink: var(--color-primary-contrast);
-  }
-  [data-theme='dark'] .chooser {
-    --chooser-ink: #ffffff;
-  }
   .chooser__title {
     margin: 0 0 var(--space-8);
     font-size: var(--font-size-xl);
@@ -321,17 +345,17 @@ const styles = `
     gap: var(--space-3);
     text-align: left;
     padding: var(--space-6);
-    border: 1px solid color-mix(in srgb, var(--chooser-ink) 16%, transparent);
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-xl);
-    background: var(--color-primary);
-    color: var(--chooser-ink);
+    background: color-mix(in srgb, var(--color-bg) 64%, transparent);
+    color: var(--color-text);
     font: inherit;
     cursor: pointer;
-    box-shadow: 0 var(--space-2) var(--space-6) var(--shadow-color);
+    box-shadow: inset 0 1px 0 var(--glass-highlight);
     transition:
       border-color var(--duration-fast) var(--ease-out),
-      box-shadow var(--duration-fast) var(--ease-out),
-      background-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-base) var(--ease-out),
+      box-shadow var(--duration-base) var(--ease-out),
       border-radius var(--duration-fast) var(--ease-out),
       margin-bottom var(--duration-fast) var(--ease-out);
   }
@@ -342,15 +366,31 @@ const styles = `
     view-transition-name: dir-renovation;
   }
   .chooser__shell.has-selection .chooser__card:not(.is-selected) {
-    background: var(--color-primary-active);
     margin-bottom: var(--space-2);
   }
   .chooser__card.is-selected {
     z-index: 2;
-    border-color: color-mix(in srgb, var(--chooser-ink) 22%, transparent);
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+    color: var(--color-primary-contrast);
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    box-shadow: 0 var(--space-1) var(--space-4) var(--shadow-color);
+  }
+  .chooser__fill {
+    position: absolute;
+    z-index: 0;
+    display: block;
+    inset: -1px;
+    border-radius: inherit;
+    background: var(--color-primary);
+    pointer-events: none;
+  }
+  .chooser__card-title,
+  .chooser__card-text,
+  .chooser__card-action {
+    position: relative;
+    z-index: 1;
   }
   .chooser__card-title {
     font-size: var(--font-size-xl);
@@ -358,12 +398,14 @@ const styles = `
     line-height: var(--line-height-tight);
   }
   .chooser__card-text {
-    color: color-mix(in srgb, var(--chooser-ink) 88%, transparent);
+    color: var(--color-text-muted);
+  }
+  .chooser__card.is-selected .chooser__card-text {
+    color: var(--color-primary-contrast);
   }
   .chooser__card-action {
     margin-top: auto;
     font-weight: 600;
-    color: var(--chooser-ink);
   }
   .chooser__preview {
     position: relative;
@@ -380,17 +422,15 @@ const styles = `
     overflow: hidden;
     border-radius: var(--radius-xl);
     padding: var(--space-6);
-    border: 1px solid color-mix(in srgb, var(--chooser-ink) 16%, transparent);
-    background: var(--color-primary);
-    box-shadow: 0 var(--space-2) var(--space-6) var(--shadow-color);
-    color: var(--chooser-ink);
+    border: 1px solid var(--glass-border);
+    background: color-mix(in srgb, var(--color-bg) 78%, transparent);
+    box-shadow: inset 0 1px 0 var(--glass-highlight);
+    color: var(--color-text);
   }
   .chooser__shell.has-selection .preview {
+    border-top: 0;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-  }
-  .preview__content {
-    will-change: transform, opacity;
   }
   .preview__heading {
     margin: 0 0 var(--space-4);
@@ -409,11 +449,33 @@ const styles = `
     justify-content: space-between;
     gap: var(--space-4);
     padding-bottom: var(--space-3);
-    border-bottom: 1px solid color-mix(in srgb, var(--chooser-ink) 18%, transparent);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .preview__name {
+    background-image: linear-gradient(var(--color-primary), var(--color-primary));
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 0% 0.22em;
+    transition:
+      color var(--duration-base) var(--ease-out),
+      background-size var(--duration-base) var(--ease-out),
+      text-shadow var(--duration-base) var(--ease-out);
+  }
+  .preview__item:hover .preview__name {
+    color: var(--color-primary);
+    background-size: 100% 0.22em;
+    text-shadow:
+      0.03em 0 0 currentColor,
+      -0.03em 0 0 currentColor;
   }
   .preview__item strong {
     white-space: nowrap;
     font-weight: 600;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .preview__name {
+      transition: none;
+    }
   }
   .preview__media {
     display: grid;
@@ -427,8 +489,8 @@ const styles = `
     object-fit: cover;
     object-position: top center;
     border-radius: var(--radius-lg);
-    border: 1px solid color-mix(in srgb, var(--chooser-ink) 14%, transparent);
-    background: color-mix(in srgb, var(--chooser-ink) 8%, transparent);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-muted);
   }
   .preview__cta {
     display: inline-flex;

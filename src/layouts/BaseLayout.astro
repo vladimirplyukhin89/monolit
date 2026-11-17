@@ -27,9 +27,7 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
     <script is:inline>
       (function () {
         document.addEventListener('DOMContentLoaded', function () {
-          var color = getComputedStyle(document.documentElement)
-            .getPropertyValue('--color-bg-muted')
-            .trim();
+          var color = getComputedStyle(document.body).backgroundColor;
           var meta = document.querySelector('meta[name="theme-color"]');
           if (meta && color) meta.setAttribute('content', color);
         });
