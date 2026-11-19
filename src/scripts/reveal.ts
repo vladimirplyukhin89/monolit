@@ -1,5 +1,5 @@
 import { animate, inView } from 'motion';
-import { fadeSlow, motionTransition, prefersReducedMotion, spring } from '../lib/motion';
+import { fade, fadeSlow, motionTransition, prefersReducedMotion, spring } from '../lib/motion';
 
 /** Длина токена в пикселях, чтобы Motion мог интерполировать сдвиг. */
 function readTokenPx(name: string): number {
@@ -85,6 +85,22 @@ if (!prefersReducedMotion()) {
           const figure = card.querySelector<HTMLElement>('.services__card-price-figure');
           if (figure) animateCountFigure(figure, delay);
         });
+      });
+    },
+    { amount: 0.2 },
+  );
+
+  inView(
+    '.materials__list',
+    (element) => {
+      const shift = readTokenPx('--space-2');
+      const items = element.querySelectorAll<HTMLElement>('.materials__item');
+      items.forEach((item, index) => {
+        void animate(
+          item,
+          { opacity: [0, 1], y: [shift, 0] },
+          motionTransition({ ...fade, delay: 0.08 + index * 0.08 }),
+        );
       });
     },
     { amount: 0.2 },

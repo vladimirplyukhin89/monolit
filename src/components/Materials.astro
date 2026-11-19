@@ -18,7 +18,9 @@ const { eyebrow = 'Материалы', title, items } = Astro.props;
         <p class="eyebrow eyebrow--on-primary">{eyebrow}</p>
         <h2 id="materials-title" class="materials__title">{title}</h2>
         <ol class="materials__list">
-          {items.map((item) => <li>{item}</li>)}
+          {items.map((item) => (
+            <li class="materials__item">{item}</li>
+          ))}
         </ol>
       </div>
       <div class="materials__media">
@@ -79,6 +81,10 @@ const { eyebrow = 'Материалы', title, items } = Astro.props;
     font-size: var(--font-size-lg);
     font-weight: 600;
     line-height: var(--line-height-tight);
+  }
+
+  :global(html.has-motion) .materials__item {
+    opacity: 0;
   }
 
   .materials__list li::before {
