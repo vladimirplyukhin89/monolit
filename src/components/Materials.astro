@@ -5,67 +5,121 @@ import photo from '../../public/images/png/объект-3.png';
 interface Props {
   eyebrow?: string;
   title: string;
-  text: string;
+  items: readonly string[];
 }
 
-const { eyebrow = 'Материалы', title, text } = Astro.props;
+const { eyebrow = 'Материалы', title, items } = Astro.props;
 ---
 
 <section id="materials" class="materials section" aria-labelledby="materials-title">
-  <div class="container materials__grid">
-    <div class="materials__copy">
-      <p class="eyebrow">{eyebrow}</p>
-      <h2 id="materials-title" class="materials__title">{title}</h2>
-      <p class="materials__text">{text}</p>
-    </div>
-    <div class="materials__media">
-      <Image
-        src={photo}
-        alt="Тротуарная плитка, щебень и мешки с песком на поддоне у дома"
-        widths={[480, 768, 1024]}
-        sizes="(min-width: 768px) 42vw, 100vw"
-        loading="lazy"
-        class="materials__photo"
-      />
+  <div class="container">
+    <div class="materials__band reveal glow">
+      <div class="materials__copy">
+        <p class="eyebrow eyebrow--on-primary">{eyebrow}</p>
+        <h2 id="materials-title" class="materials__title">{title}</h2>
+        <ol class="materials__list">
+          {items.map((item) => <li>{item}</li>)}
+        </ol>
+      </div>
+      <div class="materials__media">
+        <Image
+          src={photo}
+          alt="Тротуарная плитка, щебень и мешки с песком на поддоне у дома"
+          widths={[480, 768, 1200]}
+          sizes="(min-width: 768px) 40vw, 100vw"
+          loading="lazy"
+          class="materials__photo"
+        />
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  .materials__grid {
+  .materials__band {
     display: grid;
-    gap: var(--space-8);
-    align-items: center;
+    overflow: hidden;
+    background: var(--color-primary);
+    color: var(--color-primary-contrast);
+    border-radius: var(--radius-xl);
+  }
+
+  .materials__copy {
+    display: grid;
+    align-content: center;
+    gap: var(--space-6);
+    padding: var(--space-8);
   }
 
   .materials__title {
-    margin: 0 0 var(--space-4);
+    margin: 0;
     font-size: var(--font-size-xl);
     font-weight: 500;
     line-height: var(--line-height-tight);
   }
 
-  .materials__text {
+  .materials__list {
     margin: 0;
-    max-width: 40rem;
-    color: var(--color-text-muted);
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--space-3);
+    counter-reset: materials;
+  }
+
+  .materials__list li {
+    counter-increment: materials;
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin: 0;
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, white 28%, transparent);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    line-height: var(--line-height-tight);
+  }
+
+  .materials__list li::before {
+    content: counter(materials);
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-full);
+    background: var(--color-bg-inverse);
+    color: var(--color-on-inverse);
+    font-size: var(--font-size-base);
+    font-weight: 600;
   }
 
   .materials__media {
-    border-radius: var(--radius-xl);
-    overflow: hidden;
+    position: relative;
+    min-height: 18rem;
   }
 
   .materials__photo {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    height: auto;
-    border-radius: var(--radius-xl);
+    height: 100%;
+    object-fit: cover;
+    object-position: center 38%;
   }
 
   @media (min-width: 768px) {
-    .materials__grid {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: var(--space-12);
+    .materials__band {
+      grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+    }
+
+    .materials__copy {
+      padding: var(--space-12);
+    }
+
+    .materials__media {
+      min-height: 100%;
     }
   }
 </style>

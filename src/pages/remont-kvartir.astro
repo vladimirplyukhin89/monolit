@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import PhotoHero from '../components/PhotoHero.astro';
 import TrustStrip from '../components/TrustStrip.astro';
+import DesignBand from '../components/DesignBand.astro';
 import PackageBand from '../components/PackageBand.astro';
 import ServiceGrid from '../components/ServiceGrid.astro';
 import CaseGrid from '../components/CaseGrid.astro';
@@ -12,7 +13,7 @@ import LeadForm from '../components/LeadForm';
 import Footer from '../components/Footer.astro';
 import {
   about,
-  cases,
+  design,
   faq,
   hero,
   jsonLdService,
@@ -21,6 +22,17 @@ import {
   services,
   trust,
 } from '../data/remont-kvartir';
+import { caseGroups } from '../data/remont-kvartir-media';
+
+const headerLinks = [
+  { href: '#trust', label: 'Доверие' },
+  { href: '#design', label: 'Дизайн' },
+  { href: '#package', label: 'Пакет' },
+  { href: '#services', label: 'Услуги' },
+  ...(caseGroups.length > 0 ? [{ href: '#cases', label: 'Работы' }] : []),
+  { href: '#about', label: 'Компания' },
+  { href: '#faq', label: 'Вопросы' },
+];
 ---
 
 <BaseLayout title={pageMeta.title} description={pageMeta.description}>
@@ -30,43 +42,40 @@ import {
     set:html={JSON.stringify(jsonLdService)}
   />
   <div class="page-shell">
-    <Header
-      links={[
-        { href: '#trust', label: 'Доверие' },
-        { href: '#package', label: 'Пакет' },
-        { href: '#services', label: 'Услуги' },
-        { href: '#cases', label: 'Работы' },
-        { href: '#about', label: 'Компания' },
-        { href: '#faq', label: 'Вопросы' },
-      ]}
-    />
+    <Header links={headerLinks} />
     <main>
       <PhotoHero
         title={hero.title}
         support={hero.support}
         ctaLabel={hero.ctaLabel}
         ctaHref={hero.ctaHref}
-        photoAlt={hero.photoAlt}
+        photo={hero.photo}
         transitionName="dir-renovation"
       />
       <TrustStrip items={[...trust]} />
+      <DesignBand
+        eyebrow={design.eyebrow}
+        title={design.title}
+        text={design.text}
+        photoAlt={design.photo.alt}
+        ctaLabel={design.ctaLabel}
+        ctaHref={design.ctaHref}
+      />
       <PackageBand
         title={packageOffer.title}
         eyebrow={packageOffer.eyebrow}
         items={packageOffer.items}
         priceFrom={packageOffer.priceFrom}
+        photoAlt={packageOffer.photoAlt}
         ctaLabel={packageOffer.ctaLabel}
         ctaHref={packageOffer.ctaHref}
       />
       <ServiceGrid items={services} />
-      <CaseGrid
-        items={cases}
-        variant="dark"
-        showActions
-        viewLabel="Смотреть"
-        leadLabel="Оставить заявку"
-        leadHref="#lead"
-      />
+      {
+        caseGroups.length > 0 && (
+          <CaseGrid groups={caseGroups} variant="dark" />
+        )
+      }
       <AboutSection
         title={about.title}
         text={about.text}

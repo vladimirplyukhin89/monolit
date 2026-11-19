@@ -15,23 +15,32 @@ function readTokenPx(name: string): number {
   return px;
 }
 
+/** Группа цифр, включая пробелы тысяч: «18 000», «800». */
+const COUNT_NUMBER = /\d{1,3}(?:[ \u00a0\u202f]\d{3})+|\d+/;
+
+function formatCount(value: number): string {
+  return Math.round(value)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+}
+
 /** Появление и пересчёт первой группы цифр — как у метрик «О нас». */
 function animateCountFigure(figure: HTMLElement, delay: number): void {
   const original = figure.textContent ?? '';
-  const match = /(\d+)/.exec(original);
+  const match = COUNT_NUMBER.exec(original);
   void animate(figure, { opacity: [0, 1] }, motionTransition({ ...fadeSlow, delay }));
   if (!match || match.index === undefined) return;
 
-  const target = Number(match[1]);
+  const target = Number(match[0].replace(/[ \u00a0\u202f]/g, ''));
   const prefix = original.slice(0, match.index);
-  const suffix = original.slice(match.index + match[1].length);
+  const suffix = original.slice(match.index + match[0].length);
   figure.textContent = `${prefix}0${suffix}`;
   void animate(0, target, {
     duration: 1.05,
     ease: [0.2, 0, 0, 1],
     delay,
     onUpdate: (latest) => {
-      figure.textContent = `${prefix}${Math.round(latest)}${suffix}`;
+      figure.textContent = `${prefix}${formatCount(latest)}${suffix}`;
     },
   });
 }
@@ -45,6 +54,8 @@ if (!prefersReducedMotion()) {
         { opacity: [0, 1], transform: ['translateY(16px)', 'none'] },
         motionTransition(spring),
       );
+      const price = element.querySelector<HTMLElement>('.package__price-figure');
+      if (price) animateCountFigure(price, 0.12);
     },
     { amount: 0.2 },
   );

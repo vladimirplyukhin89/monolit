@@ -20,6 +20,7 @@ interface Props {
   /** Сброс на первый кадр, когда панель таба снова становится активной. */
   active?: boolean;
   reveal?: boolean;
+  tone?: 'default' | 'inverse';
 }
 
 function usePerView(): number {
@@ -44,6 +45,7 @@ export default function PhotoSlider({
   label,
   active = true,
   reveal = true,
+  tone = 'default',
 }: Props) {
   const labelId = useId();
   const dotLayoutId = useId();
@@ -141,7 +143,7 @@ export default function PhotoSlider({
     <LazyMotion features={loadMotionFeatures} strict>
       <div
         ref={rootRef}
-        className={`photo-slider photo-slider--${variant}${reveal ? ' reveal' : ''}`}
+        className={`photo-slider photo-slider--${variant}${tone === 'inverse' ? ' photo-slider--inverse' : ''}${reveal ? ' reveal' : ''}`}
         role="region"
         aria-roledescription="carousel"
         aria-label={label}
@@ -389,6 +391,17 @@ const styles = `
     inset: 0;
     border-radius: inherit;
     background: var(--color-primary);
+  }
+  .photo-slider--inverse .photo-slider__nav {
+    background: color-mix(in srgb, var(--color-on-inverse) 8%, var(--color-bg-inverse));
+    border-color: color-mix(in srgb, var(--color-on-inverse) 20%, transparent);
+    color: var(--color-on-inverse);
+  }
+  .photo-slider--inverse .photo-slider__nav:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--color-on-inverse) 16%, var(--color-bg-inverse));
+  }
+  .photo-slider--inverse .photo-slider__dot {
+    background: color-mix(in srgb, var(--color-on-inverse) 40%, transparent);
   }
   @media (min-width: 768px) {
     .photo-slider--peek .photo-slider__track {

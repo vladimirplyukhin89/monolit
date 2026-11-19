@@ -1,0 +1,112 @@
+---
+import { Image } from 'astro:assets';
+import photo from '../../public/images/jpg/дизайн-3.jpg';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  text: string;
+  photoAlt: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const {
+  eyebrow = 'Дизайн',
+  title,
+  text,
+  photoAlt,
+  ctaLabel = 'Оставить заявку',
+  ctaHref = '#lead',
+} = Astro.props;
+---
+
+<section id="design" class="design section" aria-labelledby="design-title">
+  <div class="container design__grid">
+    <div class="design__copy">
+      <p class="eyebrow eyebrow--on-inverse">{eyebrow}</p>
+      <h2 id="design-title" class="design__title">{title}</h2>
+      <p class="design__text">{text}</p>
+      <a class="design__cta" href={ctaHref} data-lead-dialog>{ctaLabel}</a>
+    </div>
+    <div class="design__media">
+      <Image
+        src={photo}
+        alt={photoAlt}
+        widths={[480, 768, 1200]}
+        sizes="(min-width: 768px) 42vw, 100vw"
+        loading="lazy"
+        class="design__photo"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .design {
+    background: var(--color-bg-inverse);
+    color: var(--color-on-inverse);
+  }
+
+  .design__grid {
+    display: grid;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .design__title {
+    margin: 0 0 var(--space-4);
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    line-height: var(--line-height-tight);
+  }
+
+  .design__text {
+    margin: 0 0 var(--space-6);
+    max-width: 38rem;
+    color: color-mix(in srgb, var(--color-on-inverse) 78%, transparent);
+  }
+
+  .design__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    color: var(--color-primary-contrast);
+    text-decoration: none;
+    font-weight: 600;
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .design__cta:hover {
+    background: var(--color-primary-hover);
+  }
+
+  .design__cta:active {
+    background: var(--color-primary-active);
+    transform: scale(var(--press-scale));
+  }
+
+  .design__media {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+
+  .design__photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-xl);
+  }
+
+  @media (min-width: 768px) {
+    .design__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-12);
+    }
+  }
+</style>

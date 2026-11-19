@@ -12,9 +12,10 @@ export interface CaseTabGroup {
 
 interface Props {
   groups: readonly CaseTabGroup[];
+  tone?: 'default' | 'inverse';
 }
 
-export default function CaseTabs({ groups }: Props) {
+export default function CaseTabs({ groups, tone = 'default' }: Props) {
   const baseId = useId();
   const pillId = useId();
   const [active, setActive] = useState(0);
@@ -31,7 +32,7 @@ export default function CaseTabs({ groups }: Props) {
 
   return (
     <LazyMotion features={loadMotionFeatures} strict>
-      <div className="case-tabs reveal">
+      <div className={`case-tabs reveal${tone === 'inverse' ? ' case-tabs--inverse' : ''}`}>
         <LayoutGroup>
           <div className="case-tabs__list" role="tablist" aria-label="Виды работ">
             {groups.map((group, i) => (
@@ -102,6 +103,7 @@ export default function CaseTabs({ groups }: Props) {
                   label={group.title}
                   active={i === active}
                   reveal={false}
+                  tone={tone}
                 />
               </m.div>
             </div>
@@ -165,5 +167,13 @@ const styles = `
   }
   .case-tabs__fade {
     min-width: 0;
+  }
+  .case-tabs--inverse .case-tabs__tab {
+    border-color: color-mix(in srgb, var(--color-on-inverse) 28%, transparent);
+    color: color-mix(in srgb, var(--color-on-inverse) 82%, transparent);
+  }
+  .case-tabs--inverse .case-tabs__tab[aria-selected='true'] {
+    border-color: transparent;
+    color: var(--color-primary-contrast);
   }
 `;

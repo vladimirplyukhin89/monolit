@@ -115,7 +115,7 @@ export default function CaseSlider({
     <LazyMotion features={loadMotionFeatures} strict>
       <div
         ref={rootRef}
-        className={`cases-slider${dark ? ' is-dark' : ''} reveal`}
+        className={`cases-slider${dark ? ' is-dark' : ''}`}
         role="region"
         aria-roledescription="carousel"
         aria-labelledby={labelId}

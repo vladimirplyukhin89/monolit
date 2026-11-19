@@ -1,10 +1,18 @@
 ---
+interface Photo {
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
+}
+
 interface Props {
   eyebrow?: string;
   title: string;
   support: string;
   ctaLabel?: string;
   ctaHref?: string;
+  photo?: Photo;
   photoAlt?: string;
   /** view-transition-name медиа: морфинг из карточки DirectionChooser */
   transitionName?: string;
@@ -16,6 +24,7 @@ const {
   support,
   ctaLabel = 'Оставить заявку',
   ctaHref = '#lead',
+  photo,
   photoAlt = 'Фото готового ремонта — будет добавлено',
   transitionName,
 } = Astro.props;
@@ -23,12 +32,26 @@ const {
 
 <section class="photo-hero" aria-labelledby="photo-hero-title">
   <div
-    class="photo-hero__media"
-    role="img"
-    aria-label={photoAlt}
+    class:list={['photo-hero__media', photo && 'photo-hero__media--photo']}
+    role={photo ? undefined : 'img'}
+    aria-label={photo ? undefined : photoAlt}
     style={transitionName ? `view-transition-name: ${transitionName}` : undefined}
   >
-    <span class="photo-hero__media-label">Фото интерьера</span>
+    {
+      photo ? (
+        <img
+          src={encodeURI(photo.src)}
+          alt={photo.alt}
+          width={photo.width}
+          height={photo.height}
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      ) : (
+        <span class="photo-hero__media-label">Фото интерьера</span>
+      )
+    }
   </div>
   <div class="photo-hero__scrim" aria-hidden="true"></div>
   <div class="container photo-hero__content">
@@ -58,6 +81,18 @@ const {
     border-bottom: 1px dashed color-mix(in srgb, var(--color-on-inverse) 25%, transparent);
   }
 
+  .photo-hero__media--photo {
+    border-bottom: 0;
+  }
+
+  .photo-hero__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
   .photo-hero__media-label {
     position: relative;
     z-index: 1;
@@ -81,10 +116,10 @@ const {
     position: relative;
     z-index: 1;
     padding-block: var(--space-12) var(--space-16);
-    max-width: 40rem;
   }
 
   .photo-hero__title {
+    max-width: 40rem;
     margin: 0 0 var(--space-4);
     font-size: var(--font-size-xl);
     font-weight: 500;
@@ -92,6 +127,7 @@ const {
   }
 
   .photo-hero__support {
+    max-width: 40rem;
     margin: 0 0 var(--space-6);
     color: color-mix(in srgb, var(--color-on-inverse) 78%, transparent);
     font-size: var(--font-size-base);

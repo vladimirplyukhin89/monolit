@@ -87,7 +87,11 @@ const hasGroups = optimizedGroups.length > 0;
     <h2 id="cases-title" class="cases__title">{title}</h2>
     {
       hasGroups ? (
-        <CaseTabs client:visible groups={optimizedGroups} />
+        <CaseTabs
+          client:visible
+          groups={optimizedGroups}
+          tone={isDark ? 'inverse' : 'default'}
+        />
       ) : (
         <CaseSlider
           client:visible

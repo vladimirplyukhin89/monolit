@@ -1,9 +1,13 @@
 ---
+import { Image } from 'astro:assets';
+import photo from '../../public/images/webp/дизайн-2.webp';
+
 interface Props {
   title?: string;
   eyebrow?: string;
   items: readonly string[];
   priceFrom: string;
+  photoAlt?: string;
   ctaLabel?: string;
   ctaHref?: string;
 }
@@ -13,6 +17,7 @@ const {
   eyebrow = 'Пакетное предложение',
   items,
   priceFrom,
+  photoAlt = 'Кухня после ремонта: синие шкафы, мраморный фартук и два красных стула',
   ctaLabel = 'Оставить заявку',
   ctaHref = '#lead',
 } = Astro.props;
@@ -21,47 +26,118 @@ const {
 <section id="package" class="package section" aria-labelledby="package-title">
   <div class="container">
     <div class="package__band reveal glow">
-      <p class="eyebrow eyebrow--on-primary">{eyebrow}</p>
-      <h2 id="package-title" class="package__title">{title}</h2>
-      <ol class="package__list">
-        {
-          items.map((item) => (
-            <li>{item}</li>
-          ))
-        }
-      </ol>
-      <p class="package__price">{priceFrom}</p>
-      <a class="package__cta" href={ctaHref} data-lead-dialog>{ctaLabel}</a>
+      <div class="package__copy">
+        <p class="eyebrow eyebrow--on-primary">{eyebrow}</p>
+        <h2 id="package-title" class="package__title">{title}</h2>
+        <ol class="package__list">
+          {
+            items.map((item) => (
+              <li>{item}</li>
+            ))
+          }
+        </ol>
+        <div class="package__offer">
+          <a class="package__cta" href={ctaHref} data-lead-dialog>{ctaLabel}</a>
+          <p class="package__price">
+            <span class="visually-hidden">{priceFrom}</span>
+            <span class="package__price-figure" aria-hidden="true">{priceFrom}</span>
+          </p>
+        </div>
+      </div>
+      <div class="package__media">
+        <Image
+          src={photo}
+          alt={photoAlt}
+          widths={[480, 768, 1200]}
+          sizes="(min-width: 768px) 40vw, 100vw"
+          loading="lazy"
+          class="package__photo"
+        />
+      </div>
     </div>
   </div>
 </section>
 
 <style>
   .package__band {
+    display: grid;
+    overflow: hidden;
     background: var(--color-primary);
     color: var(--color-primary-contrast);
     border-radius: var(--radius-xl);
+  }
+
+  .package__copy {
+    display: grid;
+    align-content: center;
+    gap: var(--space-6);
     padding: var(--space-8);
   }
 
   .package__title {
-    margin: 0 0 var(--space-6);
+    margin: 0;
     font-size: var(--font-size-xl);
     font-weight: 500;
     line-height: var(--line-height-tight);
   }
 
   .package__list {
-    margin: 0 0 var(--space-6);
-    padding-left: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
     display: grid;
-    gap: var(--space-2);
+    gap: var(--space-3);
+    counter-reset: package;
+  }
+
+  .package__list li {
+    counter-increment: package;
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin: 0;
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, white 28%, transparent);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    line-height: var(--line-height-tight);
+  }
+
+  .package__list li::before {
+    content: counter(package);
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-full);
+    background: var(--color-bg-inverse);
+    color: var(--color-on-inverse);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+  }
+
+  .package__offer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-6);
   }
 
   .package__price {
-    margin: 0 0 var(--space-6);
-    font-size: var(--font-size-lg);
-    font-weight: 700;
+    margin: 0;
+    font-size: var(--font-size-2xl);
+    font-weight: 500;
+    line-height: var(--line-height-tight);
+  }
+
+  .package__price-figure {
+    font-variant-numeric: tabular-nums;
+  }
+
+  :global(html.has-motion) .package__price-figure {
+    opacity: 0;
   }
 
   .package__cta {
@@ -87,9 +163,31 @@ const {
     transform: scale(var(--press-scale));
   }
 
+  .package__media {
+    position: relative;
+    min-height: 18rem;
+  }
+
+  .package__photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 38%;
+  }
+
   @media (min-width: 768px) {
     .package__band {
+      grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+    }
+
+    .package__copy {
       padding: var(--space-12);
+    }
+
+    .package__media {
+      min-height: 100%;
     }
   }
 </style>
