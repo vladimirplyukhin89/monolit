@@ -103,7 +103,7 @@ function itemNumber(index: number): string {
 
   .trust__ghost {
     position: absolute;
-    top: calc(var(--space-4) * -1);
+    top: calc(var(--space-4) * -1 + var(--space-1));
     right: var(--space-2);
     z-index: 0;
     font-size: calc(var(--font-size-2xl) * 2.6);
@@ -189,6 +189,10 @@ function itemNumber(index: number): string {
   }
 
   @media (min-width: 768px) {
+    .trust__ghost {
+      top: calc(var(--space-4) * -1);
+    }
+
     .trust__list {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: var(--space-6);

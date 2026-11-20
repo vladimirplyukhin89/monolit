@@ -75,7 +75,7 @@ const {
   }
 
   .package__title {
-    margin: 0;
+    margin: calc(var(--space-6) * -1) 0 0;
     font-size: var(--font-size-xl);
     font-weight: 500;
     line-height: var(--line-height-tight);
@@ -120,19 +120,20 @@ const {
 
   .package__offer {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
-    gap: var(--space-4) var(--space-6);
+    gap: var(--space-3);
   }
 
   .package__price {
     margin: 0;
-    font-size: var(--font-size-2xl);
     font-weight: 500;
     line-height: var(--line-height-tight);
+    white-space: nowrap;
   }
 
   .package__price-figure {
+    font-size: var(--font-size-base);
     font-variant-numeric: tabular-nums;
   }
 
@@ -142,9 +143,11 @@ const {
 
   .package__cta {
     display: inline-flex;
+    flex: 0 0 auto;
     align-items: center;
     justify-content: center;
     padding: var(--space-3) var(--space-6);
+    white-space: nowrap;
     border-radius: var(--radius-full);
     background: var(--color-bg-inverse);
     color: var(--color-on-inverse);
@@ -178,6 +181,23 @@ const {
   }
 
   @media (min-width: 768px) {
+    .package__title {
+      margin-top: 0;
+    }
+
+    .package__offer {
+      flex-wrap: wrap;
+      gap: var(--space-4) var(--space-6);
+    }
+
+    .package__price {
+      font-size: var(--font-size-2xl);
+    }
+
+    .package__price-figure {
+      font-size: var(--font-size-2xl);
+    }
+
     .package__band {
       grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
     }

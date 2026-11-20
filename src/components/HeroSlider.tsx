@@ -315,12 +315,15 @@ const styles = `
   }
 
   .hero-slider__slide {
+    position: relative;
     flex: 0 0 100%;
     height: 100%;
     min-width: 0;
   }
 
   .hero-slider__slide img {
+    position: absolute;
+    inset: 0;
     display: block;
     width: 100%;
     height: 100%;

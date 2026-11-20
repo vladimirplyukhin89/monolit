@@ -512,6 +512,7 @@ const newLocal = `
     border-radius: var(--radius-full);
     background: var(--color-primary);
     color: var(--color-primary-contrast);
+    font-size: var(--font-size-lg);
     font-weight: 600;
     line-height: var(--line-height-tight);
   }
@@ -555,10 +556,11 @@ const newLocal = `
   .preview__item {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--space-4);
     width: 100%;
-    padding: var(--space-3);
+    padding-block: var(--space-3);
+    padding-inline: 0;
     border: 0;
     border-radius: var(--radius-md);
     background: transparent;
@@ -689,9 +691,16 @@ const newLocal = `
     }
   }
   @media (min-width: 768px) {
+    .chooser__card-action {
+      font-size: inherit;
+    }
     .chooser__grid {
       grid-template-columns: 1fr 1fr;
       gap: var(--space-4);
+    }
+    .preview__item {
+      align-items: center;
+      padding: var(--space-3);
     }
     .chooser__card--landscaping {
       order: 1;
