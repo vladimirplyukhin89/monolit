@@ -554,13 +554,15 @@ const newLocal = `
     gap: var(--space-2);
   }
   .preview__item {
+    --preview-item-outset: calc(var(--space-6) - 5px);
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     gap: var(--space-4);
-    width: 100%;
+    width: calc(100% + 2 * var(--preview-item-outset));
+    margin-inline: calc(-1 * var(--preview-item-outset));
     padding-block: var(--space-3);
-    padding-inline: 0;
+    padding-inline: var(--preview-item-outset);
     border: 0;
     border-radius: var(--radius-md);
     background: transparent;
@@ -700,7 +702,8 @@ const newLocal = `
     }
     .preview__item {
       align-items: center;
-      padding: var(--space-3);
+      padding-block: var(--space-3);
+      padding-inline: calc(var(--preview-item-outset) + var(--space-3));
     }
     .chooser__card--landscaping {
       order: 1;
