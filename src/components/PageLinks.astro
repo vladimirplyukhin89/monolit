@@ -1,0 +1,61 @@
+---
+interface Props {
+  siblingHref: string;
+  siblingLabel: string;
+}
+
+const { siblingHref, siblingLabel } = Astro.props;
+---
+
+<nav class="page-links section" aria-labelledby="page-links-title">
+  <div class="container page-links__inner">
+    <p id="page-links-title" class="page-links__label">Другие страницы</p>
+    <ul class="page-links__list">
+      <li>
+        <a class="page-links__link" href="/">На главную</a>
+      </li>
+      <li>
+        <a class="page-links__link" href={siblingHref}>{siblingLabel}</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .page-links__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-3) var(--space-6);
+  }
+
+  .page-links__label {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: var(--line-height-tight);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .page-links__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .page-links__link {
+    color: var(--color-text);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .page-links__link:hover {
+    color: var(--color-primary);
+  }
+</style>

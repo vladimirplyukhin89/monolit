@@ -12,6 +12,8 @@
   --color-text-muted: #5c5c5c;
   --color-primary: #f28c28;
   --color-primary-contrast: #222222;
+  /* Водяные знаки: тот же оранжевый, слабее сплошной заливки */
+  --color-primary-muted: color-mix(in srgb, var(--color-primary) 46%, transparent);
   --color-border: #d9d5ce;
 
   /* Состояния — производные от базовых токенов */
@@ -33,6 +35,7 @@
 
   /* Типографика — mobile-first (iPhone SE), bump с 768px */
   --font-sans: var(--font-tt-norms), system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-manrope), system-ui, sans-serif;
   --font-size-sm: 0.875rem; /* 14px */
   --font-size-base: 1rem; /* 16px */
   --font-size-lg: 1.125rem; /* 18px */

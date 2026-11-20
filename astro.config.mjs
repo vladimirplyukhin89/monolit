@@ -7,6 +7,9 @@ import react from '@astrojs/react';
 /** @param {string} file */
 const ttNorms = (file) => `./src/fonts/tt-norms/TT Norms Std Trial Condensed ${file}.otf`;
 
+/** @param {string} file */
+const manrope = (file) => `./src/fonts/manrope/static/Manrope-${file}.ttf`;
+
 /**
  * Canonical / sitemap / robots:
  * 1. PUBLIC_SITE_URL — явный URL (прод на Beget или зафиксированный стейджинг)
@@ -46,6 +49,15 @@ export default defineConfig({
           { weight: 500, style: 'normal', src: [ttNorms('Medium')] },
           { weight: 700, style: 'normal', src: [ttNorms('Bold')] },
         ],
+      },
+    },
+    {
+      provider: fontProviders.local(),
+      name: 'Manrope',
+      cssVariable: '--font-manrope',
+      fallbacks: ['system-ui', 'sans-serif'],
+      options: {
+        variants: [{ weight: 500, style: 'normal', src: [manrope('Medium')] }],
       },
     },
   ],

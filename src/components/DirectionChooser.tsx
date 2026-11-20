@@ -2,8 +2,14 @@ import type { Transition } from 'motion';
 import { AnimatePresence, LazyMotion } from 'motion/react';
 import * as m from 'motion/react-m';
 import { useLayoutEffect, useState } from 'react';
+import blindAreaPhoto from '../../docs/content/media/blagoustrojstvo/cases/otmostki/05.jpg';
+import drainagePhoto from '../../docs/content/media/blagoustrojstvo/cases/otmostki/04.jpg';
 import { fade, motionTransition, prefersReducedMotion, spring } from '../lib/motion';
 import loadMotionFeatures from '../lib/motion-features';
+
+function assetSrc(file: string | { src: string }): string {
+  return typeof file === 'string' ? file : file.src;
+}
 
 /** Мягче общей пружины: только перетекание вкладки и списка. */
 const liquid: Transition = {
@@ -15,62 +21,127 @@ const liquid: Transition = {
 
 type Direction = 'neutral' | 'landscaping' | 'renovation';
 
-interface PreviewService {
-  title: string;
-  price: string;
-}
-
 interface PreviewPhoto {
   src: string;
   alt: string;
 }
 
+interface PreviewService {
+  id: string;
+  title: string;
+  price: string;
+  summary: string;
+  photo: PreviewPhoto;
+}
+
 const landscapingServices: PreviewService[] = [
-  { title: 'Асфальтирование территорий', price: 'от 800 ₽/м²' },
-  { title: 'Укладка брусчатки и тротуарной плитки', price: 'от 900 ₽/м²' },
-  { title: 'Отмостка', price: 'от 800 ₽/м²' },
-  { title: 'Водоотведение и дренаж', price: 'от 400 ₽' },
+  {
+    id: 'asphalt',
+    title: 'Асфальтирование территорий',
+    price: 'от 800 ₽/м²',
+    summary:
+      'Покрываем дворы частных домов, парковки и подъездные дороги. Работаем по площади: от площадки у дома до въезда на участок.',
+    photo: {
+      src: '/images/png/объект-2.png',
+      alt: 'Пример благоустройства: покрытие въезда и площадки у дома',
+    },
+  },
+  {
+    id: 'paving',
+    title: 'Укладка брусчатки и тротуарной плитки',
+    price: 'от 900 ₽/м²',
+    summary:
+      'Укладываем брусчатку и тротуарную плитку на дорожках и площадках. Тем же камнем закрываем парковочные зоны у дома.',
+    photo: {
+      src: '/images/png/объект-1.png',
+      alt: 'Пример благоустройства: мощение двора у кирпичного дома',
+    },
+  },
+  {
+    id: 'blind-area',
+    title: 'Отмостка',
+    price: 'от 800 ₽/м²',
+    summary:
+      'Делаем отмостку вокруг дома из брусчатки, тротуарной плитки или бетона. Полоса идёт по периметру и стыкуется с покрытием двора.',
+    photo: {
+      src: assetSrc(blindAreaPhoto),
+      alt: 'Отмостка из тротуарной плитки вдоль стены дома',
+    },
+  },
+  {
+    id: 'drainage',
+    title: 'Водоотведение и дренаж',
+    price: 'от 400 ₽',
+    summary:
+      'Устраиваем дренаж участка, ливневую канализацию и отвод воды от дома. Система забирает воду с двора и с покрытия.',
+    photo: {
+      src: assetSrc(drainagePhoto),
+      alt: 'Водосток и ливневый лоток у отмостки дома',
+    },
+  },
 ];
 
 const renovationServices: PreviewService[] = [
-  { title: 'Дизайн-проект квартиры', price: 'от 1 500 ₽/м²' },
-  { title: 'Ремонт под ключ', price: 'от 25 000 ₽/м²' },
-  { title: 'Черновая и чистовая отделка', price: 'от 12 000 ₽/м²' },
-  { title: 'Инженерия и сантехника', price: 'от 4 500 ₽/м²' },
+  {
+    id: 'design',
+    title: 'Дизайн-проект квартиры',
+    price: 'от 1 500 ₽/м²',
+    summary:
+      'Готовим планировку, схему света и подбор материалов до старта ремонта. По проекту видно, какие работы войдут в отделку.',
+    photo: {
+      src: '/images/webp/дизайн-1.webp',
+      alt: 'Пример ремонта квартиры: гостиная и столовая после отделки',
+    },
+  },
+  {
+    id: 'turnkey',
+    title: 'Ремонт под ключ',
+    price: 'от 25 000 ₽/м²',
+    summary:
+      'Берём ремонт от черновых работ до квартиры, в которую можно въехать. Отделку и инженерию ведёт одна команда по согласованному плану.',
+    photo: {
+      src: '/images/jpg/дизайн-3.jpg',
+      alt: 'Пример ремонта квартиры: кухня после отделки',
+    },
+  },
+  {
+    id: 'finishing',
+    title: 'Черновая и чистовая отделка',
+    price: 'от 12 000 ₽/м²',
+    summary:
+      'Делаем черновую подготовку квартиры и чистовую отделку. В чистовую входят покрытия стен, полов и потолков, которые остаются после сдачи.',
+    photo: {
+      src: '/images/jpg/дизайн-2.jpg',
+      alt: 'Пример ремонта квартиры: чистовая отделка стены и пола',
+    },
+  },
+  {
+    id: 'engineering',
+    title: 'Инженерия и сантехника',
+    price: 'от 4 500 ₽/м²',
+    summary:
+      'Разводим электрику: точки света и розетки по проекту. По сантехнике делаем разводку воды и установку приборов в санузлах и на кухне.',
+    photo: {
+      src: '/images/webp/дизайн-4.webp',
+      alt: 'Пример ремонта квартиры: санузел с установленной сантехникой',
+    },
+  },
 ];
 
 const previews = {
   landscaping: {
+    id: 'landscaping' as const,
     heading: 'Благоустройство',
     services: landscapingServices,
     href: '/blagoustrojstvo',
     cta: 'Смотреть благоустройство',
-    photos: [
-      {
-        src: '/images/png/объект-1.png',
-        alt: 'Готовый участок: мощение и благоустройство территории',
-      },
-      {
-        src: '/images/png/объект-2.png',
-        alt: 'Благоустройство двора: дорожки и покрытие',
-      },
-    ] satisfies PreviewPhoto[],
   },
   renovation: {
+    id: 'renovation' as const,
     heading: 'Ремонт квартир',
     services: renovationServices,
     href: '/remont-kvartir',
     cta: 'Смотреть ремонт квартир',
-    photos: [
-      {
-        src: '/images/webp/дизайн-1.webp',
-        alt: 'Интерьер квартиры после ремонта под ключ',
-      },
-      {
-        src: '/images/jpg/дизайн-2.jpg',
-        alt: 'Дизайн и отделка жилой комнаты',
-      },
-    ] satisfies PreviewPhoto[],
   },
 };
 
@@ -209,7 +280,6 @@ function renderPreview(direction: 'landscaping' | 'renovation', reduced: boolean
     <m.div
       key={direction}
       className="chooser__preview"
-      aria-live="polite"
       initial={reduced ? false : { opacity: 0, y: '0.75rem' }}
       animate={{ opacity: 1, y: 0 }}
       exit={reduced ? undefined : { opacity: 0, y: '0.75rem' }}
@@ -223,53 +293,83 @@ function renderPreview(direction: 'landscaping' | 'renovation', reduced: boolean
 }
 
 function PreviewContent({
+  id,
   heading,
   services,
   href,
   cta,
-  photos,
   reduced,
 }: {
+  id: 'landscaping' | 'renovation';
   heading: string;
   services: PreviewService[];
   href: string;
   cta: string;
-  photos: PreviewPhoto[];
   reduced: boolean;
 }) {
+  const panelId = `preview-service-${id}`;
+  const [activeId, setActiveId] = useState(services[0].id);
+  const active = services.find((service) => service.id === activeId) ?? services[0];
+
   return (
     <>
       <h3 className="preview__heading">{heading}: услуги</h3>
       <ul className="preview__list">
-        {services.map((service, index) => (
-          <m.li
-            key={service.title}
-            className="preview__item"
-            initial={reduced ? false : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              ...motionTransition(fade),
-              delay: reduced ? 0 : index * 0.04,
-            }}
-          >
-            <span className="preview__name">{service.title}</span>
-            <strong>{service.price}</strong>
-          </m.li>
-        ))}
+        {services.map((service, index) => {
+          const selected = service.id === active.id;
+          return (
+            <m.li
+              key={service.id}
+              initial={reduced ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                ...motionTransition(fade),
+                delay: reduced ? 0 : index * 0.04,
+              }}
+            >
+              <button
+                type="button"
+                id={`${panelId}-${service.id}`}
+                className={`preview__item${selected ? ' is-active' : ''}`}
+                aria-expanded={selected}
+                aria-controls={panelId}
+                onClick={() => setActiveId(service.id)}
+              >
+                <span className="preview__name">{service.title}</span>
+                <strong>{service.price}</strong>
+              </button>
+            </m.li>
+          );
+        })}
       </ul>
-      <div className="preview__media">
-        {photos.map((photo) => (
-          <img
-            key={photo.src}
-            className="preview__photo"
-            src={encodeURI(photo.src)}
-            alt={photo.alt}
-            width={640}
-            height={400}
-            loading="lazy"
-            decoding="async"
-          />
-        ))}
+      <div
+        id={panelId}
+        className="preview__slot"
+        role="region"
+        aria-live="polite"
+        aria-labelledby={`${panelId}-${active.id}`}
+      >
+        <AnimatePresence initial={false}>
+          <m.div
+            key={active.id}
+            className="preview__detail"
+            initial={reduced ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={reduced ? undefined : { opacity: 0 }}
+            transition={motionTransition(fade)}
+          >
+            <p className="preview__summary">{active.summary}</p>
+            <img
+              className="preview__photo"
+              src={encodeURI(active.photo.src)}
+              alt={active.photo.alt}
+              width={640}
+              height={400}
+              loading="lazy"
+              decoding="async"
+            />
+          </m.div>
+        </AnimatePresence>
       </div>
       <a className="preview__cta" href={href}>
         {cta}
@@ -278,7 +378,7 @@ function PreviewContent({
   );
 }
 
-const styles = `
+const newLocal = `
   .chooser__title {
     margin: 0 0 var(--space-8);
     font-size: var(--font-size-xl);
@@ -447,55 +547,107 @@ const styles = `
   }
   .preview__list {
     list-style: none;
-    margin: 0 0 var(--space-6);
+    margin: 0 0 var(--space-4);
     padding: 0;
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-2);
   }
   .preview__item {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: var(--space-4);
-    padding-bottom: var(--space-3);
-    border-bottom: 1px solid var(--color-border);
+    width: 100%;
+    padding: var(--space-3);
+    border: 0;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      background-color var(--duration-base) var(--ease-out),
+      color var(--duration-base) var(--ease-out);
+  }
+  .preview__item:hover,
+  .preview__item:focus-visible,
+  .preview__item.is-active,
+  .preview__item.is-active:hover,
+  .preview__item.is-active:focus-visible {
+    background: var(--color-primary);
+    color: var(--color-primary-contrast);
   }
   .preview__name {
-    background-image: linear-gradient(var(--color-primary), var(--color-primary));
-    background-repeat: no-repeat;
-    background-position: left bottom;
-    background-size: 0% 0.22em;
-    transition:
-      color var(--duration-base) var(--ease-out),
-      background-size var(--duration-base) var(--ease-out),
-      text-shadow var(--duration-base) var(--ease-out);
+    position: relative;
+    min-width: 0;
+    padding-left: var(--space-4);
+    font-weight: 500;
   }
-  .preview__item:hover .preview__name {
-    color: var(--color-primary);
-    background-size: 100% 0.22em;
-    text-shadow:
-      0.03em 0 0 currentColor,
-      -0.03em 0 0 currentColor;
+  .preview__name::before {
+    content: '';
+    position: absolute;
+    top: 0.5lh;
+    left: 0;
+    width: 0.4em;
+    height: 0.4em;
+    border-radius: var(--radius-full);
+    background-color: var(--color-primary);
+    transform: translateY(-50%);
+    animation: preview-name-pulse calc(var(--duration-slow) * 5) var(--ease-in-out) infinite;
+  }
+  .preview__item:hover .preview__name::before,
+  .preview__item:focus-visible .preview__name::before,
+  .preview__item.is-active .preview__name::before {
+    background-color: var(--color-primary-contrast);
+    animation: none;
+  }
+  @keyframes preview-name-pulse {
+    0%,
+    100% {
+      transform: translateY(-50%) scale(1);
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 50%, transparent);
+    }
+    50% {
+      transform: translateY(-50%) scale(1.2);
+      box-shadow: 0 0 0 0.28em color-mix(in srgb, var(--color-primary) 0%, transparent);
+    }
   }
   .preview__item strong {
+    flex-shrink: 0;
     white-space: nowrap;
     font-weight: 600;
   }
-  @media (prefers-reduced-motion: reduce) {
-    .preview__name {
-      transition: none;
-    }
-  }
-  .preview__media {
+  .preview__slot {
     display: grid;
-    gap: var(--space-3);
     margin-bottom: var(--space-6);
+  }
+  .preview__detail {
+    grid-area: 1 / 1;
+    display: grid;
+    gap: var(--space-4);
+    align-items: start;
+  }
+  .preview__summary {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    min-height: calc(var(--line-height-base) * 4em);
+    line-height: var(--line-height-base);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    overflow: hidden;
   }
   .preview__photo {
     display: block;
     width: 100%;
-    height: 14rem;
+    height: 12rem;
     object-fit: cover;
-    object-position: top center;
+    object-position: center;
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-border);
     background: var(--color-bg-muted);
@@ -513,13 +665,28 @@ const styles = `
     font-weight: 600;
     transition:
       background-color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out),
       transform var(--duration-fast) var(--ease-out);
   }
-  .preview__cta:hover {
-    background: var(--color-inverse-hover);
+  .preview__cta:hover,
+  .preview__cta:focus-visible,
+  .preview__cta:active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-primary-contrast);
   }
   .preview__cta:active {
     transform: scale(var(--press-scale));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .preview__item,
+    .preview__cta {
+      transition: none;
+    }
+    .preview__name::before {
+      animation: none;
+    }
   }
   @media (min-width: 768px) {
     .chooser__grid {
@@ -539,11 +706,16 @@ const styles = `
     .chooser__card.is-selected + .chooser__preview {
       margin-top: calc(var(--space-4) * -1);
     }
-    .preview__media {
-      grid-template-columns: 1fr 1fr;
+    .preview__detail {
+      grid-template-columns: 1fr 1.15fr;
+      gap: var(--space-6);
+    }
+    .preview__summary {
+      min-height: 0;
     }
     .preview__photo {
-      height: 16rem;
+      height: 14rem;
     }
   }
 `;
+const styles = newLocal;

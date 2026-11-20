@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageLinks from '../components/PageLinks.astro';
 import DirectionHero from '../components/DirectionHero.astro';
 import TrustStrip from '../components/TrustStrip.astro';
 import ServiceGrid from '../components/ServiceGrid.astro';
@@ -54,6 +56,7 @@ import {
         { href: '#faq', label: 'Вопросы' },
       ]}
     />
+    <Breadcrumbs current="Благоустройство" />
     <main>
       <DirectionHero
         title={hero.title}
@@ -84,6 +87,7 @@ import {
       <AboutSection text={about.text} metrics={about.metrics} />
       <Testimonials items={reviewShots} />
       <FAQ items={faq} />
+      <PageLinks siblingHref="/remont-kvartir" siblingLabel="Ремонт квартир" />
       <LeadForm client:load />
     </main>
     <Footer />

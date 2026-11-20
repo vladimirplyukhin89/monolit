@@ -26,7 +26,7 @@ const { eyebrow = 'Услуги', title = 'Наши услуги', items } = Ast
         items.map((item) => (
           <li class="services__card reveal glow">
             <span class="services__card-logo" aria-hidden="true">
-              <Logo />
+              <Logo accent={false} />
             </span>
             <h3 class="services__card-title">{item.title}</h3>
             <div class="services__card-body">
@@ -58,6 +58,7 @@ const { eyebrow = 'Услуги', title = 'Наши услуги', items } = Ast
 <style>
   .services__title {
     margin: 0 0 var(--space-8);
+    font-family: var(--font-display);
     font-size: var(--font-size-xl);
     font-weight: 500;
     line-height: var(--line-height-tight);
